@@ -1,0 +1,23 @@
+/* Essential Styles */
+body {
+  font-family: "Graphik Regular", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+/* Main Sections Styles */
+#main-nav {
+  height: 35px;
+  background: #000 !important;
+  font-size: 0.9rem;
+}
+
+#main-header {
+}
+
+#main-section {
+}
+
+#footer {
+  height: 100px;
+  background: #000 !important;
+}
