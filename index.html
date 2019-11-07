@@ -30,12 +30,16 @@
     />
   </head>
   <body>
-    <nav id="main-nav" class="navbar navbar-expand-sm">
-      <div id="logo">
+    <!-- Header -->
+    <nav id="main-nav" class="row navbar navbar-expand-sm">
+      <div id="logo" class="col-sm-1 d-flex justify-content-center">
         <!--<img src="" alt="cycle of benefit logo" />-->
-        <i class="fas fa-dolly-flatbed fa-2x"></i>
+        <a href="#"><i class="fas fa-dolly-flatbed fa-2x"></i></a>
       </div>
-      <ul id="menu-nav" class="navbar-nav">
+      <ul
+        id="menu-nav"
+        class="navbar-nav col-sm-6 d-flex justify-content-start"
+      >
         <li class="nav-item">
           <a class="nav-link" href="#">Home</a>
         </li>
@@ -46,7 +50,7 @@
           <a class="nav-link" href="#">About</a>
         </li>
       </ul>
-      <ul id="menu-access" class="navbar-nav">
+      <ul id="login-nav" class="navbar-nav col-sm-4 d-flex justify-content-end">
         <li class="nav-item">
           <a class="nav-link" href="#">signUp</a>
         </li>
@@ -54,24 +58,32 @@
           <a class="nav-link" href="#">Login</a>
         </li>
       </ul>
-      <div id="avatar">
-        <i class="fas fa-user-tie fa-2x"></i>
+      <div id="avatar" class="col-sm-1 d-flex justify-content-center">
+        <a href="#"><i class="fas fa-user-tie fa-2x"></i></a>
       </div>
     </nav>
+    <!-- Main Body Section -->
     <div class="container-fluid text-dark">
       <header id="main-header"></header>
       <section id="main-section"></section>
     </div>
+    <!-- Footer -->
     <footer id="footer">
-      <p>Contact us</p>
-      <p>
-        All rights reserved | Created & Designed by Cole &copy; 2019.
-      </p>
-      <p>
-        <a href="#" target="_blank"><i class="fab fa-github fa-2x"></i></a>
-        <a href="#" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a>
-        <a href="#" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
-      </p>
+      <div class="row">
+        <div class="col-sm-4 d-sm-flex justify-content-center m-auto">
+          <p>Contact us</p>
+        </div>
+        <div class="col-sm-4 d-sm-flex justify-content-center m-auto">
+          <p>
+            All rights reserved | Created & Designed by Cole &copy; 2019.
+          </p>
+        </div>
+        <div class="col-sm-4 align-middle m-auto">
+          <a href="#" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+        </div>
+      </div>
     </footer>
   </body>
 </html>
