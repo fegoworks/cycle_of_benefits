@@ -1,11 +1,16 @@
-/* Essential Styles */
-html {
-  position: relative;
-  min-height: 100%;
+/* Reset */
+ol,
+ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
 }
+
+/* Essential Styles */
 body {
   /* font-family: "Graphik Regular", Arial, sans-serif; */
   font-family: "Roboto", sans-serif;
+  font-size: 16px;
   line-height: 1.8;
   overflow-x: hidden; /* this solved the problem footer horiz scroll bar*/
 }
@@ -14,61 +19,21 @@ body {
 #main-nav {
   height: 40px;
   background: #000 !important;
-  font-size: 1em;
-}
-#main-nav a:hover {
-  color: rgb(218, 218, 218) !important;
-}
-#logo {
-  /* border: 1px solid #fff; */
-}
-#menu-nav {
-  width: 100%;
 }
 
-#menu-nav li {
-  margin: 0 10px;
+#main-wrapper {
+  position: relative;
+  min-height: 100vh;
 }
-
-#menu-nav li:after {
-  content: "|";
-  color: #0056b3;
+#content-wrapper {
+  padding-bottom: 170px;
 }
-#menu-nav li:last-child:after {
-  content: "";
-}
-#menu-nav a {
-  display: inline-block;
-}
-
-#menu-nav li a:hover {
-  color: rgb(218, 218, 218) !important;
-}
-
-#login-nav {
-}
-
-#login-nav li {
-}
-
-#login-nav li:after {
-  content: "|";
-  color: #0056b3;
-}
-#login-nav li:last-child:after {
-  content: "";
-}
-#login-nav a {
-  display: inline-block;
-}
-
-#avatar {
-}
-
 #main-header {
+  /* border: 1px solid #000; */
 }
 
 #main-section {
+  /* border: 1px solid #000; */
 }
 
 #footer {
