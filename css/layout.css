@@ -1,4 +1,8 @@
 /* Reset */
+* {
+  margin: 0;
+}
+
 ol,
 ul {
   list-style: none;
@@ -11,22 +15,26 @@ body {
   /* font-family: "Graphik Regular", Arial, sans-serif; */
   font-family: "Roboto", sans-serif;
   font-size: 16px;
+  height: 100%;
+  width: 100%;
   line-height: 1.8;
   overflow-x: hidden; /* this solved the problem footer horiz scroll bar*/
 }
 
 /* Main Sections Styles */
 #main-nav {
-  height: 40px;
+  height: 7vh;
   background: #000 !important;
 }
 
 #main-wrapper {
   position: relative;
-  min-height: 100vh;
+  height: 100vh;
+  clear: both;
 }
 #content-wrapper {
-  padding-bottom: 170px;
+  min-height: 70vh;
+  padding-bottom: 3vh;
 }
 #main-header {
   /* border: 1px solid #000; */
@@ -37,11 +45,10 @@ body {
 }
 
 #footer {
-  position: absolute;
   bottom: 0;
-  box-sizing: border-box;
+  left: 0;
   width: 100%;
-  min-height: 80px;
+  min-height: 20vh;
   padding: 15px;
   background: #000 !important;
   opacity: 0.8;

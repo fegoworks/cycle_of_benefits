@@ -56,3 +56,12 @@
   display: none;
   /* Default display of avatar logo == none */
 }
+
+#main-header h1 {
+}
+
+.carousel-inner img {
+  max-width: 100%;
+  display: block;
+  height: 400px;
+}
