@@ -2,6 +2,7 @@
   margin: 0;
   padding: 0;
   border: 0;
+  box-sizing: border-box;
   vertical-align: baseline;
 }
 
@@ -38,31 +39,140 @@ a {
 
 /* Styling Starts here */
 body {
-  background: #494949;
   color: #fff;
   font-family: "Roboto", sans-serif;
   font-size: 16px;
+  background: #494949;
+}
+/* Container */
+.main-container {
+  position: relative;
   width: 100%;
-  min-height: 100%;
+  min-height: 100vh;
 }
 
 /* header */
-.menu-nav {
+.main-header {
+  position: relative;
+  padding: 1% 2%;
+  width: 100%;
+  height: 60px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 17px #2b2b2b;
 }
 .logo-div {
+  position: relative;
+  float: left;
+  display: flex;
+  align-items: center;
+  width: 30%;
+  margin: 0 5px;
+  text-align: center;
 }
-.menu {
+.logo-div a {
+  float: left;
+}
+.logo-div p {
+  float: left;
+  cursor: pointer;
+  margin-left: 15px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  word-spacing: 2px;
+  letter-spacing: 3px;
 }
 
+.menu {
+  position: relative;
+  width: 70%;
+}
+.menu ul li {
+  display: flex;
+  float: left;
+  width: ;
+}
+
+.signin-div {
+  float: right;
+}
+/* clear float */
+.clear-float {
+  clear: both;
+}
 /* Main */
 .main-content {
   position: relative;
   margin: 0 5%;
+  padding-bottom: 3em;
 }
+.content-heading {
+}
+.content-body {
+  width: 80%;
+  margin: 0 auto;
+}
+.content-button ul {
+  display: flex;
+  width: 100%;
+  text-align: center;
+}
+.content-button ul li {
+  align-items: center;
+  color: #000;
+  font-size: 0.9em;
+  margin: 5px auto;
+  font-weight: 500;
+  cursor: pointer;
+  width: 25%;
+  padding: 10px 10px;
+  border-radius: 5px;
+  background: #008a00;
+  /* border: 1px solid #007a00; */
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+button:hover {
+  border: 1px solid #007a00;
+  color: #fff;
+  background: #008a00;
+}
+
 /* Footer */
-footer {
-  position: fixed;
-  left: 0;
+.main-footer {
+  position: absolute;
   bottom: 0;
-  min-height: 20em;
+  padding: 15px;
+  min-height: 5em;
+  width: 100%;
+  background: #2b2b2b;
+  font-size: 0.9em;
+  /* grid */
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-areas: "links paragraph icon";
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+  /* box shadow */
+  box-shadow: 0 -1px 17px #2b2b2b;
+}
+.main-footer ul {
+  grid-area: links;
+  list-style-type: disc;
+  text-align: left;
+}
+.main-footer ul li:last-child {
+  color: #007a00;
+}
+.main-footer p {
+  grid-area: paragraph;
+}
+.main-footer .footer-icon {
+  grid-area: icon;
+  font-size: 0.8em;
+}
+.footer-icon a {
+  margin: 0 4px;
+}
+.footer-icon a:hover {
+  color: #008a00;
 }
