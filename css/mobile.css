@@ -1,1 +1,58 @@
-@media (min-width: "568px");
+/*******************************************************/
+/* Media Queries */
+/*******************************************************/
+@media only screen and (max-width: 900px) {
+  /* Tablets and laptops*/
+  /* Content */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .content-heading {
+    width: 100%;
+  }
+  .content-slider {
+    width: 100%;
+  }
+  .content-body {
+    width: 100%;
+  }
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 600px) {
+  /* Header */
+  .menu,
+  .signin-div {
+    display: none;
+  }
+
+  .logo-div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+
+  .menu-btn {
+    visibility: visible;
+  }
+  /* Content */
+  .content-slider {
+    /* hide slider */
+    visibility: hidden;
+  }
+
+  .content-button ul {
+    flex-direction: column;
+  }
+  .content-button ul li {
+    width: 75%;
+  }
+  /* Footer */
+  .main-footer {
+    display: flex;
+    flex-direction: column;
+  }
+}
