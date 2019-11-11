@@ -19,6 +19,7 @@
     /> -->
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/mobile.css" />
     <!-- Google Fonts Api -->
     <link
       href="https://fonts.googleapis.com/css?family=Karla&display=swap"
@@ -31,15 +32,18 @@
         <div class="logo-div">
           <a href="#"><i class="fas fa-dolly-flatbed fa-2x"></i></a>
           <p>Cycle of Benefits</p>
+          <div class="menu-btn">
+            <i class="fas fa-bars fa-2x"></i>
+          </div>
           <div class="menu">
             <ul>
-              <li>
+              <li class="menu-item">
                 <a href="/index.html">Home</a>
               </li>
-              <li>
+              <li class="menu-item">
                 <a href="/projects.html">Projects</a>
               </li>
-              <li>
+              <li class="menu-item">
                 <a href="/about.html">About</a>
               </li>
             </ul>
@@ -113,5 +117,35 @@
       integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
       crossorigin="anonymous"
     ></script> -->
+    <script>
+      const menuBtn = document.querySelector(".menu-btn");
+      const signinDiv = document.querySelector(".signin-div");
+      const menu = document.querySelector(".menu");
+      const logoDiv = document.querySelector(".logo-div");
+
+      let showMenu = false;
+
+      menuBtn.addEventListener("click", menuToggle);
+
+      function menuToggle() {
+        if (!showMenu) {
+          menuBtn.classList.add("close");
+          signinDiv.classList.add("show");
+          menu.classList.add("show");
+          logoDiv.classList.add("show");
+
+          //reset Menu State
+          showMenu = true;
+        } else {
+          menuBtn.classList.remove("close");
+          signinDiv.classList.remove("show");
+          menu.classList.remove("show");
+          logoDiv.classList.remove("show");
+
+          //reset Menu State
+          showMenu = false;
+        }
+      }
+    </script>
   </body>
 </html>
