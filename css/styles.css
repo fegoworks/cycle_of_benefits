@@ -43,6 +43,7 @@ body {
   font-family: "Karla", sans-serif;
   font-size: 16px;
   background: #494949;
+  position: relative;
 }
 /* Container */
 .main-container {
@@ -54,10 +55,12 @@ body {
 /* header */
 /*******************************************************/
 .main-header {
-  z-index: 2;
+  position: relative;
+  z-index: 100;
   width: 100%;
   height: 8vh;
   font-size: 1.1em;
+  background: #494949;
   box-shadow: 0 1px 17px #2b2b2b;
   display: flex;
   align-items: center;
@@ -124,10 +127,51 @@ body {
   margin-right: 20px;
   cursor: pointer;
   color: #fff;
+  transition: all 0.7s ease-out;
   /* @include easeOut; */
 }
 .menu-btn:hover {
-  transition: all 0.5s ease-in;
+  transition: all 0.5s ease-out;
+  color: #008a00;
+}
+
+.close {
+  transition: all 0.5s ease-out;
+  transform: rotate(0.5turn);
+}
+
+.show {
+  /* visibility: visible; */
+  transition: margin-top 0.7s ease-out;
+  margin-top: 32vh;
+}
+
+/* Menu Button Div*/
+.menu-header {
+  /* visibility: hidden; */
+  position: absolute;
+  top: -24vh;
+  left: 0;
+  background: #2b2b2b;
+  height: auto;
+  width: 100%;
+  transition: all 0.7s ease-out;
+  z-index: 1;
+  font-size: 1.1em;
+}
+.menu-header ul {
+  display: flex;
+  flex-direction: column;
+}
+.menu-header ul li {
+  height: 6vh;
+  padding: 1% 1%;
+  margin: auto;
+  align-items: center;
+  box-shadow: 0 1px 11px #2b2b2b;
+}
+.menu-header ul li a:hover {
+  opacity: 0.8;
   color: #008a00;
 }
 
@@ -195,7 +239,6 @@ body {
 /*******************************************************/
 .projects {
   max-height: 500px;
-  overflow-y: auto;
   background: inherit;
   /* border: 1px solid #fff; */
   color: gold;
@@ -220,9 +263,10 @@ body {
 }
 .project-pills li div {
   /* border: 1px solid #fff; */
+  padding: 0 1%;
 }
 .project-heading {
-  height: 30px;
+  min-height: 30px;
   align-items: center;
   text-transform: uppercase;
   font-size: 1.1em;
@@ -232,6 +276,8 @@ body {
 }
 .project-heading div {
   /* border: 1px solid #fff; */
+  text-align: center;
+  padding: 0 1%;
 }
 .project-number {
   width: 3%;
@@ -253,6 +299,10 @@ body {
 .project-button i {
   color: gold !important;
   background: #000;
+}
+.project-heading .project-button i {
+  color: #fff !important;
+  background: none;
 }
 
 /*******************************************************/
