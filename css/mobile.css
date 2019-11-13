@@ -40,6 +40,11 @@
     width: 90%;
     margin: auto;
   }
+
+  /* Login Styles */
+  .form-div {
+    width: 70%;
+  }
 }
 
 /* For mobile phones: */
@@ -89,6 +94,18 @@
     text-align: center;
   }
   .project-desc {
+    display: none;
+  }
+
+  /* Login Styles */
+  .form-div {
+    width: 100%;
+  }
+
+  .input-block input[type="text"] {
+    width: 100%;
+  }
+  .input-icon {
     display: none;
   }
 

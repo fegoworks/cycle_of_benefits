@@ -363,6 +363,7 @@ hr {
 
 .input-block {
   margin: 3% 0;
+  width: 95%;
 }
 .input-block div {
   /* border: 1px solid #fff; */
