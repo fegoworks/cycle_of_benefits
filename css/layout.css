@@ -14,6 +14,8 @@ ul {
 body {
   /* font-family: "Graphik Regular", Arial, sans-serif; */
   font-family: "Roboto", sans-serif;
+  background: #fff;
+  color: #000;
   font-size: 16px;
   height: 100%;
   width: 100%;
@@ -24,7 +26,8 @@ body {
 /* Main Sections Styles */
 #main-nav {
   height: 7vh;
-  background: #000 !important;
+  background: #fff !important;
+  color: #000 !important;
 }
 
 #main-wrapper {

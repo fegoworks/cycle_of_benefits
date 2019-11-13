@@ -51,6 +51,17 @@ body {
   width: 100%;
   height: 100vh;
 }
+.green-text {
+  color: #55a555;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #fff;
+  margin: 0.8em 0;
+  padding: 0;
+}
 /*******************************************************/
 /* header */
 /*******************************************************/
@@ -132,7 +143,7 @@ body {
 }
 .menu-btn:hover {
   transition: all 0.5s ease-out;
-  color: #008a00;
+  color: #55a555;
 }
 
 .close {
@@ -172,7 +183,7 @@ body {
 }
 .menu-header ul li a:hover {
   opacity: 0.8;
-  color: #008a00;
+  color: #55a555;
 }
 
 /*******************************************************/
@@ -215,9 +226,11 @@ body {
   border-radius: 1em;
   padding: 15px;
 }
+/*******************************************************/
 /************* Button Styles ************/
+/*******************************************************/
 .my-btn {
-  background: #008a00;
+  background: #55a555;
   cursor: pointer;
   /* border: 1px solid #007a00; */
   box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
@@ -232,7 +245,7 @@ body {
   /* background-color: rgba(0, 138, 0, 0.2); */
 }
 .my-btn a:hover {
-  color: #008a00 !important;
+  color: #55a555 !important;
 }
 /*******************************************************/
 /* Projects Content */
@@ -306,6 +319,92 @@ body {
 }
 
 /*******************************************************/
+/* Login Styles */
+/*******************************************************/
+.form-div {
+  height: auto;
+  background: #666666;
+  width: 50%;
+  margin: 3em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-header {
+  width: 100%;
+  height: 100px;
+  font-size: 1.1em;
+  background: #2b2b2b;
+  box-shadow: 0 1px 17px #2b2b2b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-header p {
+  cursor: pointer;
+  padding-left: 10px;
+  text-align: center;
+  /* text-transform: uppercase; */
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.login-header a:hover {
+  opacity: 0.7;
+}
+.login-body {
+  /* border: 1px solid #fff; */
+  width: 95%;
+  font-size: 1.1em;
+}
+.login-body h1 {
+  font-size: 2em;
+  padding: 2% 2%;
+}
+
+.input-block {
+  margin: 3% 0;
+}
+.input-block div {
+  /* border: 1px solid #fff; */
+  margin-top: 1%;
+  display: flex;
+  align-items: center;
+}
+.input-block label {
+  letter-spacing: 3px;
+}
+.input-icon {
+  display: inline-block;
+  border-radius: 5px;
+  background: #2b2b2b;
+  padding: 0.5% 1%;
+}
+.input-block input[type="text"] {
+  width: 90%;
+  border-radius: 5px;
+  line-height: 2;
+  font-size: 1.1em;
+  padding: 0 3%;
+  margin-left: 5px;
+}
+.form-button input {
+  width: 50%;
+  margin: 2% 1%;
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 2% 7%;
+  border-radius: 10px;
+}
+.form-button a:hover,
+.form-button input:hover {
+  color: #55a555;
+}
+
+.form-div footer {
+  margin-top: 1em;
+}
+
+/*******************************************************/
 /* Footer */
 /*******************************************************/
 .main-footer {
@@ -334,11 +433,9 @@ body {
 .main-footer ul li {
   padding: 5px 0;
 }
-.main-footer ul li .market-place-text {
-  color: #007a00 !important;
-}
+
 .main-footer ul li:last-child {
-  color: #007a00 !important;
+  color: #55a555 !important;
 }
 .main-footer ul li a:hover {
   opacity: 0.7;
@@ -357,5 +454,5 @@ body {
   margin: 0 4px;
 }
 .footer-icon a:hover {
-  color: #008a00;
+  color: #55a555;
 }
