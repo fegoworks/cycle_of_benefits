@@ -42,7 +42,12 @@
   }
 
   /* Login Styles */
-  .form-div {
+  .login-form {
+    width: 70%;
+  }
+
+  /* Signup styles */
+  .signup-form {
     width: 70%;
   }
 }
@@ -98,15 +103,28 @@
   }
 
   /* Login Styles */
-  .form-div {
+  .login-form {
     width: 100%;
   }
 
-  .input-block input[type="text"] {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
     width: 100%;
   }
   .input-icon {
     display: none;
+  }
+
+  /* Signup form styles */
+  .signup-form {
+    width: 100%;
+  }
+
+  .signup-form input[type="text"],
+  .signup-form input[type="email"],
+  .signup-form input[type="password"] {
+    width: 100%;
   }
 
   /* Footer */

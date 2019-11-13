@@ -30,35 +30,49 @@
       rel="stylesheet"
     />
   </head>
-  <body>
+  <body class="bg-green">
     <div class="main-container">
       <!-- Main Body Section -->
       <main class="main-content">
-        <div class="login-form">
-          <header class="login-header">
-            <a href="/index.html"><i class="fas fa-dolly-flatbed fa-2x"></i></a>
-            <p>Cycle of Benefits</p>
-          </header>
-          <section class="login-body">
-            <h1>Login</h1>
-            <h5 class="green-text">Please enter your login details</h5>
+        <div class="signup-div">
+          <div class="signup-heading">
+            <h1>SignUp Form</h1>
+            <p>Register with Cycle of benefits</p>
             <hr />
-            <form action="#" method="POST">
+          </div>
+          <div class="signup-form">
+            <form action="#" method="post">
+              <div class="input-block">
+                <label for="first_name">First Name</label>
+                <div>
+                  <input
+                    type="text"
+                    name="first_name"
+                    placeholder="First Name"
+                  />
+                </div>
+              </div>
+              <div class="input-block">
+                <label for="last_name">Last Name</label>
+                <div>
+                  <input type="text" name="last_name" placeholder="Last Name" />
+                </div>
+              </div>
               <div class="input-block">
                 <label for="username">Username</label>
                 <div>
-                  <span class="input-icon">
-                    <i class="fas fa-user fa-2x"></i>
-                  </span>
                   <input type="text" name="username" placeholder="Username" />
+                </div>
+              </div>
+              <div class="input-block">
+                <label for="email">Email</label>
+                <div>
+                  <input type="email" name="email" placeholder="Email" />
                 </div>
               </div>
               <div class="input-block">
                 <label for="password">Password</label>
                 <div>
-                  <span class="input-icon">
-                    <i class="fas fa-key fa-2x"></i>
-                  </span>
                   <input
                     type="password"
                     name="password"
@@ -66,23 +80,47 @@
                   />
                 </div>
               </div>
+              <div class="input-block">
+                <label for="confirm_password">Confirm Password</label>
+                <div>
+                  <input
+                    type="password"
+                    name="confirm_password"
+                    placeholder="Confirm Password"
+                  />
+                </div>
+              </div>
               <div class="form-button">
-                <input type="submit" class="my-btn" value="SIGN IN" />
+                <div>
+                  <input type="submit" class="my-btn" value="SIGN UP" />
+                  <a href="/index.html">Cancel</a>
+                </div>
                 <hr />
                 <p>
-                  Don't Have an Account?
-                  <a href="/register.html">Register here!</a>
+                  Got an Account Already? <a href="/signup.html">Login Here!</a>
                 </p>
               </div>
             </form>
-          </section>
-          <footer class="main-footer">
-            <p>
-              All rights reserved | Created & Designed by Cole &copy; 2019.
-            </p>
-          </footer>
+          </div>
         </div>
       </main>
+      <footer class="main-footer">
+        <ul>
+          <li><a href="/contact.html">Contact Us</a></li>
+          <li><a href="/about.html">About</a></li>
+          <li>
+            <a href="#"><span class="green-text">Market Place</span></a>
+          </li>
+        </ul>
+        <p>
+          All rights reserved | Created & Designed by Cole &copy; 2019.
+        </p>
+        <div class="footer-icon">
+          <a href="#" target="_blank"><i class="fab fa-github fa-2x"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-linkedin fa-2x"></i></a>
+          <a href="#" target="_blank"><i class="fab fa-twitter fa-2x"></i></a>
+        </div>
+      </footer>
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
