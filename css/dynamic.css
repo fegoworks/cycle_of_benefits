@@ -1,0 +1,30 @@
+.alert-info {
+  z-index: 100;
+  position: absolute;
+  top: 40vh;
+  left: 0;
+  min-height: 70px;
+  min-width: 90%;
+  background: #000080;
+  opacity: 0.8;
+  padding: 15px 20px;
+  margin: 0 5%;
+  color: #fff;
+  font-weight: 900;
+  font-size: 22px;
+}
+
+.close-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 3px;
+  background: #800000;
+  color: #fff;
+  cursor: pointer;
+  letter-spacing: 1px;
+}
+.close-button:hover {
+  background: #fc0404 !important;
+  transform: scale(1.1);
+}
