@@ -19,6 +19,7 @@
     /> -->
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dynamic.css" />
     <link rel="stylesheet" href="css/mobile.css" />
     <!-- Google Fonts Api -->
     <link
@@ -37,13 +38,18 @@
         <div class="login-form">
           <header class="login-header">
             <a href="/index.html"><i class="fas fa-dolly-flatbed fa-2x"></i></a>
-            <p>Cycle of Benefits</p>
+            <p><a href="/index.html">Cycle of Benefits</a></p>
           </header>
           <section class="login-body">
             <h1>Login</h1>
             <h5 class="green-text">Please enter your login details</h5>
             <hr />
-            <form action="#" method="POST">
+            <form
+              name="loginForm"
+              action=""
+              method="POST"
+              onsubmit="return validateLoginForm()"
+            >
               <div class="input-block">
                 <label for="username">Username</label>
                 <div>
@@ -86,7 +92,8 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script src="/js/app.js"></script>
+    <script type="module" src="js/functions.mjs"></script>
+    <script type="module" src="server.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script
     src="https://code.jquery.com/jquery-3.3.1.slim.min.js"

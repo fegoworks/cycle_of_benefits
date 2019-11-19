@@ -9,6 +9,7 @@
     <link rel="icon" href="" type="image/x-icon" />
     <!-- Font awesome CDN-->
     <link
+      samesite="none"
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.0.11/css/all.css"
     />
@@ -19,6 +20,7 @@
     /> -->
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/dynamic.css" />
     <link rel="stylesheet" href="css/mobile.css" />
     <!-- Google Fonts Api -->
     <link
@@ -41,7 +43,7 @@
             <hr />
           </div>
           <div class="signup-form">
-            <form action="#" method="post">
+            <form id="signup-form" name="signupform" action="#" method="post">
               <div class="input-block">
                 <label for="first_name">First Name</label>
                 <div>
@@ -124,7 +126,8 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script src="/js/app.js"></script>
+    <script src="server.js" type="module"></script>
+    <script src="/js/functions.mjs" type="module"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script
     src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
