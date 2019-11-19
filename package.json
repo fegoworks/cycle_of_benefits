@@ -1,0 +1,27 @@
+{
+  "name": "cycle_of_benefits",
+  "version": "1.0.0",
+  "description": "A crowdsourcing platform for environmentally related activities",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/colenocks/Cycle_of_benefits.git"
+  },
+  "keywords": [
+    "nodejs",
+    "mssql"
+  ],
+  "author": "Coleman Enocks",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/colenocks/Cycle_of_benefits/issues"
+  },
+  "homepage": "https://github.com/colenocks/Cycle_of_benefits#readme",
+  "dependencies": {
+    "mssql": "^6.0.1"
+  }
+}
