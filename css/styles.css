@@ -123,7 +123,7 @@ hr {
 
 .menu {
   min-width: 70%;
-  /* border: 1px solid #fff; */
+  /*  */
 }
 .menu ul {
   display: flex;
@@ -138,73 +138,13 @@ hr {
 }
 
 .signin-div {
-  width: 15%;
+  /* border: 1px solid #fff; */
+  min-width: 15%;
   float: right;
   padding-right: 5px;
   cursor: pointer;
   display: flex;
   justify-content: center;
-}
-.signin-div .signin-text {
-  padding-left: 5px;
-}
-
-.menu-btn {
-  visibility: hidden;
-  z-index: 3;
-  margin-right: 20px;
-  cursor: pointer;
-  color: #fff;
-  transition: all 0.7s ease-out;
-  /* @include easeOut; */
-}
-.menu-btn:hover {
-  transition: all 0.5s ease-out;
-  color: #55a555;
-}
-
-.menu-header {
-  visibility: hidden;
-}
-
-.close {
-  transition: all 0.5s ease-out;
-  transform: rotate(0.5turn);
-}
-
-.show {
-  /* visibility: visible; */
-  transition: margin-top 0.7s ease-out;
-  margin-top: 32vh;
-}
-
-/* Menu Button Div*/
-.menu-header {
-  /* visibility: hidden; */
-  position: absolute;
-  top: -24vh;
-  left: 0;
-  background: #2b2b2b;
-  height: auto;
-  width: 100%;
-  transition: all 0.7s ease-out;
-  z-index: 1;
-  font-size: 1.1em;
-}
-.menu-header ul {
-  display: flex;
-  flex-direction: column;
-}
-.menu-header ul li {
-  height: 6vh;
-  padding: 1% 1%;
-  margin: auto;
-  align-items: center;
-  box-shadow: 0 1px 11px #2b2b2b;
-}
-.menu-header ul li a:hover {
-  opacity: 0.8;
-  color: #55a555;
 }
 
 /*******************************************************/

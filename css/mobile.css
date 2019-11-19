@@ -71,6 +71,10 @@
   .menu-btn {
     visibility: visible;
   }
+
+  .menu-header {
+    visibility: visible;
+  }
   /* Content */
   .content-slider {
     visibility: hidden;
