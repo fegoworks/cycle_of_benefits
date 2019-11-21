@@ -1,10 +1,9 @@
-//Alert Display
-let alertDiv = document.createElement("div");
-alertDiv.classList.add("alert-info");
-let alertsCount = 0;
-
 function displayAlert(msg, type) {
-  alertsCount = alertsCount + 1;
+  //Alert Display
+  let alertDiv = document.createElement("div");
+  alertDiv.classList.add("alert-info");
+  let alertsCount = 1;
+
   let parag = document.createElement("p");
   parag.classList.add("p-info");
   parag.append(document.createTextNode(msg));

@@ -1,4 +1,7 @@
 import * as functions from "./functions.js";
+import * as myServer from "server.js";
+
+myServer.check();
 
 /* Form validation*/
 if (document.getElementById("form")) {

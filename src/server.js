@@ -1,9 +1,9 @@
 "use strict";
-// const sql = require("mssql");
+import * as functions from "../dist/js/functions";
 const sql = require("mssql");
 // const http = require("http");
 // const fs = require("fs");
-const port = 3000;
+//const port = 3000;
 
 /*
 const server = http.createServer((req, res) => {
@@ -76,12 +76,12 @@ function Login(user, password) {
       `SELECT username, password FROM Tbl_Users WHERE username = ${user} AND password = ${password}`
     )
     .then(data => {
-      //1. displayMessage("Login Successful!", "success");
+      //functions.displayAlert("Login Successful!", "success");
       //2. call the three methods to display user icons
       myPool.close();
     })
     .catch((err, data) => {
-      //1. displayMessage("Username or Email not found!", "error");
+      //1. functions.displayAlert("Username or Email not found!", "error");
       // 2. clearPasswordFields();
       myPool.close();
     });
@@ -99,21 +99,21 @@ function SignUp(user, fname, lname, email, password) {
             `INSERT INTO Tbl_Users VALUES (${user}, ${fname}, ${lname}, ${email}, ${password})`
           )
           .then(data => {
-            //1. displayMessage("Successfully Registered to Cycle of Benefits!", "success");
+            //1. functions.displayAlert("Successfully Registered to Cycle of Benefits!", "success");
             //2. navigate to Login Page
             myPool.close();
           })
           .catch(err => {
-            //displayMessage("Sign up Query Error", "error");
+            //functions.displayAlert("Sign up Query Error", "error");
             myPool.close();
           });
       } else {
-        // displayMessage(`${username} already exists`, "info");
+        // functions.displayAlert(`${username} already exists`, "info");
         myPool.close();
       }
     })
     .catch(err => {
-      //1. displayMessage("Input the fields in correct format", "error");
+      //1. functions.displayAlert("Input the fields in correct format", "error");
       // 2. clearFields();
       myPool.close();
     });
@@ -122,3 +122,16 @@ function SignUp(user, fname, lname, email, password) {
 function UpdateProfile(/*all profile fileds*/) {}
 function PostProject(/*all projects fileds*/) {}
 function EditProject(/*all project fileds*/) {}
+
+function check() {
+  console.log("I can see you");
+}
+
+module.exports = {
+  Login,
+  SignUp,
+  UpdateProfile,
+  PostProject,
+  EditProject,
+  check
+};
