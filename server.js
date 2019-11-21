@@ -1,6 +1,6 @@
 "use strict";
 // const sql = require("mssql");
-const sql = require("mssql/msnodesqlv8");
+const sql = require("mssql");
 // const http = require("http");
 // const fs = require("fs");
 const port = 3000;
@@ -33,8 +33,8 @@ server.listen(port, error => {
 let dbConfig = {
   server: "COLE-PC\\SQLEXPRESS",
   database: "cyobDB",
-  user: "cole",
-  password: ""
+  user: "guestuser",
+  password: "1234"
   //   provider: "SQLNCLI11",
   //   server: `COLE-PC\\SQLEXPRESS`,
   //   Security: "SSPI",
@@ -48,16 +48,16 @@ function getConnection() {
   pool
     .connect()
     .then(() => {
-      console.log("database connected");
+      console.log("Successfully connected to database");
       let request = new sql.Request(pool);
       request
         .query("SELECT * FROM Tbl_Users")
-        .then(columns => {
-          console.log(columns);
+        .then(data => {
+          console.log(data.recordset);
           pool.close();
         })
         .catch(err => {
-          console.log("Could not execute query: " + err);
+          console.log("Error in query, Could not execute query: " + err);
           pool.close();
         });
     })
@@ -67,3 +67,58 @@ function getConnection() {
 }
 
 getConnection();
+
+function Login(user, password) {
+  let myPool; //connection pool
+  let request = new sql.ConnectionPool(myPool);
+  request
+    .query(
+      `SELECT username, password FROM Tbl_Users WHERE username = ${user} AND password = ${password}`
+    )
+    .then(data => {
+      //1. displayMessage("Login Successful!", "success");
+      //2. call the three methods to display user icons
+      myPool.close();
+    })
+    .catch((err, data) => {
+      //1. displayMessage("Username or Email not found!", "error");
+      // 2. clearPasswordFields();
+      myPool.close();
+    });
+}
+
+function SignUp(user, fname, lname, email, password) {
+  let myPool; //connection pool
+  let request = new sql.ConnectionPool(myPool);
+  request
+    .query(`SELECT * FROM Tbl_Users WHERE username = ${user}`)
+    .then(data => {
+      if (data.rowsAffected == 0) {
+        request
+          .query(
+            `INSERT INTO Tbl_Users VALUES (${user}, ${fname}, ${lname}, ${email}, ${password})`
+          )
+          .then(data => {
+            //1. displayMessage("Successfully Registered to Cycle of Benefits!", "success");
+            //2. navigate to Login Page
+            myPool.close();
+          })
+          .catch(err => {
+            //displayMessage("Sign up Query Error", "error");
+            myPool.close();
+          });
+      } else {
+        // displayMessage(`${username} already exists`, "info");
+        myPool.close();
+      }
+    })
+    .catch(err => {
+      //1. displayMessage("Input the fields in correct format", "error");
+      // 2. clearFields();
+      myPool.close();
+    });
+}
+
+function UpdateProfile(/*all profile fileds*/) {}
+function PostProject(/*all projects fileds*/) {}
+function EditProject(/*all project fileds*/) {}
