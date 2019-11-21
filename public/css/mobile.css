@@ -1,0 +1,140 @@
+/*******************************************************/
+/* Media Queries */
+/*******************************************************/
+@media only screen and (max-width: 900px) {
+  /* Tablets and laptops*/
+  /* Contents */
+  .main-content {
+    display: flex;
+    flex-direction: column;
+  }
+  .content-heading {
+    width: 100%;
+  }
+  .content-slider {
+    width: 100%;
+  }
+  .content-body {
+    width: 100%;
+  }
+
+  /* Project content */
+  .project-number {
+    width: 5%;
+  }
+  .project-title {
+    min-width: 25%;
+  }
+  .project-button {
+    min-width: 15%;
+    margin: auto;
+    text-align: center;
+  }
+  .project-desc {
+    min-width: 40%;
+  }
+  .project-status {
+    display: none;
+  }
+  .projects {
+    width: 90%;
+    margin: auto;
+  }
+
+  /* Login Styles */
+  .login-form {
+    width: 70%;
+  }
+
+  /* Signup styles */
+  .signup-form {
+    width: 70%;
+  }
+}
+
+/* For mobile phones: */
+@media only screen and (max-width: 600px) {
+  /* Header */
+  .menu,
+  .signin-div,
+  .profile-div {
+    display: none;
+  }
+
+  .logo-div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+  }
+
+  .menu-btn {
+    visibility: visible;
+  }
+
+  .menu-header {
+    visibility: visible;
+  }
+  /* Content */
+  .content-slider {
+    visibility: hidden;
+  }
+  .content-heading {
+    text-align: center;
+  }
+
+  .content-button ul {
+    flex-direction: column;
+  }
+  .content-button ul li {
+    width: 75%;
+  }
+
+  /* Project content */
+  .project-number {
+    width: 10%;
+  }
+  .project-title {
+    min-width: 55%;
+  }
+  .project-button {
+    min-width: 30%;
+    margin: auto;
+    text-align: center;
+  }
+  .project-desc {
+    display: none;
+  }
+
+  /* Login Styles */
+  .login-form {
+    width: 100%;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+  }
+  .input-icon {
+    display: none;
+  }
+
+  /* Signup form styles */
+  .signup-form {
+    width: 100%;
+  }
+
+  .signup-form input[type="text"],
+  .signup-form input[type="email"],
+  .signup-form input[type="password"] {
+    width: 100%;
+  }
+
+  /* Footer */
+  .main-footer {
+    display: flex;
+    flex-direction: column;
+  }
+}

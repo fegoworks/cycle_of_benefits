@@ -1,0 +1,507 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-sizing: border-box;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+ol,
+ul {
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+}
+
+/* Styling Starts here */
+body {
+  color: #fff;
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
+  background: #494949;
+  position: relative;
+}
+/* Container */
+.main-container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/*******************************************************/
+/* Special Styles */
+/*******************************************************/
+.green-text {
+  color: #55a555;
+}
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #fff;
+  margin: 0.8em 0;
+  padding: 0;
+}
+
+.bg-green {
+  /* input styles and background color from colorlib
+    Author URL: https://colorlib.com */
+  background: #76b852 !important;
+  /* fallback for old browsers*/
+  background: -webkit-linear-gradient(to top, #76b852, #8dc26f);
+  background: -moz-linear-gradient(to top, #76b852, #8dc26f);
+  background: -o-linear-gradient(to top, #76b852, #8dc26f);
+  background: linear-gradient(to top, #76b852, #8dc26f);
+  background-size: cover;
+  background-attachment: fixed;
+}
+/*******************************************************/
+/* header */
+/*******************************************************/
+.main-header {
+  position: relative;
+  z-index: 100;
+  min-width: 100%;
+  height: 8vh;
+  font-size: 1.1em;
+  background: #494949;
+  box-shadow: 0 1px 17px #2b2b2b;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.5em;
+}
+.main-header a:hover {
+  opacity: 0.7;
+}
+
+.logo-div {
+  position: relative;
+  float: left;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  width: 85%;
+  /* border: 1px solid white; */
+}
+.logo-div a {
+  float: left;
+}
+.logo-div p {
+  float: left;
+  cursor: pointer;
+  padding-left: 10px;
+  text-align: center;
+  /* text-transform: uppercase; */
+  font-weight: 700;
+  letter-spacing: 3px;
+  /* border: 1px solid #fff; */
+}
+
+.menu {
+  min-width: 70%;
+  /*  */
+}
+.menu ul {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+.menu ul li {
+  float: left;
+  margin-right: 5%;
+  padding: 2%;
+  cursor: pointer;
+}
+
+.signin-div {
+  /* border: 1px solid #fff; */
+  min-width: 15%;
+  float: right;
+  padding-right: 5px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+/*******************************************************/
+/* clear float */
+/*******************************************************/
+.clear-float {
+  clear: both;
+}
+/********************************************************/
+/* Main */
+/********************************************************/
+.main-content {
+  position: relative;
+  min-height: 67vh;
+  margin: 0 5%;
+  padding-bottom: 3em; /*  footer height, to make stick */
+}
+.content-heading {
+  width: 40%;
+  font-size: 1.6em;
+  margin-bottom: 2em;
+}
+.content-body {
+  width: 90%;
+  margin: 0 auto;
+}
+.content-button ul {
+  width: 100%;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+.content-button ul li {
+  margin: 5px auto;
+  width: 30%;
+  letter-spacing: 3px;
+  font-weight: 600;
+  font-size: 1.1em;
+  margin-bottom: 1em;
+  border-radius: 1em;
+  padding: 15px;
+}
+/*******************************************************/
+/************* Button Styles ************/
+/*******************************************************/
+.my-btn {
+  background: #55a555;
+  cursor: pointer;
+  /* border: 1px solid #007a00; */
+  box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+.my-btn a {
+  color: #000 !important;
+}
+.my-btn:hover {
+  background: #fff;
+  transition: all 0.5s ease-out;
+  /* opacity: 0.2; */
+  /* background-color: rgba(0, 138, 0, 0.2); */
+}
+.my-btn a:hover {
+  color: #55a555 !important;
+}
+/*******************************************************/
+/* Projects Content */
+/*******************************************************/
+.projects {
+  max-height: 500px;
+  background: inherit;
+  /* border: 1px solid #fff; */
+  color: gold;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+.project-pills li:not(:first-child) {
+  background: #000;
+}
+.project-pills li:not(:first-child):hover {
+  /* background: rgba(0, 0, 0, 0.7); */
+  opacity: 0.7;
+  color: #000;
+  background: gold;
+}
+.project-pills li {
+  position: relative;
+  display: flex;
+  width: 100%;
+  padding: 0.5% 1%;
+  border-radius: 10px;
+  margin-bottom: 0.2em;
+}
+.project-pills li div {
+  /* border: 1px solid #fff; */
+  padding: 0 1%;
+}
+.project-heading {
+  min-height: 30px;
+  align-items: center;
+  text-transform: uppercase;
+  font-size: 1.1em;
+  font-weight: 700;
+  color: #fff;
+  background: #222;
+}
+.project-heading div {
+  /* border: 1px solid #fff; */
+  text-align: center;
+  padding: 0 1%;
+}
+.project-number {
+  width: 3%;
+}
+.project-title {
+  width: 20%;
+}
+.project-desc {
+  width: 60%;
+}
+.project-status {
+  width: 10%;
+  margin: auto;
+}
+.project-button {
+  width: 7%;
+  margin: auto;
+}
+.project-button i {
+  color: gold !important;
+  background: #000;
+}
+.project-heading .project-button i {
+  color: #fff !important;
+  background: none;
+}
+
+/*******************************************************/
+/* Login Styles */
+/*******************************************************/
+.login-form {
+  height: auto;
+  background: #e4e4e4;
+  width: 50%;
+  margin: 3em auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.login-header {
+  width: 100%;
+  height: 100px;
+  font-size: 1.1em;
+  background: #2b2b2b;
+  box-shadow: 0 1px 17px #2b2b2b;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login-header p {
+  cursor: pointer;
+  padding-left: 10px;
+  text-align: center;
+  /* text-transform: uppercase; */
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.login-header a:hover {
+  opacity: 0.7;
+}
+.login-body {
+  /* border: 1px solid #fff; */
+  width: 95%;
+  font-size: 1.1em;
+  color: #000;
+}
+.login-body h1 {
+  font-size: 3em;
+  font-weight: 100;
+  padding: 2% 2%;
+  letter-spacing: 4px;
+}
+
+.input-block {
+  margin: 3% 0;
+  width: 95%;
+}
+.input-block div {
+  /* border: 1px solid #fff; */
+  margin-top: 1%;
+  display: flex;
+  align-items: center;
+}
+.input-block label {
+  letter-spacing: 3px;
+}
+.input-icon {
+  display: inline-block;
+  border-radius: 5px;
+  /* background: #2b2b2b; */
+  padding: 0.4% 1%;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 90%;
+  border-radius: 5px;
+  line-height: 2;
+  font-size: 1.1em;
+  padding: 0 3%;
+  margin-left: 5px;
+  /* border-bottom: solid 3px #000; */
+  /* background: #76b852; */
+  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+.form-button div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1% 2%;
+}
+.form-button p {
+  margin-bottom: 0.5em;
+}
+.form-button input {
+  width: 50%;
+  margin: 2% 1%;
+  font-size: 0.9em;
+  font-weight: 600;
+  padding: 2% 7%;
+  border-radius: 10px;
+  letter-spacing: 3px;
+}
+.form-button a {
+  color: #000;
+}
+.form-button a:hover,
+.form-button input:hover {
+  color: #55a555;
+}
+
+.login-form footer {
+  margin-top: 1em;
+}
+
+/*******************************************************/
+/* Signup Styles */
+/*******************************************************/
+.signup-div {
+  display: flex;
+  flex-direction: column;
+}
+.signup-heading {
+  width: 50%;
+  margin: 2% auto;
+  text-align: center;
+}
+.signup-heading h1 {
+  font-size: 3em;
+  margin-bottom: 10px;
+}
+.signup-form {
+  /* font-family: "Roboto", sans-serif; */
+  background: #67994b;
+  height: auto;
+  width: 50%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  padding: 2% 2%;
+}
+.signup-form form {
+  width: 100%;
+}
+
+.signup-form input[type="text"],
+.signup-form input[type="email"],
+.signup-form input[type="password"] {
+  font-size: 0.9em;
+  font-weight: 200;
+  width: 100%;
+  display: block;
+  padding: 0.7em;
+  border: solid 1px rgba(255, 255, 255, 0.37);
+  transition: all 1s cubic-bezier(0.64, 0.09, 0.08, 1);
+  background: rgba(255, 255, 255, 0);
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+
+.signup-form input[type="text"]:focus,
+.signup-form input[type="email"]:focus,
+.signup-form input[type="password"]:focus {
+  color: #fff;
+  background: #555;
+}
+
+.signup-form .input-block {
+  width: 100%;
+  padding: 1% 2%;
+}
+
+.signup-form .form-button a {
+  padding: 1% 1%;
+  width: 30%;
+  text-align: center;
+  border-radius: 5px;
+}
+
+/*******************************************************/
+/* Footer */
+/*******************************************************/
+.main-footer {
+  bottom: 0;
+  left: 0;
+  padding: 15px;
+  min-height: 15vh;
+  min-width: 100%;
+  background: #2b2b2b;
+  font-size: 0.9em;
+  /* grid */
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-areas: "links paragraph icon";
+  justify-items: center;
+  align-items: center;
+  text-align: center;
+  /* box shadow */
+  box-shadow: 0 -1px 17px #2b2b2b;
+}
+.main-footer ul {
+  grid-area: links;
+  list-style-type: disc;
+  text-align: left;
+  padding-bottom: 1em;
+}
+.main-footer ul li {
+  padding: 5px 0;
+}
+
+.main-footer ul li:last-child {
+  color: #55a555 !important;
+}
+.main-footer ul li a:hover {
+  opacity: 0.7;
+}
+.main-footer p {
+  grid-area: paragraph;
+  padding-bottom: 1em;
+}
+
+.main-footer .footer-icon {
+  grid-area: icon;
+  font-size: 0.8em;
+  padding-bottom: 1em;
+}
+.footer-icon a {
+  margin: 0 4px;
+}
+.footer-icon a:hover {
+  color: #55a555;
+}
