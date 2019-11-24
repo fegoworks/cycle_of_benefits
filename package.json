@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/colenocks/Cycle_of_benefits/issues"
   },
-  "homepage": "https://github.com/colenocks/Cycle_of_benefits#readme"
+  "homepage": "https://github.com/colenocks/Cycle_of_benefits#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mssql": "^6.0.1"
+  },
+  "devDependencies": {}
 }
