@@ -1,52 +1,99 @@
-import * as functions from "./functions.js";
-import * as myServer from "server.js";
+// import * as functions from "./functions.js";
+// import * as server from "../../src/server.js";
 
-myServer.check();
+const functions = require("./functions");
 
+let newUserObj;
+let currentUserObj;
 /* Form validation*/
+/* Login Form*/
+if (document.getElementById("loginform")) {
+  let loginForm = document.getElementById("loginform");
+  let username = document.getElementById("username");
+  let password = document.getElementById("password");
+
+  loginForm.onsubmit = function() {
+    event.preventDefault();
+    if (username.value === "" || password.value === "") {
+      functions.displayAlert("Incorrect login credentials !", "error");
+      clearFormFields(loginForm);
+    } else {
+      currentUserObj = {
+        username: username.value,
+        password: password.value
+      };
+    }
+  };
+}
+
+/* Signup Form*/
 if (document.getElementById("form")) {
   let signupForm = document.getElementById("form");
-
-  signupForm.onclick = retrieveData;
-
+  let regForm = document.forms.namedItem("signupform");
   // if element exists on the page
-  let fname = document.forms.namedItem("signupform").first_name.value;
-  //   console.log(fname);
-  let lname = document.forms.namedItem("signupform").last_name.value;
-  let user = document.forms.namedItem("signupform").username.value;
-  let email = document.forms.namedItem("signupform").email.value;
-  let password = document.forms.namedItem("signupform").password.value;
-  let password_match = document.forms.namedItem("signupform").confirm_password
-    .value;
+  let fname = document.getElementById("reg_firstname");
+  let lname = document.getElementById("reg_lastname");
+  let user = document.getElementById("reg_username");
+  let email = document.getElementById("reg_email");
+  let password = document.getElementById("reg_password");
+  let password_match = document.getElementById("reg_conf_password");
 
-  console.log(email);
+  signupForm.onsubmit = function() {
+    event.preventDefault();
+    retrieveData();
+    //clearFormFields(regForm);
+  };
+
   function validateSignupForm() {
-    if (password !== password_match) {
+    if (
+      user.value === "" ||
+      lname.value === "" ||
+      fname.value === "" ||
+      email.value === ""
+    ) {
+      functions.displayAlert(
+        "Please provide all required information!",
+        "info"
+      );
+      clearFormFields(regForm);
+
+      return false;
+    } else if (password.value !== password_match.value) {
       functions.displayAlert("Passwords do not match", "error");
+      //clearFormFields(regForm);
+      return false;
     }
   }
 
   function retrieveData() {
-    event.preventDefault();
-    if (lname == "") {
-      functions.displayAlert("No name provided", "info");
-    }
-    //validate input
-    // if (validateSignupForm) {
+    validateSignupForm();
     // submit data to server
-    // submitData(fname, lname, user, email, password);
-    // }
-  }
-
-  function submitData(fname, lname, user, email, pass) {
-    // if data matches successfully, change signin to user icon
-    showUserIcon();
-    // call showProfile function
-    showProfileMenu();
-    // show dropdown div with link to profile (Myprofile)
-    showProfileSlideDownMenu();
-
-    return userObj;
-    // append
+    newUserObj = submitData(
+      fname.value,
+      lname.value,
+      user.value,
+      email.value,
+      password.value
+    );
   }
 }
+
+function clearFormFields(formID) {
+  let element = formID.elements;
+  for (let i = 0; i < element.length - 1; i++) {
+    element[i].value = "";
+  }
+}
+
+function submitData(fname = "", lname = "", user = "", email = "", pass = "") {
+  let userObj = {
+    fname: fname,
+    lname: lname,
+    user: user,
+    email: email,
+    pass: pass
+  };
+  return userObj;
+}
+
+module.exports = { newUserObj, submitData, currentUserObj };

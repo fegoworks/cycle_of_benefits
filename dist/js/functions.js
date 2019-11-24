@@ -1,3 +1,26 @@
+function menuToggle() {
+  /* Toggle Menu*/
+  const menuBtn = document.querySelector(".menu-btn");
+  const menuHeader = document.querySelector(".menu-header");
+
+  let showMenu = false;
+  menuBtn.onclick = function() {
+    if (!showMenu) {
+      menuBtn.classList.add("close");
+      menuHeader.classList.add("show");
+
+      //reset Menu State
+      showMenu = true;
+    } else {
+      menuBtn.classList.remove("close");
+      menuHeader.classList.remove("show");
+
+      //reset Menu State
+      showMenu = false;
+    }
+  };
+}
+
 function displayAlert(msg, type) {
   //Alert Display
   let alertDiv = document.createElement("div");
@@ -50,7 +73,6 @@ function showProfileMenu() {
   let navItem = document.querySelectorAll(".menu-item");
   navItem[3].setAttribute("href", "/userprofile.html");
   navItem[3].textContent = "My Profile";
-  console.log(navItem[4]);
 }
 
 function showUserIcon() {
@@ -109,7 +131,8 @@ function showProfileSlideDownMenu() {
   };
 }
 
-export {
+module.exports = {
+  menuToggle,
   displayAlert,
   showProfileMenu,
   showUserIcon,

@@ -1,10 +1,16 @@
 "use strict";
-import * as functions from "../dist/js/functions";
+// import * as functions from "../dist/js/functions";
+// import * as forms from "../dist/js/forms";
+// import * as app from "../dist/js/app";
+const functions = require("../dist/js/functions");
+const forms = require("../dist/js/forms");
 const sql = require("mssql");
+console.log("damn");
 // const http = require("http");
 // const fs = require("fs");
 //const port = 3000;
 
+// alert(forms.newUserObj.pass);
 /*
 const server = http.createServer((req, res) => {
   if(req.url === "/"){
@@ -42,50 +48,66 @@ let dbConfig = {
   //   user: "Cole-PC\\Cole"
 };
 
-function getConnection() {
+// function getConnection() {
+let pool = new sql.ConnectionPool(dbConfig);
+console.log(dbConfig);
+//console.log(pool);
+pool
+  .connect()
+  .then(() => {
+    console.log("Successfully connected to database");
+    let request = new sql.Request(pool);
+    request
+      .query("SELECT * FROM Tbl_Users")
+      .then(data => {
+        console.log(data.recordset);
+        pool.close();
+      })
+      .catch(err => {
+        console.log("Error in query, Could not execute query: " + err);
+        pool.close();
+      });
+  })
+  .catch(err => {
+    console.log("Could not connect to database: " + err);
+  });
+// }
+
+// getConnection();
+
+function Login(user, password) {
   let pool = new sql.ConnectionPool(dbConfig);
   //console.log(pool);
   pool
     .connect()
     .then(() => {
       console.log("Successfully connected to database");
-      let request = new sql.Request(pool);
+      let request = new sql.ConnectionPool(myPool);
       request
-        .query("SELECT * FROM Tbl_Users")
+        .query(
+          `SELECT username, password FROM Tbl_Users WHERE username = ${user} AND password = ${password}`
+        )
         .then(data => {
-          console.log(data.recordset);
-          pool.close();
+          functions.displayAlert("Login Successful!", "success");
+          //2. call the three methods to display user icons
+          functions.showProfileMenu();
+          functions.showProfileSlideDownMenu();
+          functions.showUserIcon();
+          myPool.close();
         })
-        .catch(err => {
-          console.log("Error in query, Could not execute query: " + err);
-          pool.close();
+        .catch((err, data) => {
+          functions.displayAlert("Username or Email not found!", "error");
+          // 2. clearPasswordFields();
+          myPool.close();
         });
     })
     .catch(err => {
       console.log("Could not connect to database: " + err);
     });
 }
-
-getConnection();
-
-function Login(user, password) {
-  let myPool; //connection pool
-  let request = new sql.ConnectionPool(myPool);
-  request
-    .query(
-      `SELECT username, password FROM Tbl_Users WHERE username = ${user} AND password = ${password}`
-    )
-    .then(data => {
-      //functions.displayAlert("Login Successful!", "success");
-      //2. call the three methods to display user icons
-      myPool.close();
-    })
-    .catch((err, data) => {
-      //1. functions.displayAlert("Username or Email not found!", "error");
-      // 2. clearPasswordFields();
-      myPool.close();
-    });
-}
+// if (forms.currentUserObj !== "") {
+//   Login(forms.currentUserObj.username, forms.currentUserObj.password);
+// }
 
 function SignUp(user, fname, lname, email, password) {
   let myPool; //connection pool
@@ -123,15 +145,8 @@ function UpdateProfile(/*all profile fileds*/) {}
 function PostProject(/*all projects fileds*/) {}
 function EditProject(/*all project fileds*/) {}
 
-function check() {
-  console.log("I can see you");
+function hi() {
+  alert("I can see you");
 }
 
-module.exports = {
-  Login,
-  SignUp,
-  UpdateProfile,
-  PostProject,
-  EditProject,
-  check
-};
+module.exports = { Login, SignUp, UpdateProfile, PostProject, EditProject, hi };

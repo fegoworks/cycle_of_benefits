@@ -78,11 +78,64 @@
       <main class="main-content">
         <div class="content-heading">
           <h1>My Profile</h1>
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sed
-            delectus, placeat ad optio aperiam quibusdam enim non amet veniam
-            praesentium?.
-          </p>
+        </div>
+        <div class="profile">
+          <form method="post" action="" class="profile-form">
+            <div class="input-block">
+              <label for="first_name">First Name</label>
+              <div>
+                <input id="reg_firstname" type="text" name="first_name" />
+                <span class="input-icon">
+                  <i class="fas fa-key fa-2x"></i>
+                </span>
+              </div>
+            </div>
+            <div class="input-block">
+              <label for="last_name">Last Name</label>
+              <div>
+                <input id="reg_lastname" type="text" name="last_name" />
+              </div>
+            </div>
+            <div class="input-block">
+              <label for="username">Username</label>
+              <div>
+                <input id="reg_username" type="text" name="username" />
+              </div>
+            </div>
+            <div class="input-block">
+              <label for="email">Email</label>
+              <div>
+                <input id="reg_email" type="email" name="email" />
+              </div>
+            </div>
+            <div class="input-block">
+              <label for="password">Password</label>
+              <div>
+                <input id="reg_password" type="password" name="password" />
+              </div>
+            </div>
+            <div class="input-block">
+              <label for="confirm_password">Confirm Password</label>
+              <div>
+                <input
+                  id="reg_conf_password"
+                  type="password"
+                  name="confirm_password"
+                />
+              </div>
+            </div>
+            <div class="form-button">
+              <div>
+                <input type="submit" class="my-btn" value="SIGN UP" />
+                <a href="./index.html">Cancel</a>
+              </div>
+              <hr />
+              <p>
+                Got an Account Already?
+                <a href="./login.html">Login Here!</a>
+              </p>
+            </div>
+          </form>
         </div>
       </main>
       <footer class="main-footer">
@@ -105,7 +158,7 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script type="module" src="./public/client.bundle.js"></script>
+    <script type="module" src="./js/app.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
