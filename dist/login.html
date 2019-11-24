@@ -46,19 +46,19 @@
             <h1>Login</h1>
             <h5 class="green-text">Please enter your login details</h5>
             <hr />
-            <form
-              name="loginForm"
-              action=""
-              method="POST"
-              onsubmit="return validateLoginForm()"
-            >
+            <form id="loginform" name="loginForm" action="" method="post">
               <div class="input-block">
                 <label for="username">Username</label>
                 <div>
                   <span class="input-icon">
                     <i class="fas fa-user fa-2x"></i>
                   </span>
-                  <input type="text" name="username" placeholder="Username" />
+                  <input
+                    id="username"
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                  />
                 </div>
               </div>
               <div class="input-block">
@@ -68,6 +68,7 @@
                     <i class="fas fa-key fa-2x"></i>
                   </span>
                   <input
+                    id="password"
                     type="password"
                     name="password"
                     placeholder="Password"
@@ -94,7 +95,7 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script type="module" src="./js/forms.js"></script>
+    <script type="module" src="./public/client.bundle.js"></script>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <!-- <script
     src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
