@@ -1,36 +1,58 @@
-// import * as functions from "./functions.js";
-// import * as server from "../../src/server.js";
-
-const functions = require("./functions");
+import * as functions from "./functions.js";
 
 let newUserObj;
 let currentUserObj;
 /* Form validation*/
 /* Login Form*/
 if (document.getElementById("loginform")) {
+  // if element exists on the page
   let loginForm = document.getElementById("loginform");
   let username = document.getElementById("username");
   let password = document.getElementById("password");
 
-  loginForm.onsubmit = function() {
-    event.preventDefault();
+  loginForm.onsubmit = function(e) {
+    e.preventDefault();
     if (username.value === "" || password.value === "") {
-      functions.displayAlert("Incorrect login credentials !", "error");
-      clearFormFields(loginForm);
+      functions.displayAlert("Enter your login information!", "info");
     } else {
-      currentUserObj = {
+      let userObj = {
         username: username.value,
         password: password.value
       };
+      const fetchOptions = {
+        method: "post",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userObj)
+      };
+
+      fetchData()
+        .then(res => {})
+        .catch(err => {
+          console.log("fetch error: " + err);
+        });
+
+      async function fetchData() {
+        const response = await fetch("/login", fetchOptions);
+        const jsonData = await response.json();
+        console.log(jsonData.status);
+        if (jsonData.status === "error") {
+          functions.displayAlert("Username or Email not found!", "error");
+          clearFormFields(loginForm);
+        } else if (jsonData.status === "success") {
+          functions.displayAlert("Login Successful!", "success");
+        }
+      }
     }
   };
 }
 
 /* Signup Form*/
 if (document.getElementById("form")) {
+  // if element exists on the page
   let signupForm = document.getElementById("form");
   let regForm = document.forms.namedItem("signupform");
-  // if element exists on the page
   let fname = document.getElementById("reg_firstname");
   let lname = document.getElementById("reg_lastname");
   let user = document.getElementById("reg_username");
@@ -96,4 +118,4 @@ function submitData(fname = "", lname = "", user = "", email = "", pass = "") {
   return userObj;
 }
 
-module.exports = { newUserObj, submitData, currentUserObj };
+export { newUserObj, submitData, currentUserObj };

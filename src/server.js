@@ -2,81 +2,81 @@
 // import * as functions from "../dist/js/functions";
 // import * as forms from "../dist/js/forms";
 // import * as app from "../dist/js/app";
-const functions = require("../dist/js/functions");
-const forms = require("../dist/js/forms");
+// const functions = require("../dist/js/functions");
+// const forms = require("../dist/js/forms");
 const sql = require("mssql");
-console.log("damn");
-// const http = require("http");
+const http = require("http");
 // const fs = require("fs");
-//const port = 3000;
+const port = 3000;
+const express = require("express");
+const app = express();
 
-// alert(forms.newUserObj.pass);
-/*
-const server = http.createServer((req, res) => {
-  if(req.url === "/"){
-    res.writeHead(200, { "Content-Type": "text/html" });
-    fs.write("index.html", (error, data) => {
-      if (error) {
-        res.writeHead(404);
-        res.write("Error: Coundn't find file");
-      } else {
-        res.write(data);
-      }
-      res.end();
+app.listen(port, () => console.log(`listening at port ${port}`));
+app.use(express.static("dist"));
+app.use(express.json({ limit: "1mb" }));
+// app.get("/index", (req, res))
+app.post("/login", (req, res) => {
+  const clientData = req.body;
+  //connect to database
+  let pool = new sql.ConnectionPool(dbConfig);
+  pool
+    .connect()
+    .then(() => {
+      console.log("Successfully connected to database");
+      let request = new sql.Request(pool);
+      // switch statement for different queries
+      request
+        .query("SELECT * FROM Tbl_Users")
+        .then(data => {
+          let dbData = data.recordset[0];
+          // console.log("server\t" + JSON.stringify(dbData));
+          // for (let row = 0; row < dbData.length; row++) {
+          if (
+            clientData.username === dbData.userId &&
+            clientData.password === dbData.password
+          ) {
+            //send data back
+            res.json({
+              status: "success",
+              data: dbData
+            });
+          } else {
+            res.json({
+              status: "error",
+              data: {}
+            });
+          }
+          // }
+          pool.close();
+        })
+        .catch(err => {
+          console.log("Error in query, Could not execute query: " + err);
+          pool.close();
+        });
+    })
+    .catch(err => {
+      console.log("Could not connect to database: " + err);
     });
-  }
 });
-
-server.listen(port, error => {
-  if (error) {
-    console.log("Server not connected", error);
-  } else {
-    console.log("Server is listening on port " + port);
-  }
-});
-*/
 
 let dbConfig = {
   server: "COLE-PC\\SQLEXPRESS",
   database: "cyobDB",
   user: "guestuser",
   password: "1234"
-  //   provider: "SQLNCLI11",
-  //   server: `COLE-PC\\SQLEXPRESS`,
-  //   Security: "SSPI",
-  //   Database: "cyobDB",
-  //   user: "Cole-PC\\Cole"
 };
 
-// function getConnection() {
-let pool = new sql.ConnectionPool(dbConfig);
-console.log(dbConfig);
-//console.log(pool);
-pool
-  .connect()
-  .then(() => {
-    console.log("Successfully connected to database");
-    let request = new sql.Request(pool);
-    request
-      .query("SELECT * FROM Tbl_Users")
-      .then(data => {
-        console.log(data.recordset);
-        pool.close();
-      })
-      .catch(err => {
-        console.log("Error in query, Could not execute query: " + err);
-        pool.close();
-      });
-  })
-  .catch(err => {
-    console.log("Could not connect to database: " + err);
-  });
+function getData(data) {
+  return data;
+}
+
+//function getConnection() {
+
 // }
 
 // getConnection();
 
-function Login(user, password) {
-  let pool = new sql.ConnectionPool(dbConfig);
+function Login(user, password, pool) {
   //console.log(pool);
   pool
     .connect()
@@ -88,11 +88,7 @@ function Login(user, password) {
           `SELECT username, password FROM Tbl_Users WHERE username = ${user} AND password = ${password}`
         )
         .then(data => {
-          functions.displayAlert("Login Successful!", "success");
-          //2. call the three methods to display user icons
-          functions.showProfileMenu();
-          functions.showProfileSlideDownMenu();
-          functions.showUserIcon();
+          //Show user data profile page
           myPool.close();
         })
         .catch((err, data) => {

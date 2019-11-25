@@ -131,7 +131,7 @@ function showProfileSlideDownMenu() {
   };
 }
 
-module.exports = {
+export {
   menuToggle,
   displayAlert,
   showProfileMenu,
