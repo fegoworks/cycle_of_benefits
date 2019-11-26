@@ -4,18 +4,30 @@
 // import * as app from "../dist/js/app";
 // const functions = require("../dist/js/functions");
 // const forms = require("../dist/js/forms");
-const sql = require("mssql");
-const http = require("http");
 // const fs = require("fs");
-const port = 3000;
 const express = require("express");
 const app = express();
+const sql = require("mssql");
+const http = require("http");
+const bodyparser = require("body-parser");
+const port = process.env.PORT || 3000;
 
 app.listen(port, () => console.log(`listening at port ${port}`));
 app.use(express.static("dist"));
 app.use(express.json({ limit: "1mb" }));
-// app.get("/index", (req, res))
-app.post("/login", (req, res) => {
+
+app.use(bodyparser.urlencoded({ extended: true }));
+// app.use(express.urlencoded());
+
+app.get("/", (req, res) => {
+  res.sendFile(__dirname, "index.html");
+});
+
+app.get("/userprofile", (req, res) => {
+  res.sendFile(__dirname, "userprofile.html");
+});
+
+app.post("/submit-login", (req, res) => {
   const clientData = req.body;
   //connect to database
   let pool = new sql.ConnectionPool(dbConfig);
@@ -36,15 +48,13 @@ app.post("/login", (req, res) => {
             clientData.password === dbData.password
           ) {
             //send data back
-            res.json({
-              status: "success",
-              data: dbData
-            });
+            res.json({ data: dbData });
+            // res.json({
+            //   status: "success",
+            //   data: dbData
+            // });
           } else {
-            res.json({
-              status: "error",
-              data: {}
-            });
+            res.end();
           }
           // }
           pool.close();

@@ -1,8 +1,12 @@
 import * as functions from "./functions.js";
 
-let newUserObj;
-let currentUserObj;
 /* Form validation*/
+async function fetchData(url, options) {
+  const response = await fetch(url, options);
+  const jsonData = await response.json();
+  return jsonData.data;
+}
+
 /* Login Form*/
 if (document.getElementById("loginform")) {
   // if element exists on the page
@@ -12,6 +16,8 @@ if (document.getElementById("loginform")) {
 
   loginForm.onsubmit = function(e) {
     e.preventDefault();
+    let url = loginForm.getAttribute("action");
+    let currentLocation = window.location;
     if (username.value === "" || password.value === "") {
       functions.displayAlert("Enter your login information!", "info");
     } else {
@@ -22,29 +28,26 @@ if (document.getElementById("loginform")) {
       const fetchOptions = {
         method: "post",
         headers: {
+          Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json"
         },
         body: JSON.stringify(userObj)
       };
-
-      fetchData()
-        .then(res => {})
-        .catch(err => {
-          console.log("fetch error: " + err);
-        });
-
-      async function fetchData() {
-        const response = await fetch("/login", fetchOptions);
-        const jsonData = await response.json();
-        console.log(jsonData.status);
-        if (jsonData.status === "error") {
-          functions.displayAlert("Username or Email not found!", "error");
+      fetchData(url, fetchOptions)
+        .then(data => {
+          // console.log(data);
           clearFormFields(loginForm);
-        } else if (jsonData.status === "success") {
           functions.displayAlert("Login Successful!", "success");
-        }
-      }
+          window.location.replace("userprofile.html");
+        })
+        .catch(err => {
+          //if no data is returned
+          console.log("No data returned: " + err);
+          // functions.displayAlert("Username or Password not correct!", "error");
+          clearFormFields(loginForm);
+        });
     }
+    return false;
   };
 }
 
@@ -117,5 +120,3 @@ function submitData(fname = "", lname = "", user = "", email = "", pass = "") {
   };
   return userObj;
 }
-
-export { newUserObj, submitData, currentUserObj };

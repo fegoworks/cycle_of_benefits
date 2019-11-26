@@ -6,32 +6,40 @@ if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
 
+// window.location.assign("userprofile.html");
+// ("userprofile.html");
+// console.log(myLock);
 //send data to server via fetch
-const data = {
+const test = {
   name: "cole",
   hobby: "soccer"
 };
+
 // const fetchOptions = {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json"
-//   },
-//   body: JSON.stringify(data)
-// };
+//     method: "post",
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify(userObj)
+//   };
 
-// fetchData().catch(err => {
-//   console.log("fetch error: " + err);
-// });
+//   fetchData()
+//     .then(res => {})
+//     .catch(err => {
+//       console.log("fetch error: " + err);
+//     });
 
-// async function fetchData() {
-//   const response = await fetch("/api", fetchOptions);
-//   const jsonData = await response.json();
-//   if (jsonData.data.status === "error") {
-//     functions.displayAlert();
-//   } else {
-//     console.log(json.data.password);
+//   async function fetchData() {
+//     const response = await fetch("/submit-login", fetchOptions);
+//     const jsonData = await response.json();
+//     console.log(jsonData);
+//     if (jsonData.status === 404) {
+//       functions.displayAlert("Username or Email not found!", "error");
+//       clearFormFields(loginForm);
+//     } else if (jsonData.status === 200) {
+//       functions.displayAlert("Login Successful!", "success");
+//     }
 //   }
-// }
 // fetch("/api", fetchOptions)
 //   .then(res => res.json())
 //    .then(json =>{
