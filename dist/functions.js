@@ -1,0 +1,152 @@
+function menuToggle() {
+  /* Toggle Menu*/
+  const menuBtn = document.querySelector(".menu-btn");
+  const menuHeader = document.querySelector(".menu-header");
+
+  let showMenu = false;
+  menuBtn.onclick = function() {
+    if (!showMenu) {
+      menuBtn.classList.add("close");
+      menuHeader.classList.add("show");
+
+      //reset Menu State
+      showMenu = true;
+    } else {
+      menuBtn.classList.remove("close");
+      menuHeader.classList.remove("show");
+
+      //reset Menu State
+      showMenu = false;
+    }
+  };
+}
+
+function displayAlert(msg, type) {
+  //Alert Display
+  let alertDiv = document.createElement("div");
+  alertDiv.classList.add("alert-info");
+  let alertsCount = 1;
+
+  let parag = document.createElement("p");
+  parag.classList.add("p-info");
+  parag.append(document.createTextNode(msg));
+
+  // Alert Close button
+  let closeButton = document.createElement("button");
+  closeButton.classList.add("close-button");
+  closeButton.append(document.createTextNode("close"));
+  parag.appendChild(closeButton);
+  // alertDiv.appendChild(closeButton);
+
+  if (type === "error") {
+    parag.style.background = "red";
+  } else if (type === "info") {
+    parag.style.background = "blue";
+  } else if (type === "success") {
+    parag.style.background = "green";
+  }
+
+  alertDiv.append(parag);
+  document.body.appendChild(alertDiv);
+
+  closeButton.onclick = function() {
+    alertsCount--;
+    parag.style.display = "none";
+    if (alertsCount === 0) {
+      // document.body.removeChild(alertDiv);
+      alertDiv.style.display = "none";
+    }
+  };
+}
+
+function showProfileMenu() {
+  // show icon when user is logged in successfully
+  // if (document.getElementsByClassName("menu-list")) {
+  let ul = document.querySelector(".menu-list");
+  let listItem = document.createElement("li");
+  let a = document.createElement("a");
+  a.setAttribute("href", "/index.html");
+  a.classList.add("menu-item");
+  a.textContent = "Sign Out";
+
+  listItem.appendChild(a);
+  ul.appendChild(listItem);
+  let navItem = document.querySelectorAll(".menu-item");
+  navItem[3].setAttribute("href", "/userprofile.html");
+  navItem[3].textContent = "My Profile";
+  // }
+}
+
+function showUserIcon() {
+  // show icon when user is logged in successfully
+  // if (document.getElementsByClassName("signin-link")) {
+  let signinLink = document.querySelector(".signin-link");
+  signinLink.textContent = "";
+  signinLink.removeAttribute("href");
+  let userIcon = document.createElement("i");
+  userIcon.classList.add("fas", "fa-user", "fa-2x");
+  signinLink.appendChild(userIcon);
+  // show slidedown menu for screens more than 900px
+  showProfileSlideDownMenu();
+  // }
+}
+
+function showProfileSlideDownMenu() {
+  //called by showUserIcon();
+  let userIcon = document.querySelector(".signin-link");
+  let profileDiv = document.createElement("div");
+  profileDiv.classList.add("profile-div");
+  let ul = document.createElement("ul");
+
+  let profile = document.createElement("li");
+  let profileLink = document.createElement("a");
+  profileLink.setAttribute("href", "/userprofile.html");
+  profileLink.textContent = "My Profile";
+  profile.appendChild(profileLink);
+
+  let signout = document.createElement("li");
+  let signoutLink = document.createElement("a");
+  signoutLink.setAttribute("href", "/message.html");
+  signoutLink.classList.add();
+  signoutLink.textContent = "Log Out";
+  signout.appendChild(signoutLink);
+
+  ul.appendChild(profileLink);
+  ul.appendChild(signoutLink);
+  profileDiv.appendChild(ul);
+  document.body.appendChild(profileDiv);
+
+  let dropdown = false;
+
+  userIcon.onclick = function() {
+    if (!dropdown) {
+      userIcon.classList.add("slide-up");
+      profileDiv.classList.add("slide-down");
+
+      //reset Menu State
+      dropdown = true;
+    } else {
+      userIcon.classList.remove("slide-up");
+      profileDiv.classList.remove("slide-down");
+
+      //reset Menu State
+      dropdown = false;
+    }
+  };
+}
+
+//function that connects to the data base and retrieve project information appends as a div to the list of project
+
+//function that loads all project data on request through the projects.html url
+
+//a project button functionality that when clicked loads projectpage.html of the corrresponding project
+
+//a userprofile page with navigation links at the left
+//--post project
+//--my messages
+//--my Profile userprofile
+
+export { menuToggle, displayAlert, showProfileMenu, showUserIcon };
+// create an i element, attache a class of "fas fa-user-tie"
+//create a dropdown div for wider screens(>600px), include a ul with two list items: profile and signout
+// };
