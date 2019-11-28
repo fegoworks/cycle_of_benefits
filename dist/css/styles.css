@@ -540,8 +540,9 @@ $white: #ffffff; */
 }
 
 .noshow {
-  display: none;
+  visibility: hidden;
   opacity: 0;
+  /* display: none; */
 }
 
 .profile,
