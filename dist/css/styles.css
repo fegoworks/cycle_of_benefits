@@ -43,13 +43,14 @@ body {
   font-family: "Karla", sans-serif;
   font-size: 16px;
   background: #494949;
-  position: relative;
 }
 /* Container */
 .main-container {
   position: relative;
+  /* display: flex;
+  flex-direction: column; */
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 /*******************************************************/
@@ -62,7 +63,7 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #fff;
+  border-top: 1px solid #555;
   margin: 0.8em 0;
   padding: 0;
 }
@@ -95,7 +96,9 @@ hr {
   margin-bottom: 2.5em;
 }
 .main-header a:hover {
-  opacity: 0.7;
+  /* opacity: 0.7; */
+  transform: scale(1.1);
+  color: #3fb6a8;
 }
 
 .logo-div {
@@ -156,16 +159,30 @@ hr {
 /********************************************************/
 /* Main */
 /********************************************************/
-.main-content {
+main.main-content {
+  clear: both;
   position: relative;
   min-height: 67vh;
-  margin: 0 5%;
+  margin: 0 3%;
   padding-bottom: 3em; /*  footer height, to make stick */
 }
 .content-heading {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 2em;
+}
+.content-heading .title {
   width: 40%;
   font-size: 1.6em;
-  margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+.content-heading .image {
+  width: 55%;
+  display: flex;
+  justify-content: end;
 }
 .content-body {
   width: 90%;
@@ -215,6 +232,7 @@ hr {
   max-height: 500px;
   background: inherit;
   /* border: 1px solid #fff; */
+  overflow-y: auto;
   color: gold;
   box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
@@ -315,18 +333,19 @@ hr {
 .login-body {
   /* border: 1px solid #fff; */
   width: 95%;
-  font-size: 1.1em;
+  font-size: 1em;
+  /* padding-bottom: 17vh; */
   color: #000;
 }
 .login-body h1 {
-  font-size: 3em;
+  font-size: 2em;
   font-weight: 100;
   padding: 2% 2%;
   letter-spacing: 4px;
 }
 
 .input-block {
-  margin: 3% 0;
+  margin: 2% 0;
   width: 95%;
 }
 .input-block div {
@@ -347,45 +366,46 @@ hr {
 
 input[type="text"],
 input[type="email"],
-input[type="password"] {
-  width: 90%;
+input[type="password"],
+textarea {
+  width: 100%;
   border-radius: 5px;
-  line-height: 2;
-  font-size: 1.1em;
-  padding: 0 3%;
-  margin-left: 5px;
+  /* line-height: 2; */
+  font-size: 1em;
+  padding: 1% 2%;
+  /* margin-left: 5px; */
   /* border-bottom: solid 3px #000; */
   /* background: #76b852; */
   transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
 }
-.form-button div {
+.form-button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1% 2%;
-}
-.form-button p {
-  margin-bottom: 0.5em;
-}
-.form-button input {
-  width: 50%;
-  margin: 2% 1%;
+  padding: 2% 2%;
   font-size: 0.9em;
   font-weight: 600;
-  padding: 2% 7%;
+  letter-spacing: 2px;
+}
+.form-info p {
+  margin-bottom: 0.5em;
+}
+.form-button .left-btn,
+.form-button .right-btn {
+  width: 40%;
+  display: flex;
+  justify-content: start;
+  text-align: center;
+  padding: 2% 1%;
   border-radius: 10px;
-  letter-spacing: 3px;
+  font-size: 1em;
+  font-weight: 600;
+  letter-spacing: 2px;
 }
-.form-button a {
-  color: #000;
-}
+.form-info a:hover,
 .form-button a:hover,
 .form-button input:hover {
   color: #55a555;
-}
-
-.login-form footer {
-  margin-top: 1em;
 }
 
 /*******************************************************/
@@ -453,14 +473,169 @@ input[type="password"] {
 }
 
 /*******************************************************/
-/* Footer */
+/* Profile Styles Content */
 /*******************************************************/
+/* $logo: #3dbb3d;
+$gray: #777777;
+$black: #070707;
+$aqua: #3fb6a8;
+$white: #ffffff; */
+.boxes {
+  position: relative;
+  display: flex;
+  border: 1px solid #fff;
+  width: 100%;
+  min-height: fit-content;
+  padding: 1% 2%;
+}
+.leftbox {
+  /* border: 1px solid #fff; */
+  width: 20%;
+  height: 100%;
+  /* border: 1px solid #555; */
+  padding: 1% 0;
+  box-shadow: 3px 3px 10px rgba(#777, 0.5);
+}
+.rightbox {
+  border: 1px solid #fff;
+  position: relative;
+  /* height: 400px; */
+  /* min-height: 67vh; */
+  width: 80%;
+  padding: 1% 5%;
+}
+
+.leftbox nav a {
+  list-style: none;
+  padding: 7% 1%;
+  color: #fff;
+  font-size: 1.1em;
+  display: block;
+  transition: all 0.2s ease-in-out;
+}
+.leftbox nav a:hover {
+  color: #3fb6a8;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.rightbox > div:nth-child(1) {
+  flex: 1;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+.rightbox > div:nth-child(2),
+.rightbox > div:nth-child(3),
+.rightbox > div:nth-child(4) {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0;
+  right: 0;
+}
+.active {
+  color: #3fb6a8 !important;
+}
+
+.noshow {
+  display: none;
+  opacity: 0;
+}
+
+.profile,
+.postproject,
+.rewards,
+.messages {
+  /* position: relative; */
+  display: flex;
+  flex-direction: column;
+  padding: 1% 2%;
+  width: 100%;
+  min-height: fit-content;
+  /* top: 0;
+  left: 0; */
+  /* overflow: auto; */
+  transition: opacity 0.5s ease-in;
+}
+.profile .profile-heading {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  background: inherit;
+  margin-bottom: 0.5em;
+  text-align: center;
+}
+.edit-button {
+  display: flex;
+  padding: 1%;
+  background: inherit;
+  color: #fff;
+  border-radius: 5px;
+  border: 1px solid #555;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+.profile .edit-button:hover {
+  color: #3fb6a8;
+  cursor: pointer;
+}
+
+#profile-form {
+  /* border: 1px solid #555; */
+  /* border-radius: 20px; */
+  padding: 1% 2%;
+  width: 100%;
+}
+#profile-form .input-block {
+  margin: 1% 0;
+}
+#profile-form input[type="text"],
+#profile-form input[type="email"],
+#profile-form textarea {
+  background: #494949;
+  color: #f5f5f5;
+  border-bottom: 1px solid #555;
+  /* border: 1px solid #fff; */
+}
+
+/*******************************************************/
+/* Project Styles Content */
+/*******************************************************/
+#project-form {
+  border: 1px solid #555;
+  padding: 1% 2%;
+  border-radius: 20px;
+  color: gold;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+}
+#project-form input[type="text"],
+#project-form input[type="email"],
+#project-form input[type="password"],
+#project-form textarea {
+  font-size: 0.9em;
+  font-weight: 200;
+  width: 100%;
+  display: block;
+  padding: 0.7em;
+  border-bottom: solid 1px rgba(255, 255, 255, 0.37);
+  transition: all 1s cubic-bezier(0.64, 0.09, 0.08, 1);
+  background: rgba(255, 255, 255, 0);
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+#project-form textarea {
+  min-height: 200px;
+}
+
+/*********************************************************/
+/* Footer */
+/*********************************************************/
 .main-footer {
   bottom: 0;
-  left: 0;
   padding: 15px;
   min-height: 15vh;
-  min-width: 100%;
+  width: 100%;
   background: #2b2b2b;
   font-size: 0.9em;
   /* grid */
@@ -477,7 +652,7 @@ input[type="password"] {
   grid-area: links;
   list-style-type: disc;
   text-align: left;
-  padding-bottom: 1em;
+  /* padding-bottom: 1em; */
 }
 .main-footer ul li {
   padding: 5px 0;
@@ -491,13 +666,13 @@ input[type="password"] {
 }
 .main-footer p {
   grid-area: paragraph;
-  padding-bottom: 1em;
+  /* padding-bottom: 1em; */
 }
 
 .main-footer .footer-icon {
   grid-area: icon;
   font-size: 0.8em;
-  padding-bottom: 1em;
+  /* padding-bottom: 1em; */
 }
 .footer-icon a {
   margin: 0 4px;
