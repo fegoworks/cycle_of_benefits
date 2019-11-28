@@ -174,9 +174,15 @@
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="age">Age</label>
+                  <label for="dob">DOB</label>
                   <div>
-                    <input id="reg_age" type="text" name="age" readonly />
+                    <input
+                      id="reg_dob"
+                      type="date"
+                      name="dob"
+                      min="2000-01-01"
+                      readonly
+                    />
                   </div>
                 </div>
                 <div class="input-block">
@@ -212,125 +218,106 @@
 
             <div class="postproject noshow">
               <h1>Post a new Project</h1>
-              <form method="post" action="" id="project-form">
-                  <div class="input-block">
-                    <label for="type">Ptoject Type</label>
-                    <div>
-                      <input
-                        class="proj_type"
-                        type="radio"
-                        name="type"
-                        value="refuse"
-                        checked
-                      
-                      />Refuse Dump Site <br />
-                      <input
-                        class="proj_type"
-                        type="radio"
-                        name="type"
-                        value="gutter"
-                      
-                      />
-                      Clogged Gutter<br />
-                      <input
-                        class="proj_type"
-                        type="radio"
-                        name="type"
-                        value="market"
-                      
-                      />
-                      Market Cleaning<br />
-                      <input
-                        class="proj_type"
-                        type="radio"
-                        name="type"
-                        value="other"
-                      
-                      />
-                      Other
-                    </div>
-                  </div>
-                  <div class="input-block">
-                    <label for="description">Description:</label>
-                    <div>
-                      <input
-                        id="proj_description"
-                        type="text"
-                        name="description"
-                      
-                      />
-                    </div>
-                  </div>
-                  <div class="input-block">
-                    <label for="details">Project Details:</label>
-                    <div>
-                      <textarea
-                        form="project-form"
-                        id="proj_details"
-                        name="details"
-                      
-                      ></textarea>
-                    </div>
-                  </div>
-                  <div class="input-block">
-                    <label for="location">Location:</label>
-                    <div>
-                      <input
-                        id="proj_lastname"
-                        type="text"
-                        name="location"
-                      
-                      />
-                    </div>
-                  </div>
-                  <div class="input-block">
-                    <label for="posted_by">Posted By:</label>
-                    <div>
-                      <input
-                        id="proj_posted_by"
-                        type="text"
-                        name="posted_by"
-                      
-                      />
-                    </div>
-                  </div>
-                  <div class="input-block">
-                    <label for="no_of_workers">Maximum Number of Workers:</label>
-                    <div>
-                      <input
-                        id="proj_no_of_workers"
-                        type="text"
-                        name="no_of_workers"
-                      
-                      />
-                    </div>
-                  </div>
-                  <div class="form-button">
+              <form method="post" action="" id="post_project">
+                <div class="input-block">
+                  <label for="type">Project Type</label>
+                  <div>
                     <input
-                      class="my-btn left-btn"
-                      type="button"
-                      value="Express Interest"
+                      class="proj_type"
+                      type="radio"
+                      name="type"
+                      value="refuse"
+                      checked
+                    />Refuse Dump Site <br />
+                    <input
+                      class="proj_type"
+                      type="radio"
+                      name="type"
+                      value="gutter"
                     />
-                    <a class="right-btn" href="./index.html">Back</a>
+                    Clogged Gutter<br />
+                    <input
+                      class="proj_type"
+                      type="radio"
+                      name="type"
+                      value="market"
+                    />
+                    Market Cleaning<br />
+                    <input
+                      class="proj_type"
+                      type="radio"
+                      name="type"
+                      value="other"
+                    />
+                    Other
                   </div>
-                  <hr />
-                </form>
+                </div>
+                <div class="input-block">
+                  <label for="description">Description:</label>
+                  <div>
+                    <input
+                      id="proj_description"
+                      type="text"
+                      name="description"
+                    />
+                  </div>
+                </div>
+                <div class="input-block">
+                  <label for="details">Project Details:</label>
+                  <div>
+                    <textarea
+                      form="project-form"
+                      id="proj_details"
+                      name="details"
+                    ></textarea>
+                  </div>
+                </div>
+                <div class="input-block">
+                  <label for="location">Location:</label>
+                  <div>
+                    <input id="proj_lastname" type="text" name="location" />
+                  </div>
+                </div>
+                <div class="input-block">
+                  <label for="posted_by">Posted By:</label>
+                  <div>
+                    <input id="proj_posted_by" type="text" name="posted_by" />
+                  </div>
+                </div>
+                <div class="input-block">
+                  <label for="no_of_workers">Maximum Number of Workers:</label>
+                  <div>
+                    <input
+                      id="proj_no_of_workers"
+                      type="number"
+                      name="no_of_workers"
+                      min="1"
+                    />
+                  </div>
+                </div>
+                <div class="form-button">
+                  <input class="my-btn left-btn" type="button" value="SUBMIT" />
+                  <a class="right-btn" href="./index.html">Back</a>
+                </div>
+                <hr />
+              </form>
             </div>
 
             <div class="rewards noshow">
               <h1>My Rewards</h1>
+              <p>Rewards Coming Soon</p>
             </div>
 
             <div class="messages noshow">
               <h1>My Messages</h1>
+              <p>Messages Coming Soon</p>
             </div>
           </div>
         </div>
         <!--Close boxes div-->
-        <p>
+        <!-- <p>
           made by <a href="https://codepen.io/juliepark"> julie</a> ♡
-          <!--  -->
-        </p>
+        </p> -->
       </main>
 
       <footer class="main-footer">
@@ -353,22 +340,6 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script type="module" src="./js/app.js"></script>
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <!-- <script
-      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
-      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
-      crossorigin="anonymous"
-    ></script> -->
+    <script type="module" src="/app.js"></script>
   </body>
 </html>
