@@ -5,7 +5,8 @@ const dbConfig = {
   server: "COLE-PC\\SQLEXPRESS",
   database: "cyobDB",
   user: "guestuser",
-  password: "1234"
+  password: "1234",
+  connectionLimit: 10
 };
 
 //connect to database
@@ -20,4 +21,6 @@ pool
     console.log("Could not connect to database: " + err);
   });
 
-module.exports = pool;
+pool.query = util.promisify(pool.query);
+
+module.exports = { pool, sql };
