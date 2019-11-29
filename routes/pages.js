@@ -1,91 +1,96 @@
 const express = require("express");
-const sql = require("mssql");
 const path = require("path");
+const User = require("../persistence/user");
 const router = express.Router();
 
-let dbConfig = {
-  server: "COLE-PC\\SQLEXPRESS",
-  database: "cyobDB",
-  user: "guestuser",
-  password: "1234"
-};
+const user = new User();
 
+//get index page
 router.get("/", (req, res, next) => {
   res.render("index");
 });
-//get index page
-router.get("/index.html", (req, res, next) => {
+router.get("/index", (req, res, next) => {
   res.render("index");
-  // res.sendFile("/", path.join())
 });
 
-router.get("/projects.html", (req, res, next) => {
+router.get("/projects", (req, res, next) => {
   res.render("projects");
 });
 
-router.get("/about.html", (req, res, next) => {
+router.get("/about", (req, res, next) => {
   res.render("about");
 });
 
-router.get("/register.html", (req, res, next) => {
+router.get("/register", (req, res, next) => {
   res.render("register");
 });
 
-router.get("/login.html", (req, res, next) => {
+router.get("/login", (req, res, next) => {
   res.render("login");
 });
 
-router.get("/about.html", (req, res, next) => {
-  res.render("about");
+router.get("/profile", (req, res, next) => {
+  res.render("userprofile");
 });
 
 //get user profile page
 router.get("/success", (req, res, next) => {
-  console.log(req.body.username);
+  console.log("user: " + req.params.user);
   // res.render("userprofile");
   res.end();
 });
 
-//Post login
-router.post("/login", (req, res, next) => {
-  //connect to database
-  let pool = new sql.ConnectionPool(dbConfig);
-  pool
-    .connect()
-    .then(() => {
-      console.log("Successfully connected to database");
-      let request = new sql.Request(pool);
-      // switch statement for different queries
-      request
-        .query("SELECT * FROM Tbl_Users")
-        .then(data => {
-          let dbData = data.recordset[0];
-          // console.log("server\t" + JSON.stringify(dbData));
-          // for (let row = 0; row < dbData.length; row++) {
-          if (
-            req.body.username === dbData.userId &&
-            req.body.password === dbData.password
-          ) {
-            //redirect to new route
-            res.redirect("/success");
-            // res.json({ data: dbData });
-          } else {
-            res.redirect("/failed");
-          }
-          // }
-          pool.close();
-        })
-        .catch(err => {
-          console.log("Error in query, Could not execute query: " + err);
-          pool.close();
-        });
-    })
-    .catch(err => {
-      console.log("Could not connect to database: " + err);
-    });
+router.get("/failed", (req, res) => {
+  // console.log(req.params.password);
+  res.send("Username/Password incorrect!");
+  res.end();
 });
 
-router.post("/register", (req, res, next) => {
-  // res
+//Post login
+router.post("/submitlogin", (req, res, next) => {
+  user.login(req.body.username, req.body.password, function(data) {
+    if (data) {
+      //on login, make a session
+      req.session.user = data;
+      console.log(req.session.user);
+      req.session.opp = 1;
+      res.redirect("/profile");
+    } else {
+      res.redirect("/failed");
+    }
+  });
 });
+
+router.post("/submitregister", (req, res, next) => {
+  let userObj = {
+    username: req.body.username,
+    password: req.body.password,
+    firstname: req.body.first_name,
+    lastname: req.body.last_name,
+    email: req.body.email
+  };
+  user.create(userObj, function(userid) {
+    if (userid) {
+      user.find(userid, function(result) {
+        req.session.opp = 0;
+        req.session.user = result;
+        res.redirect("/");
+      });
+    } else {
+      console.log("Error: Unable to create user");
+    }
+  });
+});
+
+// Get logout page
+router.get("/logout", (req, res, next) => {
+  // Check if the session is exist
+  if (req.session.user) {
+    // destroy the session and redirect the user to the index page.
+    req.session.destroy(function() {
+      res.redirect("/");
+    });
+  }
+});
+
 module.exports = router;
