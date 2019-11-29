@@ -5,6 +5,7 @@ const app = express();
 const pageRouter = require("./routes/pages");
 const sql = require("mssql");
 const path = require("path");
+const session = require("express-session");
 const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, "dist")));
@@ -15,6 +16,18 @@ app.use(express.urlencoded({ extended: false }));
 app.set("views", path.join(__dirname, "views"));
 app.engine("html", require("ejs").__express);
 app.set("view engine", "html");
+
+// Session Params
+app.use(
+  session({
+    secret: "cyob",
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 60 * 1000 * 30
+    }
+  })
+);
 
 //user routes
 app.use("/", pageRouter);
@@ -33,10 +46,6 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () => console.log(`listening at port ${port}...`));
-
-// app.get("/userprofile", (req, res) => {
-//   res.sendFile(__dirname, "about.html");
-// });
 
 //success handler
 // app.get("/success/:user", (req, res) => {

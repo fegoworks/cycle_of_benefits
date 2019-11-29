@@ -5,7 +5,6 @@ import * as forms from "./forms.js";
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
-functions;
 // let check = document.querySelector("button#check");
 // check.onclick = function(e) {
 //   e.preventDefault();

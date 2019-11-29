@@ -23,11 +23,11 @@ User.prototype = {
           if (dbData.userId === userid) {
             // console.log(userid);
             callback(dbData); //return the first result
+            dbconnect.pool.close();
           } else {
             callback(null);
           } //close connection
           // }
-          dbconnect.pool.close();
         })
         .catch(err => {
           console.log("Find Error: " + err);

@@ -7,9 +7,12 @@ const user = new User();
 
 //get index page
 router.get("/", (req, res, next) => {
-  res.render("index");
-});
-router.get("/index", (req, res, next) => {
+  //if user session exists
+  // if(req.session.user){
+  //   res.redirect('/profile');
+  //   return;
+  // }
+  console.log(req.session);
   res.render("index");
 });
 
@@ -30,19 +33,21 @@ router.get("/login", (req, res, next) => {
 });
 
 router.get("/profile", (req, res, next) => {
-  res.render("userprofile");
+  if (req.session.user) {
+    res.render("userprofile");
+    return;
+  }
+  res.redirect("/");
 });
 
 //get user profile page
 router.get("/success", (req, res, next) => {
-  console.log("user: " + req.params.user);
-  // res.render("userprofile");
-  res.end();
+  console.log("user: " + req.session.user);
+  res.render("userprofile");
 });
 
 router.get("/failed", (req, res) => {
-  // console.log(req.params.password);
-  res.send("Username/Password incorrect!");
+  res.json({ message: "User not found" });
   res.end();
 });
 
@@ -54,7 +59,7 @@ router.post("/submitlogin", (req, res, next) => {
       req.session.user = data;
       console.log(req.session.user);
       req.session.opp = 1;
-      res.redirect("/profile");
+      res.redirect("/success");
     } else {
       res.redirect("/failed");
     }

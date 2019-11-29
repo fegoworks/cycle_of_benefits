@@ -17,8 +17,6 @@ if (document.getElementById("loginform")) {
   loginForm.onsubmit = function(e) {
     // e.preventDefault();
     let url = loginForm.getAttribute("action");
-    let redirect = "/success";
-    let currentLocation = window.location;
     if (username.value === "" || password.value === "") {
       functions.displayAlert("Enter your login information!", "info");
       return false;
@@ -41,7 +39,6 @@ if (document.getElementById("loginform")) {
     //       // console.log(data);
     //       clearFormFields(loginForm);
     //       functions.displayAlert("Login Successful!", "success");
-    //       // window.location.assign("/userprofile.html");
     //     })
     //     .catch(err => {
     //       //if no data is returned
