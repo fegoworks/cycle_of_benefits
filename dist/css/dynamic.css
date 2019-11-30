@@ -22,14 +22,14 @@
 .show {
   /* makes the div slide down; */
   transition: margin-top 0.7s ease-out;
-  margin-top: 32vh;
+  margin-top: 240px;
 }
 
 /* Menu Button Div*/
 .menu-header {
   visibility: hidden;
   position: absolute;
-  top: -24vh;
+  top: -190px;
   left: 0;
   background: #2b2b2b;
   height: auto;
@@ -43,7 +43,7 @@
   flex-direction: column;
 }
 .menu-header ul li {
-  height: 6vh;
+  height: 35px;
   padding: 1% 1%;
   margin: auto;
   align-items: center;
