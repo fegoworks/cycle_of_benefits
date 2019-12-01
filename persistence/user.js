@@ -17,13 +17,13 @@ User.prototype = {
       request
         .query(queryString)
         .then(data => {
-          let dbData = data.recordset[0];
-          // console.log("In database: " + typeof dbData.userId);
-          // for (let row = 0; row < dbData.length; row++) {
-          if (dbData.userId === userid) {
+          let userRecord = data.recordset[0];
+          // console.log("In database: " + typeof userRecord.userId);
+          // for (let row = 0; row < userRecord.length; row++) {
+          if (userRecord.userId === userid) {
             // console.log(userid);
-            callback(dbData); //return the first result
-            dbconnect.pool.close();
+            callback(userRecord); //return the first result
+            // dbconnect.pool.close();
           } else {
             callback(null);
           } //close connection
@@ -54,7 +54,7 @@ User.prototype = {
       .then(result => {
         // return the last inserted id. if there is no error
         callback(result.insertId); //???
-        dbconnect.pool.close();
+        // dbconnect.pool.close();
       })
       .catch(err => {
         console.log("Error: " + err);
@@ -77,17 +77,17 @@ User.prototype = {
     //     console.log("Find Error: " + err);
     //   });
     // find the user data by his username.
-    this.find(submittedUsername, function(user) {
+    this.find(submittedUsername, function(userRecord) {
       // if there is a user by this username.
-      if (user) {
+      if (userRecord) {
         // now we check his password.
         // let validPassword = bcrypt.compareSync(
         //   submittedPassword,
         //   user.password
         // );
-        if (submittedPassword === user.password) {
+        if (submittedPassword === userRecord.password) {
           // return userdata.
-          callback(user.userId);
+          callback(userRecord);
           return;
         }
       }

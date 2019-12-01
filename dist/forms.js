@@ -2,9 +2,9 @@ import * as functions from "./functions.js";
 
 /* Form validation*/
 async function fetchData(url, options) {
-  const response = await fetch(url, options);
-  const jsonData = await response.json();
-  return jsonData.data;
+  const rawResponse = await fetch(url, options);
+  const jsonData = await rawResponse.json();
+  return jsonData;
 }
 
 /* Login Form*/
@@ -14,40 +14,61 @@ if (document.getElementById("loginform")) {
   let username = document.getElementById("username");
   let password = document.getElementById("password");
 
-  loginForm.onsubmit = function(e) {
-    // e.preventDefault();
-    let url = loginForm.getAttribute("action");
+  loginForm.addEventListener("submit", e => {
+    e.preventDefault(); //ignores the default submit behaviour through action
+    let url = loginForm.getAttribute("action")
+      ? "/submitlogin"
+      : "/cannotgetposturl";
     if (username.value === "" || password.value === "") {
       functions.displayAlert("Enter your login information!", "info");
       return false;
+    } else {
+      //retrieve user data
+      const user = {
+        username: username.value,
+        password: password.value
+      };
+      const fetchOptions = {
+        method: "POST",
+        headers: {
+          Accept: [
+            "application/x-www-form-urlencoded",
+            "application/json",
+            "text/plain",
+            "*/*"
+          ],
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+      };
+      fetchData(url, fetchOptions)
+        .then(data => {
+          if (!data.redirect_path) {
+            console.log("inside fetch function: " + data.message);
+            functions.displayAlert(
+              "Username or Password not correct!",
+              "error"
+            );
+            clearFormFields(loginForm);
+          } else {
+            console.log(data);
+            functions.displayAlert("Login Successful!", "success");
+            console.log(
+              "Success: Don't need to fetch data" + data.redirection_path
+            );
+            clearFormFields(loginForm);
+            //get data and send to
+            if (confirm("Go to your profile?")) {
+              window.location.assign(data.redirect_path);
+              functions.showUserIcon(data.firstname);
+            } else {
+              window.location.assign("/");
+            }
+          }
+        })
+        .catch(error => console.error("Fetch Error: ", error));
     }
-    // else {
-    //   let userObj = {
-    //     username: username.value,
-    //     password: password.value
-    //   };
-    //   const fetchOptions = {
-    //     method: "post",
-    //     headers: {
-    //       Accept: "application/json, text/plain, */*",
-    //       "Content-Type": "application/json"
-    //     },
-    //     body: JSON.stringify(userObj)
-    //   };
-    //   fetchData(url, fetchOptions)
-    //     .then(data => {
-    //       // console.log(data);
-    //       clearFormFields(loginForm);
-    //       functions.displayAlert("Login Successful!", "success");
-    //     })
-    //     .catch(err => {
-    //       //if no data is returned
-    //       console.log("No data returned: " + err);
-    //       // functions.displayAlert("Username or Password not correct!", "error");
-    //       clearFormFields(loginForm);
-    //     });
-    // }
-  };
+  });
 }
 
 /* Signup Form*/

@@ -12,7 +12,7 @@ router.get("/", (req, res, next) => {
   //   res.redirect('/profile');
   //   return;
   // }
-  console.log(req.session);
+  // console.log(req.session);
   res.render("index");
 });
 
@@ -41,25 +41,27 @@ router.get("/profile", (req, res, next) => {
 });
 
 //get user profile page
-router.get("/success", (req, res, next) => {
-  console.log("user: " + req.session.user);
-  res.render("userprofile");
+router.get("/success/:userfirstname", (req, res, next) => {
+  res.json({
+    status: "Login Success",
+    redirect_path: `/profile`,
+    firstname: req.params.userfirstname
+  });
 });
 
-router.get("/failed", (req, res) => {
+router.get("/failed", (req, res, next) => {
   res.json({ message: "User not found" });
-  res.end();
 });
 
 //Post login
 router.post("/submitlogin", (req, res, next) => {
+  console.log(req.body);
   user.login(req.body.username, req.body.password, function(data) {
     if (data) {
       //on login, make a session
-      req.session.user = data;
-      console.log(req.session.user);
+      req.session.user = data.userId;
       req.session.opp = 1;
-      res.redirect("/success");
+      res.redirect("/success/" + data.firstName);
     } else {
       res.redirect("/failed");
     }
@@ -78,7 +80,7 @@ router.post("/submitregister", (req, res, next) => {
     if (userid) {
       user.find(userid, function(result) {
         req.session.opp = 0;
-        req.session.user = result;
+        req.session.user = result.userId;
         res.redirect("/");
       });
     } else {
