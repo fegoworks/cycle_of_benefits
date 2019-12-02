@@ -46,22 +46,22 @@ function displayAlert(msg, type) {
   }
 
   if (document.getElementById("alert-info")) {
-    let alertDiv = document.getElementById("alert-info");
-    alertDiv.appendChild(parag);
+    let alertDialog = document.getElementById("alert-info");
+    alertDialog.appendChild(parag);
   } else {
-    let alertDiv = document.createElement("div");
-    alertDiv.classList.add("alert-info");
-    alertDiv.setAttribute("id", "alert-info");
-    alertDiv.appendChild(parag);
-    document.body.appendChild(alertDiv);
+    let alertDialog = document.createElement("div");
+    alertDialog.classList.add("alert-info");
+    alertDialog.setAttribute("id", "alert-info");
+    alertDialog.appendChild(parag);
+    document.body.appendChild(alertDialog);
   }
   closeButton.onclick = function() {
     // parag.style.display = "none";
-    let alertDiv = document.getElementById("alert-info");
-    alertDiv.removeChild(parag);
+    let alertDialog = document.getElementById("alert-info");
+    alertDialog.removeChild(parag);
     if (document.getElementsByClassName("p-info").length == 0) {
-      document.body.removeChild(alertDiv);
-      // alertDiv.style.display = "none";
+      document.body.removeChild(alertDialog);
+      // alertDialog.style.display = "none";
     }
   };
 }

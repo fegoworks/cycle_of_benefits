@@ -1,25 +1,55 @@
 import * as functions from "./functions.js";
-import * as forms from "./forms.js";
-// import * as server from "../../src/server.js";
+import * as myform from "./forms.js";
+// const forms = require("./forms");
+const usersession = new myform.UserSession();
 
+usersession.loginData(function(userSessionName) {
+  if (userSessionName) {
+    console.log("i got it: " + userSessionName);
+  }
+});
+
+if (document.getElementById("form")) {
+  const form = {
+    signupForm: document.getElementById("form"),
+    fname: document.getElementById("reg_firstname"),
+    lname: document.getElementById("reg_lastname"),
+    user: document.getElementById("reg_username"),
+    email: document.getElementById("reg_email"),
+    password: document.getElementById("reg_password"),
+    password_match: document.getElementById("reg_conf_password"),
+    formName: document.forms.namedItem("form")
+  };
+
+  document.getElementById("form").addEventListener("submit", e => {
+    e.preventDefault();
+    usersession.signupData(form);
+  });
+}
+usersession.signupData();
+// if (isSession) {
+//
+// }
+// if (document.querySelector(".signin-link")) {
+//   console.log("what is your problem");
+//   let userLink = document.querySelector(".signin-link");
+//   userLink.textContent = "";
+//   userLink.removeAttribute("href");
+//   let userIcon = document.createElement("i");
+//   userIcon.classList.add("fas", "fa-user", "fa-2x");
+//   userLink.appendChild(userIcon);
+
+//   functions.enableSlideMenu(userLink);
+//   functions.appendProfileToMobileMenu();
+// }
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
-// let check = document.querySelector("button#check");
-// check.onclick = function(e) {
-//   e.preventDefault();
-//   let a = "";
-//   for (let i = 0; i < nav.length; i++) {
-//     if (nav[i].className !== "profile") {
-//       console.log(nav[i].className);
-//     }
-//   }
-//   // alert(a);
-// };
-if (document.querySelectorAll(".boxes")) {
+
+if (document.querySelector(".boxes")) {
   let leftbox = document.querySelector(".leftbox");
   let navLinks = document.querySelectorAll(".leftbox nav a");
-  let nav = document.querySelectorAll(".rightbox").children;
+  let nav = document.querySelector(".rightbox").children;
   let postproject = document.querySelector(".postproject");
   let profile = document.querySelector(".profile");
   let messages = document.querySelector(".messages");
@@ -56,40 +86,7 @@ if (document.querySelectorAll(".boxes")) {
     };
   });
 }
-// window.location.assign("userprofile.html");
-// ("userprofile.html");
-// console.log(myLock);
-//send data to server via fetch
-const test = {
-  name: "cole",
-  hobby: "soccer"
-};
 
-// const fetchOptions = {
-//     method: "post",
-//     headers: {
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify(userObj)
-//   };
-
-//   fetchData()
-//     .then(res => {})
-//     .catch(err => {
-//       console.log("fetch error: " + err);
-//     });
-
-//   async function fetchData() {
-//     const response = await fetch("/submit-login", fetchOptions);
-//     const jsonData = await response.json();
-//     console.log(jsonData);
-//     if (jsonData.status === 404) {
-//       functions.displayAlert("Username or Email not found!", "error");
-//       clearFormFields(loginForm);
-//     } else if (jsonData.status === 200) {
-//       functions.displayAlert("Login Successful!", "success");
-//     }
-//   }
 // fetch("/api", fetchOptions)
 //   .then(res => res.json())
 //    .then(json =>{
@@ -97,4 +94,3 @@ const test = {
 //      })
 //   .catch(err => {
 //     console.log("fetch failed: " + err);
-//   });
