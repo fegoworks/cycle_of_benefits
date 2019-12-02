@@ -1,3 +1,6 @@
+// import * as forms from "./forms.js";
+// const usersession = new forms.UserSession();
+
 function menuToggle() {
   /* Toggle Menu*/
   const menuBtn = document.querySelector(".menu-btn");
@@ -23,10 +26,6 @@ function menuToggle() {
 
 function displayAlert(msg, type) {
   //Alert Display
-  let alertDiv = document.createElement("div");
-  alertDiv.classList.add("alert-info");
-  let alertsCount = 1;
-
   let parag = document.createElement("p");
   parag.classList.add("p-info");
   parag.append(document.createTextNode(msg));
@@ -34,8 +33,8 @@ function displayAlert(msg, type) {
   // Alert Close button
   let closeButton = document.createElement("button");
   closeButton.classList.add("close-button");
-  closeButton.append(document.createTextNode("close"));
-  parag.appendChild(closeButton);
+  closeButton.append(document.createTextNode("X"));
+  parag.append(closeButton);
   // alertDiv.appendChild(closeButton);
 
   if (type === "error") {
@@ -46,68 +45,62 @@ function displayAlert(msg, type) {
     parag.style.background = "green";
   }
 
-  alertDiv.append(parag);
-  document.body.appendChild(alertDiv);
-
+  if (document.getElementById("alert-info")) {
+    let alertDiv = document.getElementById("alert-info");
+    alertDiv.appendChild(parag);
+  } else {
+    let alertDiv = document.createElement("div");
+    alertDiv.classList.add("alert-info");
+    alertDiv.setAttribute("id", "alert-info");
+    alertDiv.appendChild(parag);
+    document.body.appendChild(alertDiv);
+  }
   closeButton.onclick = function() {
-    alertsCount--;
-    parag.style.display = "none";
-    if (alertsCount === 0) {
-      // document.body.removeChild(alertDiv);
-      alertDiv.style.display = "none";
+    // parag.style.display = "none";
+    let alertDiv = document.getElementById("alert-info");
+    alertDiv.removeChild(parag);
+    if (document.getElementsByClassName("p-info").length == 0) {
+      document.body.removeChild(alertDiv);
+      // alertDiv.style.display = "none";
     }
   };
 }
 
-function showProfileMenu() {
+function appendProfileToMobileMenu() {
   // show icon when user is logged in successfully
-  // if (document.getElementsByClassName("menu-list")) {
-  let ul = document.querySelector(".menu-list");
-  let listItem = document.createElement("li");
-  let a = document.createElement("a");
-  a.setAttribute("href", "/index.html");
-  a.classList.add("menu-item");
-  a.textContent = "Sign Out";
+  let menuItem = document.querySelectorAll(".menu-item");
+  //grab and change the sign in list item to my profile
+  menuItem[3].setAttribute("href", "./profile");
+  menuItem[3].textContent = "My Profile";
 
-  listItem.appendChild(a);
-  ul.appendChild(listItem);
-  let navItem = document.querySelectorAll(".menu-item");
-  navItem[3].setAttribute("href", "/userprofile.html");
-  navItem[3].textContent = "My Profile";
-  // }
+  //append signout menu
+  let menuList = document.querySelector(".menu-list");
+  let signoutMenu = document.createElement("li");
+  let signoutLink = document.createElement("a");
+  signoutLink.setAttribute("href", "./logout");
+  signoutLink.classList.add("menu-item"); //add existing class
+  signoutLink.textContent = "Sign Out";
+
+  signoutMenu.appendChild(signoutLink);
+  menuList.appendChild(signoutMenu);
 }
 
-function showUserIcon() {
-  // show icon when user is logged in successfully
-  // if (document.getElementsByClassName("signin-link")) {
-  let signinLink = document.querySelector(".signin-link");
-  signinLink.textContent = "";
-  signinLink.removeAttribute("href");
-  let userIcon = document.createElement("i");
-  userIcon.classList.add("fas", "fa-user", "fa-2x");
-  signinLink.appendChild(userIcon);
-  // show slidedown menu for screens more than 900px
-  showProfileSlideDownMenu();
-  // }
-}
-
-function showProfileSlideDownMenu() {
+function enableSlideMenu(userIconLink) {
   //called by showUserIcon();
-  let userIcon = document.querySelector(".signin-link");
+  //create a new div
   let profileDiv = document.createElement("div");
-  profileDiv.classList.add("profile-div");
+  profileDiv.classList.add("profile-div"); //add existing class
   let ul = document.createElement("ul");
 
   let profile = document.createElement("li");
   let profileLink = document.createElement("a");
-  profileLink.setAttribute("href", "/userprofile.html");
+  profileLink.setAttribute("href", "/profile");
   profileLink.textContent = "My Profile";
   profile.appendChild(profileLink);
 
   let signout = document.createElement("li");
   let signoutLink = document.createElement("a");
-  signoutLink.setAttribute("href", "/message.html");
-  signoutLink.classList.add();
+  signoutLink.setAttribute("href", "/logout");
   signoutLink.textContent = "Log Out";
   signout.appendChild(signoutLink);
 
@@ -118,15 +111,15 @@ function showProfileSlideDownMenu() {
 
   let dropdown = false;
 
-  userIcon.onclick = function() {
+  userIconLink.onclick = function() {
     if (!dropdown) {
-      userIcon.classList.add("slide-up");
+      userIconLink.classList.add("enable-slide");
       profileDiv.classList.add("slide-down");
 
       //reset Menu State
       dropdown = true;
     } else {
-      userIcon.classList.remove("slide-up");
+      userIconLink.classList.remove("enable-slide");
       profileDiv.classList.remove("slide-down");
 
       //reset Menu State
@@ -134,6 +127,12 @@ function showProfileSlideDownMenu() {
     }
   };
 }
+
+// function showUserIcon() {
+// show icon when user is logged in successfully
+
+// }
+// }
 
 //function that connects to the data base and retrieve project information appends as a div to the list of project
 
@@ -146,7 +145,7 @@ function showProfileSlideDownMenu() {
 //--my messages
 //--my Profile userprofile
 
-export { menuToggle, displayAlert, showProfileMenu, showUserIcon };
+export { menuToggle, displayAlert, appendProfileToMobileMenu, enableSlideMenu };
 // create an i element, attache a class of "fas fa-user-tie"
 //create a dropdown div for wider screens(>600px), include a ul with two list items: profile and signout
 // };

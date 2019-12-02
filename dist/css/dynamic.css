@@ -59,7 +59,7 @@
 /* PROFILE MENU SLIDEDOWN STYLES */
 .profile-div {
   position: absolute;
-  top: -12vh;
+  top: -58px;
   right: 0;
   background: #2b2b2b;
   width: 20%;
@@ -80,13 +80,16 @@
   flex-direction: column;
   margin: auto;
 }
+.profile-div li {
+  height: 35px;
+}
 
 .profile-div a:hover {
   opacity: 0.8;
   color: #55a555;
 }
 
-.slide-up {
+.enable-slide {
   /* turns the icon 45 degs */
   transition: transform 0.5s ease-in-out;
   transform: rotate(1turn);
@@ -95,8 +98,8 @@
 
 .slide-down {
   /* makes the div slide down; */
-  transition: margin-top 0.7s ease-out;
-  margin-top: 20vh;
+  transition: margin-top 0.4s ease-out;
+  margin-top: 110px;
 }
 
 /* the profile-div ul, li and hover styles are combined with the menu-button styles above */
@@ -105,41 +108,47 @@
 /*******************************************************/
 /* ALERT DIV STYLES */
 .alert-info {
+  display: flex;
+  flex-direction: column;
   z-index: 100;
   position: fixed;
   top: 40vh;
   left: 0;
   min-height: 70px;
-  min-width: 90%;
+  width: 100%;
   border-radius: 10px;
   background: #fff !important;
   opacity: 0.8;
   padding: 15px 20px;
-  margin: 0 5%;
+  /* margin: 0 5%; */
   color: #fff;
-  font-weight: 700;
-  font-size: 22px;
+  font-weight: 500;
+  font-size: 20px;
 }
 
 .p-info {
   position: relative;
+  height: auto;
   display: block;
-  padding: 1% 1%;
+  margin-right: 3px;
+  padding: 1% 2%;
   width: 100%;
   border-radius: 10px;
-  margin-bottom: 0.5em;
+  margin: 0.5em 0;
 }
 .close-button {
   position: absolute;
   top: 0;
   right: 0;
-  padding: 3px;
+  padding: 5px;
   background: #800000;
   color: #fff;
   cursor: pointer;
-  letter-spacing: 1px;
+  font-weight: 900;
+  border-radius: 10px;
+  /* letter-spacing: 1px; */
 }
 .close-button:hover {
   background: #fc0404 !important;
-  transform: scale(1.1);
+  transform: scale(1.2);
 }
