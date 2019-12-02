@@ -8,6 +8,11 @@
     display: flex;
     flex-direction: column;
   }
+
+  .main-header,
+  .content-heading {
+    margin-bottom: 0.5em;
+  }
   .content-body {
     width: 100%;
   }
@@ -143,6 +148,36 @@
     margin-bottom: 0.8em;
     width: 90%;
     justify-content: center;
+  }
+
+  /* Profile page styles */
+  .boxes {
+    flex-direction: column;
+    width: 100%;
+  }
+  .leftbox {
+    width: 100%;
+    border-bottom: 1px solid #555;
+  }
+  .leftbox nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .leftbox nav a {
+    padding: 1% 1%;
+    width: 18%;
+  }
+  .leftbox nav a i {
+    display: block;
+    font-size: 1.5em;
+  }
+  .leftbox .nav-menu {
+    display: none;
+  }
+  .rightbox {
+    margin-top: 3%;
+    width: 100%;
   }
 
   /* Footer */
