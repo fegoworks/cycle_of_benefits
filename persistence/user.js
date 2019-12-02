@@ -7,93 +7,92 @@ function User() {}
 
 User.prototype = {
   // Find the user data by id or username.
-  find: function(userid = null, callback) {
+  find: function(userid, callback) {
     // if the userid variable is defined
     if (userid) {
       // Sql query
-      // console.log("Passed in: " + typeof userid);
-      let queryString = "SELECT * FROM Tbl_Users";
+      console.log(userid);
+      let queryString = "SELECT * FROM cyobDB.dbo.Tbl_Users";
       let request = new dbconnect.sql.Request(dbconnect.pool);
       request
         .query(queryString)
         .then(data => {
+          console.log("Find: " + data);
           let userRecord = data.recordset[0];
-          // console.log("In database: " + typeof userRecord.userId);
-          // for (let row = 0; row < userRecord.length; row++) {
-          if (userRecord.userId === userid) {
-            // console.log(userid);
+          if (userRecord.userId == userid) {
             callback(userRecord); //return the first result
-            // dbconnect.pool.close();
+            console.log("This user exists");
+            // return full record
           } else {
             callback(null);
-          } //close connection
-          // }
+          }
+          // dbconnect.pool.close();
         })
         .catch(err => {
-          console.log("Find Error: " + err);
+          console.log("Find Fetch Error: " + err);
         });
     }
   },
 
   // This function will insert data into the database. (create a new user)
   // body is an object
-  create: function(body, callback) {
-    let hashedPassword = body.password;
-    // Hash the password first
-    hashedPassword = bcrypt.hashSync(hashedPassword, 10);
-    let userfields = [];
-    // loop in the attributes of the object and push the values into the bind array.
-    for (prop in body) {
-      userfields.push(body[prop]); //5 from post route data
-    }
-    // prepare the sql query, insert inorder 5 fields
-    let queryString = `INSERT INTO Tbl_Users VALUES (?, ?, ?, ?, ?)`;
+  create: function(userobj, callback) {
+    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Users WHERE userId = '${userobj.username}'`;
     let request = new dbconnect.sql.Request(dbconnect.pool);
-    request
-      .query(queryString, userfields)
-      .then(result => {
-        // return the last inserted id. if there is no error
-        callback(result.insertId); //???
-        // dbconnect.pool.close();
-      })
-      .catch(err => {
-        console.log("Error: " + err);
-      });
+    request.query(queryString).then(data => {
+      let matchedRow = data.rowsAffected;
+      if (matchedRow >= 1) {
+        console.log("Found: " + data.recordset[0].userId);
+        callback(null);
+      } else {
+        let hashedPassword = userobj.password;
+        // Hash the password
+        hashedPassword = bcrypt.hashSync(hashedPassword, 10);
+
+        // prepare the sql query, insert inorder 5 fields
+        let queryString = `INSERT INTO cyobDB.dbo.Tbl_Users VALUES ('${userobj.username}', '${hashedPassword}', '${userobj.firstname}', '${userobj.lastname}', '${userobj.email}')`;
+        //make new request
+        request
+          .query(queryString)
+          .then(rows => {
+            if (rows.rowsAffected == 1) {
+              // return the record of current user
+              callback(userobj);
+              return;
+            } else {
+              callback(null);
+            }
+            // dbconnect.pool.close();
+          })
+          .catch(err => {
+            console.log("Create Error: " + err);
+          });
+      }
+    });
   },
 
   login: function(submittedUsername, submittedPassword, callback) {
-    // let request = new dbconnect.sql.Request(dbconnect.pool);
-    // let queryString = "SELECT * FROM Tbl_Users";
-    // request
-    //   .query(queryString)
-    //   .then(data.Record => {
-    //       if(submittedUsername === dbData.userId &&
-    //         submittedPassword === dbData.password){
-
-    //         }
-    //     dbconnect.pool.close(); //close connection
-    //   })
-    //   .catch(err => {
-    //     console.log("Find Error: " + err);
-    //   });
-    // find the user data by his username.
-    this.find(submittedUsername, function(userRecord) {
-      // if there is a user by this username.
-      if (userRecord) {
-        // now we check his password.
-        // let validPassword = bcrypt.compareSync(
-        //   submittedPassword,
-        //   user.password
-        // );
-        if (submittedPassword === userRecord.password) {
-          // return userdata.
-          callback(userRecord);
-          return;
+    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Users WHERE userId = '${submittedUsername}' `;
+    let request = new dbconnect.sql.Request(dbconnect.pool);
+    request
+      .query(queryString)
+      .then(data => {
+        let userRecord = data.recordset[0];
+        if (userRecord) {
+          let validPassword = bcrypt.compareSync(
+            submittedPassword,
+            userRecord.pass_code
+          );
+          if (validPassword) {
+            callback(userRecord);
+          } else {
+            callback(null);
+          }
         }
-      }
-      // if the username/password is wrong then return null.
-      callback(null);
-    });
+      })
+      .catch(err => {
+        console.log("Login Error: " + err);
+      });
   }
 };
 

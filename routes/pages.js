@@ -8,10 +8,10 @@ const user = new User();
 //get index page
 router.get("/", (req, res, next) => {
   //if user session exists
-  // if(req.session.user){
-  //   res.redirect('/profile');
-  //   return;
-  // }
+  if (req.session.user) {
+    res.redirect("/profile");
+    return;
+  }
   // console.log(req.session);
   res.render("index");
 });
@@ -41,50 +41,60 @@ router.get("/profile", (req, res, next) => {
 });
 
 //get user profile page
-router.get("/success/:userfirstname", (req, res, next) => {
+router.get("/login-success/:userfirstname", (req, res, next) => {
   res.json({
     status: "Login Success",
     redirect_path: `/profile`,
     firstname: req.params.userfirstname
   });
 });
-
-router.get("/failed", (req, res, next) => {
+router.get("/login-failed", (req, res, next) => {
   res.json({ message: "User not found" });
+});
+
+//get user profile page
+router.get("/registersuccess", (req, res, next) => {
+  res.json({
+    status: "Registeration Successful",
+    redirect_path: "/"
+  });
+});
+router.get("/registerfailed", (req, res, next) => {
+  res.json({ message: "Sorry! This User already exists" });
 });
 
 //Post login
 router.post("/submitlogin", (req, res, next) => {
-  console.log(req.body);
-  user.login(req.body.username, req.body.password, function(data) {
+  user.login(req.body.username, req.body.password, data => {
     if (data) {
       //on login, make a session
       req.session.user = data.userId;
       req.session.opp = 1;
-      res.redirect("/success/" + data.firstName);
+      res.redirect("/login-success/" + data.first_name);
     } else {
-      res.redirect("/failed");
+      res.redirect("/login-failed");
     }
   });
 });
 
 router.post("/submitregister", (req, res, next) => {
+  // console.log(req.body);
   let userObj = {
     username: req.body.username,
     password: req.body.password,
-    firstname: req.body.first_name,
-    lastname: req.body.last_name,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
     email: req.body.email
   };
-  user.create(userObj, function(userid) {
-    if (userid) {
-      user.find(userid, function(result) {
-        req.session.opp = 0;
-        req.session.user = result.userId;
-        res.redirect("/");
-      });
+  user.create(userObj, data => {
+    console.log("post: " + data);
+    if (data) {
+      req.session.opp = 0;
+      req.session.user = data.userId;
+      res.redirect("/registersuccess");
     } else {
       console.log("Error: Unable to create user");
+      res.redirect("/registerfailed");
     }
   });
 });
