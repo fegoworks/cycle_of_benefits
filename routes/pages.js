@@ -41,11 +41,11 @@ router.get("/profile", (req, res, next) => {
 });
 
 //get user profile page
-router.get("/login-success/:userfirstname", (req, res, next) => {
+router.get("/login-success/:userdata", (req, res, next) => {
   res.json({
     status: "Login Success",
     redirect_path: `/profile`,
-    firstname: req.params.userfirstname
+    userdata: req.params.userdata
   });
 });
 router.get("/login-failed", (req, res, next) => {
@@ -69,8 +69,7 @@ router.post("/submitlogin", (req, res, next) => {
     if (data) {
       //on login, make a session
       req.session.user = data.userId;
-      req.session.opp = 1;
-      res.redirect("/login-success/" + data.first_name);
+      res.redirect("/login-success/" + userdata);
     } else {
       res.redirect("/login-failed");
     }
