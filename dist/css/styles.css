@@ -226,32 +226,32 @@ main.main-content {
   color: #55a555 !important;
 }
 /*******************************************************/
-/* Projects Content */
+/* All Projects Content */
 /*******************************************************/
 .projects {
-  max-height: 500px;
-  background: inherit;
+  /* max-height: 500px; */
   /* border: 1px solid #fff; */
-  overflow-y: auto;
-  color: gold;
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+  /* overflow-y: auto; */
+  /* color: #fff; */
+  /* box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); */
 }
 .project-pills li:not(:first-child) {
-  background: #000;
+  background: rgb(212, 211, 211);
+  color: #000;
 }
 .project-pills li:not(:first-child):hover {
   /* background: rgba(0, 0, 0, 0.7); */
-  opacity: 0.7;
-  color: #000;
-  background: gold;
+  /* opacity: 0.7; */
+  color: #fff;
+  background: #76b852;
 }
 .project-pills li {
   position: relative;
   display: flex;
   width: 100%;
-  padding: 0.5% 1%;
-  border-radius: 10px;
-  margin-bottom: 0.2em;
+  padding: 0.5% 0.5%;
+  border-radius: 5px;
+  margin-bottom: 0.4em;
 }
 .project-pills li div {
   /* border: 1px solid #fff; */
@@ -271,31 +271,43 @@ main.main-content {
   text-align: center;
   padding: 0 1%;
 }
-.project-number {
-  width: 3%;
+.project-id,
+.heading-id {
+  width: 5%;
 }
-.project-title {
-  width: 20%;
-}
-.project-desc {
-  width: 60%;
-}
-.project-status {
+.project-title,
+.heading-title {
   width: 10%;
-  margin: auto;
 }
-.project-button {
+.project-details,
+.heading-details {
+  width: 55%;
+}
+.project-status,
+.heading-status {
+  width: 10%;
+  margin: 0 auto;
+}
+.project-workers,
+.heading-workers {
+  width: 10%;
+  margin: 0 auto;
+}
+.project-button,
+.heading-button {
   width: 7%;
-  margin: auto;
+  margin: 0 auto;
 }
-.project-button i {
-  color: gold !important;
-  background: #000;
+.project-button input {
+  padding: 15% 15%;
+  font-size: 1em;
+  margin: 5% auto;
 }
-.project-heading .project-button i {
+
+/* .project-heading .project-button i {
   color: #fff !important;
   background: none;
-}
+} */
 
 /*******************************************************/
 /* Login Styles */
@@ -381,7 +393,6 @@ textarea {
 .form-button {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   padding: 2% 2%;
   font-size: 0.9em;
   font-weight: 600;
@@ -392,15 +403,22 @@ textarea {
 }
 .form-button .left-btn,
 .form-button .right-btn {
-  width: 40%;
   display: flex;
-  justify-content: start;
+  justify-content: center;
   text-align: center;
   padding: 2% 1%;
   border-radius: 10px;
   font-size: 1em;
   font-weight: 600;
   letter-spacing: 2px;
+}
+.form-button .left-btn {
+  min-width: 40%;
+  margin-right: 10%;
+}
+.form-button .right-btn {
+  border: dashed 1px #fff;
+  width: 20%;
 }
 .form-info a:hover,
 .form-button a:hover,
@@ -606,32 +624,54 @@ $white: #ffffff; */
 }
 
 /*******************************************************/
-/* Project Styles Content */
+/* View Project Styling */
 /*******************************************************/
-#project-form {
-  border: 1px solid #555;
-  padding: 1% 2%;
-  border-radius: 20px;
-  color: gold;
-  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+#viewproject {
+  display: flex;
+  position: relative;
+  width: 90%;
+  margin: auto;
 }
-#project-form input[type="text"],
-#project-form input[type="email"],
-#project-form input[type="password"],
-#project-form textarea {
+#project-image {
+  width: 30%;
+  max-height: 300px;
+  border: 1px solid #555;
+}
+#project {
+  width: 70%;
+  border: 1px solid #555;
+}
+#project-form {
+  display: flex;
+  flex-direction: column;
+  padding: 1% 2%;
+  color: #fff;
+  font-size: 1em;
+  /* box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); */
+}
+.view-block label {
+  color: #3fb6a8;
+  font-size: 1.2em;
+  /* text-transform: uppercase; */
+}
+.view-block {
+  margin: 1% 0;
+  width: 95%;
+}
+
+.view-block input[type="text"],
+.view-block input[type="email"],
+.view-block input[type="password"] {
+  height: auto;
   font-size: 0.9em;
   font-weight: 200;
   width: 100%;
-  display: block;
-  padding: 0.7em;
-  border-bottom: solid 1px rgba(255, 255, 255, 0.37);
+  /* display: block; */
+  padding: 0.5em;
   transition: all 1s cubic-bezier(0.64, 0.09, 0.08, 1);
   background: rgba(255, 255, 255, 0);
   color: #fff;
   font-family: "Roboto", sans-serif;
-}
-#project-form textarea {
-  min-height: 200px;
 }
 
 /*********************************************************/

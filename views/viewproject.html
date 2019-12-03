@@ -72,119 +72,106 @@
       </div>
 
       <main class="main-content">
-        <div class="content-heading">
-          <div class="title">
-            <h1>{Project Name}</h1>
-          </div>
-          <div class="image">
-            <img src="" alt="Project Photo" />
-          </div>
-        </div>
         <div class="content-body">
-          <div class="project">
-            <form method="post" action="" id="project-form">
-              <div class="input-block">
-                <label for="type">Ptoject Type</label>
-                <div>
-                  <input
-                    class="proj_type"
-                    type="radio"
-                    name="type"
-                    value="refuse"
-                    checked
-                    readonly
-                  />Refuse Dump Site <br />
-                  <input
-                    class="proj_type"
-                    type="radio"
-                    name="type"
-                    value="gutter"
-                    readonly
-                  />
-                  Clogged Gutter<br />
-                  <input
-                    class="proj_type"
-                    type="radio"
-                    name="type"
-                    value="market"
-                    readonly
-                  />
-                  Market Cleaning<br />
-                  <input
-                    class="proj_type"
-                    type="radio"
-                    name="type"
-                    value="other"
-                    readonly
-                  />
-                  Other
+          <div id="viewproject">
+            <div id="project-image">
+              <img src="" alt="Project Photo" />
+            </div>
+            <div id="project">
+              <form method="post" action="/workonproject" id="project-form">
+                <div class="view-block">
+                  <label for="type">Project Id:</label>
+                  <div>
+                    <input id="view_type" type="text" name="type"disabled />
+                  </div>
                 </div>
-              </div>
-              <div class="input-block">
-                <label for="description">Description:</label>
-                <div>
-                  <input
-                    id="proj_description"
+                <div class="view-block">
+                  <label for="title">Title / Type:</label>
+                  <div>
+                    <input
+                      id="view_title"
+                      type="text"
+                      name="title"
+                      disabled
+                    />
+                  </div>
+                <div class="view-block">
+                  <label for="details">Details:</label>
+                  <div>
+                    <input
+                      id="view_details"
+                      type="text"
+                      name="details"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="view-block">
+                  <label for="location">Location:</label>
+                  <div>
+                    <input
+                      id="view_lastname"
+                      type="text"
+                      name="location"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="view-block">
+                  <label for="status">Status:</label>
+                  <div>
+                    <input
                     type="text"
-                    name="description"
-                    readonly
-                  />
+                      id="view_status"
+                      name="status"
+                      disabled
+                      />
+                  </div>
                 </div>
-              </div>
-              <div class="input-block">
-                <label for="details">Project Details:</label>
-                <div>
-                  <textarea
-                    form="project-form"
-                    id="proj_details"
-                    name="details"
-                    readonly
-                  ></textarea>
+                <div class="view-block">
+                  <label for="current_workers">Current Number of Workers:</label>
+                  <div>
+                    <input
+                      id="view_current_workers"
+                      type="text"
+                      name="current_workers"
+                      disabled
+                    />
+                  </div>
                 </div>
-              </div>
-              <div class="input-block">
-                <label for="location">Location:</label>
-                <div>
+                <div class="view-block">
+                  <label for="no_of_workers">Maximum Number of Workers:</label>
+                  <div>
+                    <input
+                      id="view_no_of_workers"
+                      type="text"
+                      name="no_of_workers"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="view-block">
+                  <label for="posted_by">Posted By:</label>
+                  <div>
+                    <input
+                      id="view_posted_by"
+                      type="text"
+                      name="posted_by"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="form-button">
                   <input
-                    id="proj_lastname"
-                    type="text"
-                    name="location"
-                    readonly
+                    class="my-btn left-btn"
+                    type="button"
+                    value="Indicate Interest"
                   />
+                  <a class="right-btn" href="./">Back</a>
                 </div>
-              </div>
-              <div class="input-block">
-                <label for="posted_by">Posted By:</label>
-                <div>
-                  <input
-                    id="proj_posted_by"
-                    type="text"
-                    name="posted_by"
-                    readonly
-                  />
-                </div>
-              </div>
-              <div class="input-block">
-                <label for="no_of_workers">Maximum Number of Workers:</label>
-                <div>
-                  <input
-                    id="proj_no_of_workers"
-                    type="text"
-                    name="no_of_workers"
-                    readonly
-                  />
-                </div>
-              </div>
-              <div class="form-button">
-                <input
-                  class="my-btn left-btn"
-                  type="button"
-                  value="Express Interest"
-                />
-                <a class="right-btn" href="./">Back</a>
-              </div>
-              <hr />
-            </form>
+                <hr />
+              </form>
+            </div>
           </div>
         </div>
       </main>
@@ -208,6 +195,6 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script type="module" src="/app.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>
