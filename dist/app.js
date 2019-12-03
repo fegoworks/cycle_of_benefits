@@ -20,6 +20,7 @@ if (document.getElementById("loginform")) {
         if (confirm("Go to your profile?")) {
           //send data to profile page
           window.location.replace(data.redirect_path);
+          // showprofile(userSessionData);
         } else {
           window.location.assign("/");
         }
@@ -48,18 +49,22 @@ if (document.getElementById("form")) {
 }
 
 //pass session variable here to load user data on profile page
-if (document.querySelector(".signin-link")) {
-  if (usersession.getCurrentUser()) {
-    console.log("what is your problem");
-    let userLink = document.querySelector(".signin-link");
-    userLink.textContent = "";
-    userLink.removeAttribute("href");
-    let userIcon = document.createElement("i");
-    userIcon.classList.add("fas", "fa-user", "fa-2x");
-    userLink.appendChild(userIcon);
+function showprofile(user) {
+  if (user) {
+    if (document.querySelector(".signin-link")) {
+      // if (usersession.getCurrentUser()) {
+      console.log("what is your problem: " + user.first_name);
+      let userLink = document.querySelector(".signin-link");
+      userLink.textContent = "";
+      userLink.removeAttribute("href");
+      let userIcon = document.createElement("i");
+      userIcon.classList.add("fas", "fa-user", "fa-2x");
+      userLink.appendChild(userIcon);
 
-    functions.enableSlideMenu(userLink);
-    functions.appendProfileToMobileMenu();
+      functions.enableSlideMenu(userLink);
+      functions.appendProfileToMobileMenu();
+      // }
+    }
   }
 }
 
@@ -110,38 +115,20 @@ if (document.querySelector(".boxes")) {
   });
 }
 
-async function fetchData(url, options) {
-  const rawResponse = await fetch(url, options);
-  const jsonData = await rawResponse.json();
-  return jsonData;
-}
-
 // let projectNumber = document.querySelectorAll(".project-number");
 // console.log(projectNumber[3].textContent);
-//projects page
+//view page
 if (document.querySelector(".projects")) {
   let projectRow = document.querySelectorAll(".project_");
-  let projectBtn = document.querySelectorAll("project-button");
-  let projectNumber = document.querySelectorAll(".project-number");
-  let projectTitle = document.querySelectorAll(".project-title");
-  let projectDesc = document.querySelectorAll(".project-desc");
-  let projectStatus = document.querySelectorAll(".project-status");
-  let projectWorkers = document.getElementsByClassName("project-workers");
-  // let currentWorkers = projectWorkers[i].querySelectorAll(".current-workers");
-  // let totalWorkers = projectWorkers[i].querySelectorAll(".current-workers");
-
+  let projectBtn = document.querySelectorAll(".project-button");
+  let projectId = document.querySelectorAll(".project-id");
   //set static url
   let url = "/viewproject";
-
-  for (let i = 0; i < projectRow.length; i++) {
+  for (let i = 1; i < projectRow.length; i++) {
     projectBtn[i].onclick = function() {
       //fetch project data
       const project = {
-        number: projectNumber[i].textContent,
-        title: projectTitle[i].textContent,
-        desc: projectDesc[i].textContent,
-        status: projectStatus[i].textContent,
-        workers: projectNumber[i].textContent
+        id: projectId[i].textContent
       };
       const fetchOptions = {
         method: "POST",
@@ -157,9 +144,27 @@ if (document.querySelector(".projects")) {
         body: JSON.stringify(project)
       };
 
-      fetch(url, fetchOptions).then(rawResponse => rawResponse.json());
-
-      window.location.assign(`/id=?${projectId}`);
+      fetch(url, fetchOptions)
+        .then(rawResponse => rawResponse.json())
+        .then(data => {
+          console.log(data);
+          if (!data.projectdata) {
+            functions.displayAlert(data.message, "info");
+          } else {
+            const project = data.projectdata;
+            console.log("project fetch error: " + data.projectdata);
+            window.location.assign(data.redirect_path);
+          }
+        })
+        .catch(err => {
+          console.log("project fetch error: " + err);
+        });
     };
   }
+}
+
+async function fetchData(url, options) {
+  const rawResponse = await fetch(url, options);
+  const jsonData = await rawResponse.json();
+  return jsonData;
 }
