@@ -26,9 +26,10 @@ router.get("/about", (req, res, next) => {
   res.render("about");
 });
 
-router.get("/postp", (req, res, next) => {
-  res.render("userprofile");
-});
+// router.get("/testprofile", (req, res, next) => {
+//   res.render("userprofile");
+// });
+
 router.get("/register", (req, res, next) => {
   res.render("register");
 });
@@ -50,7 +51,7 @@ router.get("/profile", (req, res, next) => {
 });
 
 //get project page
-router.get("/project/:projectdata", (req, res, next) => {});
+// router.get("/project/:projectdata", (req, res, next) => {});
 
 //get user profile page
 router.get("/login-success/:userdata", (req, res, next) => {
@@ -91,26 +92,24 @@ router.post("/viewproject", (req, res, next) => {
 });
 
 // Add Project
-//project view post
 router.post("/addproject", (req, res, next) => {
-  // if (req.session.user) {
-  console.log(req.body);
-  let proj = {
-    title: req.body.title,
-    details: req.body.details,
-    address: req.body.address,
-    city: req.body.city,
-    maxworkers: parseInt(req.body.maxworkers, 10),
-    postedby: "test" //req.session.name
-  };
-  project.addProject(proj, projectdata => {
-    if (projectdata) {
-      res.json({ success: "Project has been Submitted!" });
-    } else {
-      res.json({ message: "Could not add project" });
-    }
-  });
-  // }
+  if (req.session.user) {
+    let proj = {
+      title: req.body.title,
+      details: req.body.details,
+      address: req.body.address,
+      city: req.body.city,
+      maxworkers: parseInt(req.body.maxworkers, 10),
+      postedby: "test" //req.session.name
+    };
+    project.addProject(proj, projectdata => {
+      if (projectdata) {
+        res.json({ success: "Project has been Submitted!" });
+      } else {
+        res.json({ message: "Could not add project" });
+      }
+    });
+  }
 });
 
 //login Post

@@ -5,34 +5,58 @@ const sql = require("mssql");
 function Project() {}
 
 Project.prototype = {
-  addProject: function(projObj, callback) {
-    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects WHERE projId = '${projObj.id}'`;
+  generateId: function(callback) {
     let request = new dbconnect.sql.Request(dbconnect.pool);
-    request.query(queryString).then(data => {
-      let matchedRow = data.rowsAffected;
-      if (matchedRow >= 1) {
-        console.log("Found Project: " + data.recordset[0].projId);
-        callback(null);
-      } else {
-        let queryString = `INSERT INTO cyobDB.dbo.Tbl_Projects (proj_title, proj_desc, proj_address, proj_city, max_no_workers, posted_by) VALUES ('${projObj.title}', '${projObj.desc}','${projObj.address}' , '${projObj.city}', '${projObj.maxworkers}', '${projObj.postedby}')`;
-        //make new request
-        request
-          .query(queryString)
-          .then(rows => {
-            if (rows.rowsAffected == 1) {
-              // return the record of current user
-              callback(projObj);
-              return;
-            } else {
-              callback(null);
-            }
-            // dbconnect.pool.close();
-          })
-          .catch(err => {
-            console.log("Add Project Error: " + err);
-          });
-      }
-    });
+    request
+      .query("SELECT * FROM cyobDB.dbo.Tbl_Projects")
+      .then(data => {
+        if (data) {
+          //get last Id
+          const row = data.rowsAffected;
+          const lastId = data.recordset[row - 1].projId;
+          const newId = lastId + 1;
+          console.log(newId);
+          callback(newId);
+          return;
+        } else {
+          callback(null);
+        }
+      })
+      .catch(err => {
+        console.log("Generate Id- Fetch error: " + err);
+      });
+  },
+
+  addProject: function(projObj, callback) {
+    //   generate project Id
+    // let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects WHERE projId = '${projObj.id}'`;
+    // let queryString = `SELECT projId FROM
+    //     (SELECT * FROM Tbl_Projects
+    //     WHERE posted_by = '${projObj.postedby}') AS temp
+    //     WHERE projId = temp.projId`;
+
+    let queryString = `INSERT INTO cyobDB.dbo.Tbl_Projects (proj_title, proj_details, proj_address, proj_city, max_no_workers, posted_by) VALUES ('${projObj.title}', '${projObj.details}','${projObj.address}' , '${projObj.city}', ${projObj.maxworkers}, '${projObj.postedby}')`;
+
+    //make new request
+    let request = new dbconnect.sql.Request(dbconnect.pool);
+    request
+      .query(queryString)
+      .then(data => {
+        if (data.rowsAffected == 1) {
+          // return the record of current user
+          callback(projObj);
+          return;
+        } else {
+          callback(null);
+        }
+        // dbconnect.pool.close();
+      })
+      .catch(err => {
+        console.log("Add Project Error: " + err);
+      });
+    //   .catch(err => {
+    //     console.log("Projects Check Fetch Error: " + err);
+    //   });
   },
 
   getProject: function(projectId, callback) {
