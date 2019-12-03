@@ -1,14 +1,34 @@
 import * as functions from "./functions.js";
 import * as myform from "./forms.js";
-// const forms = require("./forms");
+
 const usersession = new myform.UserSession();
 
-usersession.loginData(function(userSessionName) {
-  if (userSessionName) {
-    console.log("i got it: " + userSessionName);
-  }
-});
+// on login page
+if (document.getElementById("loginform")) {
+  const form = {
+    loginForm: document.getElementById("loginform"),
+    username: document.getElementById("username"),
+    password: document.getElementById("password"),
+    formName: document.forms.namedItem("loginform")
+  };
 
+  form.loginForm.addEventListener("submit", e => {
+    e.preventDefault(); //ignores the default submit behaviour through action
+    usersession.loginUser(form, function(userSessionData) {
+      if (userSessionData) {
+        console.log("i got it: " + userSessionData.first_name);
+        if (confirm("Go to your profile?")) {
+          //send data to profile page
+          window.location.replace(data.redirect_path);
+        } else {
+          window.location.assign("/");
+        }
+      }
+    });
+  });
+}
+
+//on signup page
 if (document.getElementById("form")) {
   const form = {
     signupForm: document.getElementById("form"),
@@ -23,29 +43,31 @@ if (document.getElementById("form")) {
 
   document.getElementById("form").addEventListener("submit", e => {
     e.preventDefault();
-    usersession.signupData(form);
+    usersession.signupUser(form);
   });
 }
-usersession.signupData();
-// if (isSession) {
-//
-// }
-// if (document.querySelector(".signin-link")) {
-//   console.log("what is your problem");
-//   let userLink = document.querySelector(".signin-link");
-//   userLink.textContent = "";
-//   userLink.removeAttribute("href");
-//   let userIcon = document.createElement("i");
-//   userIcon.classList.add("fas", "fa-user", "fa-2x");
-//   userLink.appendChild(userIcon);
 
-//   functions.enableSlideMenu(userLink);
-//   functions.appendProfileToMobileMenu();
-// }
+//pass session variable here to load user data on profile page
+if (document.querySelector(".signin-link")) {
+  if (usersession.getCurrentUser()) {
+    console.log("what is your problem");
+    let userLink = document.querySelector(".signin-link");
+    userLink.textContent = "";
+    userLink.removeAttribute("href");
+    let userIcon = document.createElement("i");
+    userIcon.classList.add("fas", "fa-user", "fa-2x");
+    userLink.appendChild(userIcon);
+
+    functions.enableSlideMenu(userLink);
+    functions.appendProfileToMobileMenu();
+  }
+}
+
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
 
+// user profile
 if (document.querySelector(".boxes")) {
   let leftbox = document.querySelector(".leftbox");
   let navLinks = document.querySelectorAll(".leftbox nav a");
@@ -55,6 +77,7 @@ if (document.querySelector(".boxes")) {
   let messages = document.querySelector(".messages");
   let rewards = document.querySelector(".rewards");
 
+  //stacked divs display function
   navLinks.forEach(link => {
     link.onclick = function(e) {
       e.preventDefault();
@@ -87,10 +110,56 @@ if (document.querySelector(".boxes")) {
   });
 }
 
-// fetch("/api", fetchOptions)
-//   .then(res => res.json())
-//    .then(json =>{
-//       console.log(json);
-//      })
-//   .catch(err => {
-//     console.log("fetch failed: " + err);
+async function fetchData(url, options) {
+  const rawResponse = await fetch(url, options);
+  const jsonData = await rawResponse.json();
+  return jsonData;
+}
+
+// let projectNumber = document.querySelectorAll(".project-number");
+// console.log(projectNumber[3].textContent);
+//projects page
+if (document.querySelector(".projects")) {
+  let projectRow = document.querySelectorAll(".project_");
+  let projectBtn = document.querySelectorAll("project-button");
+  let projectNumber = document.querySelectorAll(".project-number");
+  let projectTitle = document.querySelectorAll(".project-title");
+  let projectDesc = document.querySelectorAll(".project-desc");
+  let projectStatus = document.querySelectorAll(".project-status");
+  let projectWorkers = document.getElementsByClassName("project-workers");
+  // let currentWorkers = projectWorkers[i].querySelectorAll(".current-workers");
+  // let totalWorkers = projectWorkers[i].querySelectorAll(".current-workers");
+
+  //set static url
+  let url = "/viewproject";
+
+  for (let i = 0; i < projectRow.length; i++) {
+    projectBtn[i].onclick = function() {
+      //fetch project data
+      const project = {
+        number: projectNumber[i].textContent,
+        title: projectTitle[i].textContent,
+        desc: projectDesc[i].textContent,
+        status: projectStatus[i].textContent,
+        workers: projectNumber[i].textContent
+      };
+      const fetchOptions = {
+        method: "POST",
+        headers: {
+          Accept: [
+            "application/x-www-form-urlencoded",
+            "application/json",
+            "text/plain",
+            "*/*"
+          ],
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(project)
+      };
+
+      fetch(url, fetchOptions).then(rawResponse => rawResponse.json());
+
+      window.location.assign(`/id=?${projectId}`);
+    };
+  }
+}
