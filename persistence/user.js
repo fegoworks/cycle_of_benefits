@@ -49,8 +49,8 @@ User.prototype = {
         // Hash the password
         hashedPassword = bcrypt.hashSync(hashedPassword, 10);
 
-        // prepare the sql query, insert inorder 5 fields
-        let queryString = `INSERT INTO cyobDB.dbo.Tbl_Users VALUES ('${userobj.username}', '${hashedPassword}', '${userobj.firstname}', '${userobj.lastname}', '${userobj.email}')`;
+        // prepare the sql query, insert in order 5 required fields
+        let queryString = `INSERT INTO cyobDB.dbo.Tbl_Users (userId, pass_code, first_name, last_name, email_address) VALUES ('${userobj.username}', '${hashedPassword}', '${userobj.firstname}', '${userobj.lastname}', '${userobj.email}')`;
         //make new request
         request
           .query(queryString)
