@@ -115,16 +115,14 @@ if (document.querySelector(".boxes")) {
   });
 }
 
-// let projectNumber = document.querySelectorAll(".project-number");
-// console.log(projectNumber[3].textContent);
-//view page
+//view Project page
 if (document.querySelector(".projects")) {
   let projectRow = document.querySelectorAll(".project_");
-  let projectBtn = document.querySelectorAll(".project-button");
+  let projectBtn = document.querySelectorAll(".project-button > input");
   let projectId = document.querySelectorAll(".project-id");
   //set static url
   let url = "/viewproject";
-  for (let i = 1; i < projectRow.length; i++) {
+  for (let i = 0; i < projectRow.length; i++) {
     projectBtn[i].onclick = function() {
       //fetch project data
       const project = {
@@ -162,6 +160,27 @@ if (document.querySelector(".projects")) {
     };
   }
 }
+
+// Post project
+if (document.querySelector("#post_project")) {
+  // console.log("hi");
+  const form = {
+    projectform: document.getElementById("post_project"),
+    projectTitle: document.getElementById("proj_title"),
+    projectDetails: document.getElementById("proj_details"),
+    projectAddress: document.getElementById("proj_address"),
+    projectCity: document.getElementById("proj_city"),
+    projectWorkers: document.getElementById("proj_max_workers"),
+    formName: document.forms.namedItem("post_project")
+  };
+
+  form.projectform.addEventListener("submit", e => {
+    e.preventDefault();
+    usersession.addProject(form);
+  });
+}
+
+//Edit profile button
 
 async function fetchData(url, options) {
   const rawResponse = await fetch(url, options);

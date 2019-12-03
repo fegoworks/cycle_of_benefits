@@ -50,7 +50,7 @@ UserSession.prototype = {
           } else {
             // console.log(data);
             functions.displayAlert("Login Successful!", "success");
-            console.log(data.redirection_path);
+            console.log(data.redirect_path);
             clearFormFields(form.formName);
             callback(data.userdata);
             // this.getCurrentUser(userdata);
@@ -128,6 +128,52 @@ UserSession.prototype = {
           });
       }
     }
+  },
+
+  addProject: function(form) {
+    // validation
+    if (!validateSignupForm(form.formName)) {
+      functions.displayAlert("Fill all required fields", "error");
+      return false;
+    } else {
+      let url = "/addproject";
+      const newProject = {
+        title: form.projectTitle.value,
+        details: form.projectDetails.value,
+        address: form.projectAddress.value,
+        city: form.projectCity.value,
+        maxworkers: form.projectWorkers.value
+      };
+      // console.log(newProject);
+      const options = {
+        method: "POST",
+        headers: {
+          Accept: [
+            "application/x-www-form-urlencoded",
+            "application/json",
+            "text/plain",
+            "*/*"
+          ],
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(newProject)
+      };
+
+      fetch(url, options)
+        .then(rawResponse => rawResponse.json())
+        .then(jsonData => {
+          if (jsonData.success) {
+            functions.displayAlert(jsonData.success, "success");
+            clearFormFields(form.formName);
+          } else {
+            functions.displayAlert(jsonData.message, "error");
+          }
+        })
+        .catch(error => {
+          console.log("post project Fetch error: " + error);
+        });
+    }
+    //set static url
   }
 };
 

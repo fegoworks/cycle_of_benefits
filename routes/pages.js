@@ -1,9 +1,11 @@
 const express = require("express");
 const path = require("path");
 const User = require("../persistence/user");
+const Project = require("../persistence/project");
 const router = express.Router();
 
 const user = new User();
+const project = new Project();
 
 //get index page
 router.get("/", (req, res, next) => {
@@ -24,12 +26,19 @@ router.get("/about", (req, res, next) => {
   res.render("about");
 });
 
+router.get("/postp", (req, res, next) => {
+  res.render("userprofile");
+});
 router.get("/register", (req, res, next) => {
   res.render("register");
 });
 
 router.get("/login", (req, res, next) => {
   res.render("login");
+});
+
+router.get("/projectview", (req, res, next) => {
+  res.render("viewproject");
 });
 
 router.get("/profile", (req, res, next) => {
@@ -39,6 +48,9 @@ router.get("/profile", (req, res, next) => {
   }
   res.redirect("/");
 });
+
+//get project page
+router.get("/project/:projectdata", (req, res, next) => {});
 
 //get user profile page
 router.get("/login-success/:userdata", (req, res, next) => {
@@ -63,12 +75,51 @@ router.get("/registerfailed", (req, res, next) => {
   res.json({ message: "Sorry! This User already exists" });
 });
 
-//Post login
+//project view post
+router.post("/viewproject", (req, res, next) => {
+  console.log(req.body.id);
+  project.getProject(req.body.id, projectdata => {
+    if (projectdata) {
+      res.json({
+        redirect_path: "/projectview",
+        projectdata: projectdata
+      });
+    } else {
+      res.json({ message: "Cannot find project" });
+    }
+  });
+});
+
+// Add Project
+//project view post
+router.post("/addproject", (req, res, next) => {
+  // if (req.session.user) {
+  console.log(req.body);
+  let proj = {
+    title: req.body.title,
+    details: req.body.details,
+    address: req.body.address,
+    city: req.body.city,
+    maxworkers: parseInt(req.body.maxworkers, 10),
+    postedby: "test" //req.session.name
+  };
+  project.addProject(proj, projectdata => {
+    if (projectdata) {
+      res.json({ success: "Project has been Submitted!" });
+    } else {
+      res.json({ message: "Could not add project" });
+    }
+  });
+  // }
+});
+
+//login Post
 router.post("/submitlogin", (req, res, next) => {
-  user.login(req.body.username, req.body.password, data => {
-    if (data) {
+  user.login(req.body.username, req.body.password, userdata => {
+    if (userdata) {
       //on login, make a session
-      req.session.user = data.userId;
+      req.session.name = userdata.firstname + " " + userdata.last_name;
+      req.session.user = userdata.userId;
       res.redirect("/login-success/" + userdata);
     } else {
       res.redirect("/login-failed");
@@ -76,6 +127,7 @@ router.post("/submitlogin", (req, res, next) => {
   });
 });
 
+//register post
 router.post("/submitregister", (req, res, next) => {
   // console.log(req.body);
   let userObj = {
@@ -88,8 +140,6 @@ router.post("/submitregister", (req, res, next) => {
   user.create(userObj, data => {
     console.log("post: " + data);
     if (data) {
-      req.session.opp = 0;
-      req.session.user = data.userId;
       res.redirect("/registersuccess");
     } else {
       console.log("Error: Unable to create user");

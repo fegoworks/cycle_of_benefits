@@ -76,31 +76,36 @@
       </div>
       <!-- <div class="clear-float"></div> -->
       <main class="main-content">
-        <div>
-          <button class="my-btn" id="check">
-            check
-          </button>
-        </div>
         <!-- <div class="content-heading">
           <div class="title">
-            <h2><span id="fullname">{Hi user}</span></h2>
+            <h3>Hi <span id="fullname">{user}</span></h3>
           </div>
         </div> -->
         <div class="boxes">
           <div class="leftbox">
             <nav>
               <a id="profile" class="active"
-                ><i class="fa fa-user"></i>My Profile</a
+                ><i class="fa fa-user"></i
+                ><span class="nav-menu">My Profile</span></a
               >
-              <a id="messages"><i class="fa fa-credit-card"></i>My Messages</a>
-              <a id="postproject"><i class="fa fa-tv"></i>Post Project</a>
-              <a id="rewards"><i class="fa fa-tasks"></i>My Rewards</a>
+              <a id="messages"
+                ><i class="fa fa-credit-card"></i
+                ><span class="nav-menu">My Messages</span></a
+              >
+              <a id="postproject"
+                ><i class="fa fa-tv"></i
+                ><span class="nav-menu">Post Project</span></a
+              >
+              <a id="rewards"
+                ><i class="fa fa-tasks"></i
+                ><span class="nav-menu">My Rewards</span></a
+              >
             </nav>
           </div>
           <div class="rightbox">
             <div class="profile">
               <div class="profile-heading">
-                <h2><strong>My Profile</strong></h2>
+                <h1><strong>My Profile</strong></h1>
                 <button class="edit-button">
                   <i class="fas fa-edit fa-2x"></i>
                 </button>
@@ -218,85 +223,54 @@
 
             <div class="postproject noshow">
               <h1>Post a new Project</h1>
-              <form method="post" action="" id="post_project">
+              <form method="post" action="/addproject" id="post_project">
                 <div class="input-block">
-                  <label for="type">Project Type</label>
-                  <div>
-                    <input
-                      class="proj_type"
-                      type="radio"
-                      name="type"
-                      value="refuse"
-                      checked
-                    />Refuse Dump Site <br />
-                    <input
-                      class="proj_type"
-                      type="radio"
-                      name="type"
-                      value="gutter"
-                    />
-                    Clogged Gutter<br />
-                    <input
-                      class="proj_type"
-                      type="radio"
-                      name="type"
-                      value="market"
-                    />
-                    Market Cleaning<br />
-                    <input
-                      class="proj_type"
-                      type="radio"
-                      name="type"
-                      value="other"
-                    />
-                    Other
-                  </div>
+                  <label for="type">Project Type: </label>
+                  <input list="project-types" name="type" />
+                  <datalist id="project-types">
+                    <option value="Refuse Dump Site"></option>
+                    <option value="Clogged Gutter"></option>
+                    <option value="Market Cleaning"></option>
+                    <option value="Other"></option>
+                  </datalist>
                 </div>
                 <div class="input-block">
-                  <label for="description">Description:</label>
+                  <label for="title">Title:</label>
                   <div>
-                    <input
-                      id="proj_description"
-                      type="text"
-                      name="description"
-                    />
+                    <input id="proj_title" type="text" name="title" />
                   </div>
                 </div>
                 <div class="input-block">
                   <label for="details">Project Details:</label>
                   <div>
-                    <textarea
-                      form="project-form"
-                      id="proj_details"
-                      name="details"
-                    ></textarea>
+                    <input type="textarea" id="proj_details" name="details" />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="location">Location:</label>
+                  <label for="address">Address:</label>
                   <div>
-                    <input id="proj_lastname" type="text" name="location" />
+                    <input id="proj_address" type="text" name="address" />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="posted_by">Posted By:</label>
+                  <label for="city">City:</label>
                   <div>
-                    <input id="proj_posted_by" type="text" name="posted_by" />
+                    <input id="proj_city" type="text" name="city" />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="no_of_workers">Maximum Number of Workers:</label>
+                  <label for="max_workers">Maximum Number of Workers:</label>
                   <div>
                     <input
-                      id="proj_no_of_workers"
+                      id="proj_max_workers"
                       type="number"
-                      name="no_of_workers"
+                      name="max_workers"
                       min="1"
                     />
                   </div>
                 </div>
                 <div class="form-button">
-                  <input class="my-btn left-btn" type="button" value="SUBMIT" />
+                  <input class="my-btn left-btn" type="submit" value="SUBMIT" />
                   <a class="right-btn" href="./">Back</a>
                 </div>
                 <hr />
@@ -340,6 +314,6 @@
     </div>
     <!--Main Wrapper div-->
     <!-- Optional JavaScript -->
-    <script type="module" src="/app.js"></script>
+    <script type="module" src="app.js"></script>
   </body>
 </html>
