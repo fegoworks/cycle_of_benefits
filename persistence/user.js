@@ -84,7 +84,7 @@ User.prototype = {
             userRecord.pass_code
           );
           if (validPassword) {
-            callback(userRecord);
+            callback(userRecord.userId);
           } else {
             callback(null);
           }
@@ -92,6 +92,24 @@ User.prototype = {
       })
       .catch(err => {
         console.log("Login Error: " + err);
+      });
+  },
+
+  getProfile: function(userid, callback) {
+    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Profiles WHERE username = '${userid}' `;
+    let request = new dbconnect.sql.Request(dbconnect.pool);
+    request
+      .query(queryString)
+      .then(data => {
+        let userRecord = data.recordset[0];
+        if (userRecord) {
+          callback(userRecord);
+        } else {
+          callback(null);
+        }
+      })
+      .catch(err => {
+        console.log("get Profile Error: " + err);
       });
   }
 };
