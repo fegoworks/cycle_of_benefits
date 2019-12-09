@@ -4,17 +4,9 @@ function UserSession() {}
 
 /* Form validation*/
 UserSession.prototype = {
-  getCurrentUser: function(userdata) {
-    // this.loginUser()
-    if (userdata) {
-      return userdata;
-    }
-    return null;
-  },
-
   loginUser: function(form, callback) {
     let url = form.loginForm.getAttribute("action")
-      ? "/submitlogin"
+      ? "/login"
       : "/cannotgetposturl";
     if (form.username.value === "" || form.password.value === "") {
       functions.displayAlert("Enter your login information!", "info");
@@ -38,27 +30,29 @@ UserSession.prototype = {
         },
         body: JSON.stringify(user)
       };
+
       fetch(url, fetchOptions)
-        .then(rawResponse => rawResponse.json())
+        .then(response => {
+          return response.json();
+        })
         .then(data => {
-          if (!data.redirect_path) {
-            console.log("Error: " + data.message);
+          if (data.message) {
+            console.log("Error: " + data);
             functions.displayAlert(
-              "Username or Password not correct!",
+              data.message + ": Username or Password not correct!",
               "error"
             );
           } else {
-            // console.log(data);
-            functions.displayAlert("Login Successful!", "success");
             console.log(data.redirect_path);
+            // console.log(data.userdata);
             clearFormFields(form.formName);
-            callback(data.userdata);
-            // this.getCurrentUser(userdata);
+            // this.setSession();
+            callback(data.redirect_path);
             return;
           }
           callback(null);
         })
-        .catch(error => console.error("Fetch Error: ", error));
+        .catch(error => console.error("HTTP- Error: ", "\n" + error));
     }
   },
   /* Register */

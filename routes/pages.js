@@ -10,10 +10,10 @@ const project = new Project();
 //get index page
 router.get("/", (req, res, next) => {
   //if user session exists
-  if (req.session.user) {
-    res.redirect("/profile");
-    return;
-  }
+  // if (req.session.user) {
+  //   res.redirect("/profile");
+  //   return;
+  // }
   // console.log(req.session);
   res.render("index");
 });
@@ -25,10 +25,6 @@ router.get("/projects", (req, res, next) => {
 router.get("/about", (req, res, next) => {
   res.render("about");
 });
-
-// router.get("/testprofile", (req, res, next) => {
-//   res.render("userprofile");
-// });
 
 router.get("/register", (req, res, next) => {
   res.render("register");
@@ -42,28 +38,44 @@ router.get("/projectview", (req, res, next) => {
   res.render("viewproject");
 });
 
-router.get("/profile", (req, res, next) => {
-  if (req.session.user) {
-    res.render("userprofile");
-    return;
+// router.get("/profile", redirectHome, (req, res) => {
+//   res.render("profile");
+// });
+
+router.get("/profile", (req, res) => {
+  // res.render("profile.ejs");
+  console.log(req.session.userid);
+  if (req.session.userid) {
+    //get userdata and render profile
+    user.getProfile(req.session.userid, userprofile => {
+      if (userprofile) {
+        res.render("profile.ejs", {
+          username: userprofile.username ? userprofile.username : "",
+          firstname: userprofile.first_name ? userprofile.first_name : "",
+          lastname: userprofile.last_name ? userprofile.last_name : "",
+          age: userprofile.age ? userprofile.age : "",
+          email: userprofile.email_address ? userprofile.email_address : "",
+          address: userprofile.home_address ? userprofile.home_address : "",
+          phone: userprofile.mobile_number ? userprofile.mobile_number : "",
+          nationalId: userprofile.nationalId ? userprofile.nationalId : "",
+          state: userprofile.state_of_origin ? userprofile.state_of_origin : ""
+        });
+        return;
+      } else {
+        console.log("profile route Error: Could not find user profile");
+      }
+    });
+  } else {
+    res.redirect("/login");
   }
-  res.redirect("/");
 });
 
 //get project page
 // router.get("/project/:projectdata", (req, res, next) => {});
 
-//get user profile page
-router.get("/login-success/:userdata", (req, res, next) => {
-  res.json({
-    status: "Login Success",
-    redirect_path: `/profile`,
-    userdata: req.params.userdata
-  });
-});
-router.get("/login-failed", (req, res, next) => {
-  res.json({ message: "User not found" });
-});
+// router.get("/loginfailed", (req, res, next) => {
+//   res.json({ message: "User not found" });
+// });
 
 //get user profile page
 router.get("/registersuccess", (req, res, next) => {
@@ -113,17 +125,27 @@ router.post("/addproject", (req, res, next) => {
 });
 
 //login Post
-router.post("/submitlogin", (req, res, next) => {
-  user.login(req.body.username, req.body.password, userdata => {
-    if (userdata) {
-      //on login, make a session
-      req.session.name = userdata.firstname + " " + userdata.last_name;
-      req.session.user = userdata.userId;
-      res.redirect("/login-success/" + userdata);
-    } else {
-      res.redirect("/login-failed");
-    }
-  });
+router.post("/login", (req, res, next) => {
+  const { username, password } = req.body;
+  if (username && password) {
+    user.login(username, password, id => {
+      if (id) {
+        console.log("user Found");
+        //on login, make a session
+        // req.session.name = userdata.first_name + " " + userdata.last_name;
+        req.session.userid = id;
+        // res.redirect("/profile");
+        res.json({
+          redirect_path: "http://localhost:3000/profile"
+          // userdata: userdata
+        });
+      } else {
+        // res.json({ message: "Login Failed" });
+        res.status(404).json({ message: "Login Failed" });
+        console.log("Login Post Err: user not found");
+      }
+    });
+  }
 });
 
 //register post
