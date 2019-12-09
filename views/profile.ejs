@@ -5,23 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Cycle of Benefits</title>
-    <!-- title favicon -->
     <link rel="icon" href="" type="image/x-icon" />
-    <!-- Font awesome CDN-->
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.0.11/css/all.css"
     />
-    <!-- Latest compiled and minified CSS -->
-    <!-- <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    /> -->
-    <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/dynamic.css" />
     <link rel="stylesheet" href="css/mobile.css" />
-    <!-- Google Fonts Api -->
     <link
       href="https://fonts.googleapis.com/css?family=Karla&display=swap"
       rel="stylesheet"
@@ -74,13 +65,12 @@
           </li>
         </ul>
       </div>
-      <!-- <div class="clear-float"></div> -->
       <main class="main-content">
-        <!-- <div class="content-heading">
+        <div class="content-heading">
           <div class="title">
-            <h3>Hi <span id="fullname">{user}</span></h3>
+            <h3>Hi <span id="fullname"><%= firstname%></span></h3>
           </div>
-        </div> -->
+        </div>
         <div class="boxes">
           <div class="leftbox">
             <nav>
@@ -110,7 +100,7 @@
                   <i class="fas fa-edit fa-2x"></i>
                 </button>
               </div>
-              <form method="post" action="" id="profile-form">
+              <form method="PUT" action="/updateuser" id="profile-form">
                 <div class="input-block">
                   <label for="username">Username</label>
                   <div>
@@ -118,7 +108,8 @@
                       id="edit_username"
                       type="text"
                       name="username"
-                      disabled
+                      value="<%= username%>"
+                      readonly
                     />
                   </div>
                 </div>
@@ -129,7 +120,8 @@
                       id="edit_firstname"
                       type="text"
                       name="first_name"
-                      disabled
+                      value="<%= firstname%>"
+                      readonly
                     />
                   </div>
                 </div>
@@ -140,7 +132,8 @@
                       id="edit_lastname"
                       type="text"
                       name="last_name"
-                      disabled
+                      value="<%= lastname%>"
+                      readonly
                     />
                   </div>
                 </div>
@@ -151,14 +144,16 @@
                       id="edit_national_ID"
                       type="text"
                       name="national_ID"
-                      disabled
+                      value="<%= nationalId%>"
+                      readonly
                     />
                   </div>
                 </div>
                 <div class="input-block">
                   <label for="email">Email</label>
                   <div>
-                    <input id="edit_email" type="email" name="email" disabled />
+                    <input id="edit_email" type="email" name="email" 
+                    value= "<%=email%>" readonly />
                   </div>
                 </div>
                 <div class="input-block">
@@ -168,56 +163,46 @@
                       id="edit_address"
                       type="text"
                       name="address"
-                      disabled
+                      value="<%= address%>"
+                      readonly
                     />
                   </div>
                 </div>
                 <div class="input-block">
                   <label for="phone">Phone Number</label>
                   <div>
-                    <input id="reg_phone" type="text" name="phone" disabled />
+                    <input id="edit_phone" type="text" name="phone" value="<%= phone%>" readonly />
                   </div>
                 </div>
                 <div class="input-block">
                   <label for="dob">DOB</label>
                   <div>
                     <input
-                      id="reg_dob"
+                      id="edit_dob"
                       type="date"
                       name="dob"
+                      value="<%= age%>"
                       min="2000-01-01"
-                      disabled
+                      readonly
                     />
                   </div>
                 </div>
                 <div class="input-block">
                   <label for="state">State of Origin</label>
                   <div>
-                    <input id="reg_state" type="text" name="state" disabled />
+                    <input id="edit_state" type="text" name="state" value="<%= state%>"readonly />
                   </div>
                 </div>
-                <!-- <div class="input-block">
-                        <label for="skills">Skills</label>
-                        <div>
-                          <textarea form="profile-form" id="reg_skills" type="text" name="skills" disabled />
-                        </div>
-                      </div> -->
                 <div class="form-button">
                   <input
                     type="submit"
                     class="left-btn my-btn"
                     value="SAVE CHANGES"
-                    disabled
+                    readonly
                   />
                   <a class="right-btn" href="#">Reset</a>
                 </div>
                 <hr />
-                <div class="form-info">
-                  <p>
-                    Got an Account Already?
-                    <a href="./login">Login Here!</a>
-                  </p>
-                </div>
               </form>
             </div>
 
@@ -288,10 +273,6 @@
             </div>
           </div>
         </div>
-        <!--Close boxes div-->
-        <!-- <p>
-          made by <a href="https://codepen.io/juliepark"> julie</a> ♡
-        </p> -->
       </main>
 
       <footer class="main-footer">
@@ -312,8 +293,6 @@
         </div>
       </footer>
     </div>
-    <!--Main Wrapper div-->
-    <!-- Optional JavaScript -->
     <script type="module" src="app.js"></script>
   </body>
 </html>
