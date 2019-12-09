@@ -14,16 +14,19 @@ if (document.getElementById("loginform")) {
 
   form.loginForm.addEventListener("submit", e => {
     e.preventDefault(); //ignores the default submit behaviour through action
-    usersession.loginUser(form, function(userSessionData) {
-      if (userSessionData) {
-        console.log("i got it: " + userSessionData.first_name);
-        if (confirm("Go to your profile?")) {
-          //send data to profile page
-          window.location.replace(data.redirect_path);
-          // showprofile(userSessionData);
-        } else {
-          window.location.assign("/");
-        }
+    usersession.loginUser(form, function(profileUrl) {
+      if (profileUrl) {
+        functions.displayAlert("Login Successful!", "success");
+        // if (confirm("Go to your profile?")) {
+        // usersession.getSession();
+        window.location.replace(profileUrl);
+        showprofile();
+        // } else {
+        // window.location.assign("/");
+        // }
+        //store data for profile page
+        // localStorage.setItem("currentUser", JSON.stringify(data.userdata));
+        // showprofile();
       }
     });
   });
@@ -48,33 +51,35 @@ if (document.getElementById("form")) {
   });
 }
 
-//pass session variable here to load user data on profile page
-function showprofile(user) {
-  if (user) {
-    if (document.querySelector(".signin-link")) {
-      // if (usersession.getCurrentUser()) {
-      console.log("what is your problem: " + user.first_name);
-      let userLink = document.querySelector(".signin-link");
-      userLink.textContent = "";
-      userLink.removeAttribute("href");
-      let userIcon = document.createElement("i");
-      userIcon.classList.add("fas", "fa-user", "fa-2x");
-      userLink.appendChild(userIcon);
+function showprofile() {
+  //pass session variable here to load user data on profile page
+  if (document.querySelector(".signin-link")) {
+    //fetch user profile
+    // if (usersession.getCurrentUser()) {
+    let userLink = document.querySelector(".signin-link");
+    userLink.textContent = "";
+    userLink.removeAttribute("href");
+    let userIcon = document.createElement("i");
+    userIcon.classList.add("fas", "fa-user", "fa-2x");
+    userLink.appendChild(userIcon);
 
-      functions.enableSlideMenu(userLink);
-      functions.appendProfileToMobileMenu();
-      // }
-    }
+    functions.enableSlideMenu(userLink);
+    functions.appendProfileToMobileMenu();
+    // }
   }
 }
 
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
-
+// localStorage.removeItem("currentUser");
+// console.log("Client:\n" + localStorage.getItem("currentUser"));
 // user profile
 if (document.querySelector(".boxes")) {
-  let leftbox = document.querySelector(".leftbox");
+  // let currentUser = localStorage.getItem("currentUser");
+  // if (currentUser) {
+  // const user = JSON.parse(currentUser);
+  // let leftbox = document.querySelector(".leftbox");
   let navLinks = document.querySelectorAll(".leftbox nav a");
   let nav = document.querySelector(".rightbox").children;
   let postproject = document.querySelector(".postproject");
@@ -113,6 +118,14 @@ if (document.querySelector(".boxes")) {
       }
     };
   });
+
+  // Load user data into form fields
+  // console.log("From profile: " + user.userId);
+  // document.querySelector("#edit_username").value = user.userId;
+  // document.querySelector("#edit_firstname").value = user.first_name;
+  // document.querySelector("#edit_lastname").value = user.last_name;
+  // document.querySelector("#edit_email").value = user.email_address;
+  // }
 }
 
 //view Project page
