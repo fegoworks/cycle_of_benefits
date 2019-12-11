@@ -43,7 +43,7 @@ router.get("/project:id", (req, res, next) => {
             : "",
         status: data.proj_status ? data.proj_status : "",
         tools: data.tools ? data.tools : "",
-        current: data.current_workers ? data.current_worker : "",
+        current: data.current_workers ? data.current_workers : "",
         maxworkers: data.max_no_workers ? data.max_no_workers : "",
         postedby: data.posted_by ? data.posted_by : ""
       });
@@ -104,8 +104,17 @@ router.put("/updateuser", (req, res) => {
     }
   });
 });
-//get project page
-// router.get("/project/:projectdata", (req, res, next) => {});
+
+//Load Projects
+router.get("/allprojects", (req, res) => {
+  project.allProjects(data => {
+    if (data) {
+      res.json(data.recordset);
+      return;
+    }
+    res.json({ errMessage: "Could not retrieve project data" });
+  });
+});
 
 //project view post
 router.post("/projectview", (req, res, next) => {

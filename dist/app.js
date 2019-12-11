@@ -69,12 +69,14 @@ function showprofile() {
   }
 }
 
+/* Menu Button Toggler */
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
 // localStorage.removeItem("currentUser");
 // console.log("Client:\n" + localStorage.getItem("currentUser"));
-// user profile
+
+/*  User profile */
 if (document.querySelector(".boxes")) {
   // let currentUser = localStorage.getItem("currentUser");
   // if (currentUser) {
@@ -128,20 +130,115 @@ if (document.querySelector(".boxes")) {
   // }
 }
 
-/* view Project page */
+/* Load all projects */
 if (document.querySelector(".projects")) {
-  let projectRow = document.querySelectorAll(".project_");
-  let projectBtn = document.querySelectorAll(".project-button > input");
-  let projectId = document.querySelectorAll(".project-id");
-  //set static url
-  for (let i = 0; i < projectRow.length; i++) {
-    projectBtn[i].onclick = function() {
-      usersession.viewProject(projectId[i], data => {
-        if (data) {
-          window.location.assign(data);
+  /* create dynamic contents */
+  const ProjectList = [];
+  function appendProjects(recordset) {
+    let pill = document.querySelector(".project-pills");
+    let project_ = document.createElement("li");
+    project_.classList.add("project_");
+
+    let proj_id = document.createElement("div");
+    proj_id.classList.add("project-id");
+    let proj_title = document.createElement("div");
+    proj_title.classList.add("project-title");
+    let proj_details = document.createElement("div");
+    proj_details.classList.add("project-details");
+    let proj_status = document.createElement("div");
+    proj_status.classList.add("project-status");
+    let proj_workers = document.createElement("div");
+    proj_workers.classList.add("project-workers");
+    let proj_current_workers = document.createElement("span");
+    proj_current_workers.classList.add("current");
+    let proj_total_workers = document.createElement("span");
+    proj_total_workers.classList.add("total");
+    let proj_button = document.createElement("div");
+    proj_button.classList.add("project-button");
+    let input = document.createElement("input");
+    input.classList.add("my-btn");
+    input.setAttribute("type", "button");
+    input.setAttribute("value", "View");
+
+    /* Add text contents */
+    proj_id.appendChild(document.createTextNode(recordset.projId));
+    proj_title.appendChild(document.createTextNode(recordset.proj_title));
+    proj_details.appendChild(document.createTextNode(recordset.proj_details));
+    proj_status.appendChild(document.createTextNode(recordset.proj_status));
+    proj_current_workers.appendChild(
+      document.createTextNode(
+        recordset.proj_current_workers
+          ? recordset.proj_current_workers
+          : 0 + "/"
+      )
+    );
+    proj_total_workers.appendChild(
+      document.createTextNode(
+        recordset.proj_max_no_workers ? recordset.proj_max_no_workers : 0
+      )
+    );
+
+    proj_workers.append(proj_current_workers);
+    proj_workers.append(proj_total_workers);
+    proj_button.appendChild(input);
+
+    /* Append to project group */
+    project_.appendChild(proj_id);
+    project_.appendChild(proj_title);
+    project_.appendChild(proj_details);
+    project_.appendChild(proj_status);
+    project_.appendChild(proj_workers);
+    project_.appendChild(proj_button);
+
+    pill.appendChild(project_);
+    // document.body.appendChild("pill");
+  }
+  // fetch data
+  fetch("/allprojects", {
+    method: "Get",
+    headers: {
+      Accept: [
+        "application/x-www-form-urlencoded",
+        "application/json",
+        "text/plain",
+        "*/*"
+      ],
+      "Content-Type": "application/json"
+    }
+  })
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      if (data) {
+        for (let i = 0; i < data.length; i++) {
+          appendProjects(data[i]);
         }
-      });
-    };
+        viewProfile();
+      } else {
+        functions.displayAlert(data.errMessage, "error");
+      }
+    })
+    .catch(err => {
+      console.log("Fetch Error: All projects: " + err);
+    });
+
+  function viewProfile() {
+    /* view Project page */
+    let projectRow = document.querySelectorAll(".project_");
+    console.log(projectRow.length);
+    let projectBtn = document.querySelectorAll(".project-button > input");
+    let projectId = document.querySelectorAll(".project-id");
+    //set static url
+    for (let i = 0; i < projectRow.length; i++) {
+      projectBtn[i].onclick = function() {
+        usersession.viewProject(projectId[i], data => {
+          if (data) {
+            window.location.assign(data);
+          }
+        });
+      };
+    }
   }
 }
 

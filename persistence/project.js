@@ -51,13 +51,6 @@ Project.prototype = {
   },
 
   addProject: function(projObj, callback) {
-    //   generate project Id
-    // let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects WHERE projId = '${projObj.id}'`;
-    // let queryString = `SELECT projId FROM
-    //     (SELECT * FROM Tbl_Projects
-    //     WHERE posted_by = '${projObj.postedby}') AS temp
-    //     WHERE projId = temp.projId`;
-
     let queryString = `INSERT INTO cyobDB.dbo.Tbl_Projects (proj_title, proj_details, proj_address, proj_city, max_no_workers, posted_by) VALUES ('${projObj.title}', '${projObj.details}','${projObj.address}' , '${projObj.city}', ${projObj.maxworkers}, '${projObj.postedby}')`;
 
     //make new request
@@ -97,6 +90,23 @@ Project.prototype = {
       })
       .catch(err => {
         console.log("Get Project Error: " + err);
+      });
+  },
+
+  allProjects: function(callback) {
+    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects`;
+    let request = new dbconnect.sql.Request(dbconnect.pool);
+    request
+      .query(queryString)
+      .then(data => {
+        if (data.recordset.length > 0) {
+          callback(data);
+          return;
+        }
+        callback(null);
+      })
+      .catch(err => {
+        console.log("Could not Fetch Projects" + err);
       });
   }
 };
