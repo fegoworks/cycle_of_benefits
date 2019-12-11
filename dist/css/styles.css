@@ -379,7 +379,7 @@ main.main-content {
 input[type="text"],
 input[type="email"],
 input[type="password"],
-textarea {
+input[type="date"] {
   width: 100%;
   border-radius: 5px;
   /* line-height: 2; */
@@ -388,6 +388,21 @@ textarea {
   /* margin-left: 5px; */
   /* border-bottom: solid 3px #000; */
   /* background: #76b852; */
+  transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
+}
+
+input[type="number"] {
+  width: 10%;
+  border-radius: 5px;
+  font-size: 1em;
+  padding: 1%;
+}
+textarea {
+  width: 100%;
+  border-radius: 5px;
+  font-size: 1em;
+  min-height: 100px;
+  padding: 1% 2%;
   transition: all 0.3s cubic-bezier(0.64, 0.09, 0.08, 1);
 }
 .form-button {
@@ -591,7 +606,7 @@ $white: #ffffff; */
   margin-bottom: 0.5em;
   text-align: center;
 }
-.edit-button {
+#edit-button {
   display: flex;
   padding: 1%;
   background: inherit;
@@ -600,7 +615,7 @@ $white: #ffffff; */
   border: 1px solid #555;
   box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
 }
-.profile .edit-button:hover {
+.profile #edit-button:hover {
   color: #3fb6a8;
   cursor: pointer;
 }
@@ -611,16 +626,27 @@ $white: #ffffff; */
   padding: 1% 2%;
   width: 100%;
 }
+#profile-form label {
+  color: #3fb6a8;
+  letter-spacing: normal;
+}
 #profile-form .input-block {
   margin: 1% 0;
 }
 #profile-form input[type="text"],
 #profile-form input[type="email"],
+#profile-form input[type="date"],
 #profile-form textarea {
   background: #494949;
   color: #f5f5f5;
   border-bottom: 1px solid #555;
   /* border: 1px solid #fff; */
+}
+#profile-form input[type="text"]:focus,
+#profile-form input[type="email"]:focus,
+#profile-form input[type="date"]:focus,
+#profile-form textarea:focus {
+  /* background: #998; */
 }
 
 /*******************************************************/
