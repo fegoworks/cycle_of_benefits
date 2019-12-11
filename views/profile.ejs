@@ -96,25 +96,26 @@
             <div class="profile">
               <div class="profile-heading">
                 <h1><strong>My Profile</strong></h1>
-                <button class="edit-button">
+                <button id="edit-button">
                   <i class="fas fa-edit fa-2x"></i>
                 </button>
               </div>
-              <form method="PUT" action="/updateuser" id="profile-form">
+              <form method="put" action="/updateuser" id="profile-form">
                 <div class="input-block">
-                  <label for="username">Username</label>
+                  <label for="username">Username: </label>
                   <div>
                     <input
                       id="edit_username"
                       type="text"
                       name="username"
                       value="<%= username%>"
+                      disabled
                       readonly
                     />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="first_name">First Name </label>
+                  <label for="first_name">First Name : </label>
                   <div>
                     <input
                       id="edit_firstname"
@@ -126,7 +127,7 @@
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="last_name">Last Name</label>
+                  <label for="last_name">Last Name: </label>
                   <div>
                     <input
                       id="edit_lastname"
@@ -138,26 +139,32 @@
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="national_ID">National ID Number</label>
+                  <label for="email">Email: </label>
                   <div>
                     <input
-                      id="edit_national_ID"
-                      type="text"
-                      name="national_ID"
-                      value="<%= nationalId%>"
+                      id="edit_email"
+                      type="email"
+                      name="email"
+                      value="<%=email%>"
                       readonly
                     />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="email">Email</label>
+                  <label for="dob">DOB: </label>
                   <div>
-                    <input id="edit_email" type="email" name="email" 
-                    value= "<%=email%>" readonly />
+                    <input
+                      id="edit_dob"
+                      type="date"
+                      name="dob"
+                      value="<%= age%>"
+                      max="2000-01-01"
+                      readonly
+                    />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="address">Address</label>
+                  <label for="address">Address: </label>
                   <div>
                     <input
                       id="edit_address"
@@ -169,38 +176,52 @@
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="phone">Phone Number</label>
-                  <div>
-                    <input id="edit_phone" type="text" name="phone" value="<%= phone%>" readonly />
-                  </div>
-                </div>
-                <div class="input-block">
-                  <label for="dob">DOB</label>
+                  <label for="phone">Phone Number: </label>
                   <div>
                     <input
-                      id="edit_dob"
-                      type="date"
-                      name="dob"
-                      value="<%= age%>"
-                      min="2000-01-01"
+                      id="edit_phone"
+                      type="text"
+                      name="phone"
+                      value="<%= phone%>"
                       readonly
                     />
                   </div>
                 </div>
                 <div class="input-block">
-                  <label for="state">State of Origin</label>
+                  <label for="state">State of Origin: </label>
                   <div>
-                    <input id="edit_state" type="text" name="state" value="<%= state%>"readonly />
+                    <input
+                      id="edit_state"
+                      type="text"
+                      name="state"
+                      value="<%= state%>"
+                      readonly
+                    />
+                  </div>
+                </div>
+                <div class="input-block">
+                  <label for="national_id">National ID Number: </label>
+                  <div>
+                    <input
+                      id="edit_national_id"
+                      type="text"
+                      name="national_id"
+                      value="<%= nationalId%>"
+                      readonly
+                    />
                   </div>
                 </div>
                 <div class="form-button">
                   <input
+                    id="save_changes"
                     type="submit"
                     class="left-btn my-btn"
                     value="SAVE CHANGES"
-                    readonly
+                    disabled
                   />
-                  <a class="right-btn" href="#">Reset</a>
+                  <a id="reset_button" class="right-btn" type="button" href="#"
+                    >Reset</a
+                  >
                 </div>
                 <hr />
               </form>
@@ -228,7 +249,11 @@
                 <div class="input-block">
                   <label for="details">Project Details:</label>
                   <div>
-                    <input type="textarea" id="proj_details" name="details" />
+                    <textarea
+                      id="proj_details"
+                      rows="6"
+                      name="details"
+                    ></textarea>
                   </div>
                 </div>
                 <div class="input-block">
