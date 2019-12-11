@@ -3,7 +3,7 @@ import * as myform from "./forms.js";
 
 const usersession = new myform.UserSession();
 
-// on login page
+/* Login and View Profile */
 if (document.getElementById("loginform")) {
   const form = {
     loginForm: document.getElementById("loginform"),
@@ -19,6 +19,7 @@ if (document.getElementById("loginform")) {
         functions.displayAlert("Login Successful!", "success");
         // if (confirm("Go to your profile?")) {
         window.location.replace(profileUrl);
+        // localStorage.setItem("profile_styles", profileUrl);
         // } else {
         // window.location.assign("/");
         // }
@@ -26,7 +27,7 @@ if (document.getElementById("loginform")) {
     });
   });
 }
-//on signup page
+/* Signup Form */
 if (document.getElementById("form")) {
   const form = {
     signupForm: document.getElementById("form"),
@@ -127,53 +128,24 @@ if (document.querySelector(".boxes")) {
   // }
 }
 
-//view Project page
+/* view Project page */
 if (document.querySelector(".projects")) {
   let projectRow = document.querySelectorAll(".project_");
   let projectBtn = document.querySelectorAll(".project-button > input");
   let projectId = document.querySelectorAll(".project-id");
   //set static url
-  let url = "/viewproject";
   for (let i = 0; i < projectRow.length; i++) {
     projectBtn[i].onclick = function() {
-      //fetch project data
-      const project = {
-        id: projectId[i].textContent
-      };
-      const fetchOptions = {
-        method: "POST",
-        headers: {
-          Accept: [
-            "application/x-www-form-urlencoded",
-            "application/json",
-            "text/plain",
-            "*/*"
-          ],
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(project)
-      };
-
-      fetch(url, fetchOptions)
-        .then(rawResponse => rawResponse.json())
-        .then(data => {
-          console.log(data);
-          if (!data.projectdata) {
-            functions.displayAlert(data.message, "info");
-          } else {
-            const project = data.projectdata;
-            console.log("project fetch error: " + data.projectdata);
-            window.location.assign(data.redirect_path);
-          }
-        })
-        .catch(err => {
-          console.log("project fetch error: " + err);
-        });
+      usersession.viewProject(projectId[i], data => {
+        if (data) {
+          window.location.assign(data);
+        }
+      });
     };
   }
 }
 
-// Post project
+/* Post project */
 if (document.querySelector("#post_project")) {
   // console.log("hi");
   const form = {
@@ -192,7 +164,7 @@ if (document.querySelector("#post_project")) {
   });
 }
 
-/* Profile Form */
+/* Edit Profile */
 if (document.querySelector(".profile")) {
   let editBtn = document.querySelector("#edit-button");
   let saveChanges = document.querySelector("#save_changes");

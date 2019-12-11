@@ -27,6 +27,29 @@ Project.prototype = {
       });
   },
 
+  findProject: (id, callback) => {
+    if (id) {
+      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects
+                        WHERE projId = ${id}`;
+      let request = new dbconnect.sql.Request(dbconnect.pool);
+      request
+        .query(queryString)
+        .then(data => {
+          let projRecord = data.recordset[0];
+          if (projRecord) {
+            console.log("Find: This project exists");
+            callback(projRecord.projId);
+            return;
+          }
+          callback(null);
+          console.log("Find: No such project");
+        })
+        .catch(err => {
+          console.log("Find Fetch Error: " + err);
+        });
+    }
+  },
+
   addProject: function(projObj, callback) {
     //   generate project Id
     // let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects WHERE projId = '${projObj.id}'`;

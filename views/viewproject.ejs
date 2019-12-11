@@ -5,23 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Project</title>
-    <!-- title favicon -->
     <link rel="icon" href="" type="image/x-icon" />
-    <!-- Font awesome CDN-->
     <link
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.0.11/css/all.css"
     />
-    <!-- Latest compiled and minified CSS -->
-    <!-- <link
-      rel="stylesheet"
-      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    /> -->
-    <!-- Custom Styles -->
+    
     <link rel="stylesheet" href="css/styles.css" />
     <link rel="stylesheet" href="css/dynamic.css" />
     <link rel="stylesheet" href="css/mobile.css" />
-    <!-- Google Fonts Api -->
     <link
       href="https://fonts.googleapis.com/css?family=Karla&display=swap"
       rel="stylesheet"
@@ -82,7 +74,9 @@
                 <div class="view-block">
                   <label for="type">Project Id:</label>
                   <div>
-                    <input id="view_type" type="text" name="type"disabled />
+                    <input id="view_type" type="text" name="type" 
+                    value="<%= id%>" 
+                    disabled />
                   </div>
                 </div>
                 <div class="view-block">
@@ -92,6 +86,7 @@
                       id="view_title"
                       type="text"
                       name="title"
+                      value="<%= title%>"
                       disabled
                     />
                   </div>
@@ -102,6 +97,7 @@
                       id="view_details"
                       type="text"
                       name="details"
+                      value="<%= details%>"
                       disabled
                     />
                   </div>
@@ -113,6 +109,7 @@
                       id="view_lastname"
                       type="text"
                       name="location"
+                      value="<%= location%>"
                       disabled
                     />
                   </div>
@@ -124,8 +121,21 @@
                     type="text"
                       id="view_status"
                       name="status"
+                      value="<%= status%>"
                       disabled
                       />
+                  </div>
+                </div>
+                <div class="view-block">
+                  <label for="tools">Tools Required:</label>
+                  <div>
+                    <input
+                      id="view_tools"
+                      type="text"
+                      name="tools"
+                      value="<%= tools%>"
+                      disabled
+                    />
                   </div>
                 </div>
                 <div class="view-block">
@@ -135,6 +145,7 @@
                       id="view_current_workers"
                       type="text"
                       name="current_workers"
+                      value="<%= current%>"
                       disabled
                     />
                   </div>
@@ -146,6 +157,7 @@
                       id="view_no_of_workers"
                       type="text"
                       name="no_of_workers"
+                      value="<%= maxworkers%>"
                       disabled
                     />
                   </div>
@@ -157,6 +169,7 @@
                       id="view_posted_by"
                       type="text"
                       name="posted_by"
+                      value="<%= postedby%>"
                       disabled
                     />
                   </div>
@@ -164,10 +177,10 @@
                 <div class="form-button">
                   <input
                     class="my-btn left-btn"
-                    type="button"
+                    type="submit"
                     value="Indicate Interest"
                   />
-                  <a class="right-btn" href="./">Back</a>
+                  <a class="right-btn" href="./projects">Back</a>
                 </div>
                 <hr />
               </form>
@@ -193,8 +206,6 @@
         </div>
       </footer>
     </div>
-    <!--Main Wrapper div-->
-    <!-- Optional JavaScript -->
-    <script type="module" src="app.js"></script>
+    <script type="module" src="/app.js"></script>
   </body>
 </html>

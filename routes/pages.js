@@ -9,12 +9,6 @@ const project = new Project();
 
 //get index page
 router.get("/", (req, res, next) => {
-  //if user session exists
-  // if (req.session.user) {
-  //   res.redirect("/profile");
-  //   return;
-  // }
-  // console.log(req.session);
   res.render("index");
 });
 
@@ -34,13 +28,31 @@ router.get("/login", (req, res, next) => {
   res.render("login");
 });
 
-router.get("/projectview", (req, res, next) => {
-  res.render("viewproject");
+router.get("/project:id", (req, res, next) => {
+  const proj_id = req.params.id;
+  console.log("Got you: " + proj_id);
+  project.getProject(proj_id, data => {
+    if (data) {
+      res.render("viewproject", {
+        id: data.projId ? data.projId : "",
+        title: data.proj_title ? data.proj_title : "",
+        details: data.proj_details ? data.proj_details : "",
+        location:
+          data.proj_address + ", " + data.proj_city
+            ? data.proj_address + ", " + data.proj_city
+            : "",
+        status: data.proj_status ? data.proj_status : "",
+        tools: data.tools ? data.tools : "",
+        current: data.current_workers ? data.current_worker : "",
+        maxworkers: data.max_no_workers ? data.max_no_workers : "",
+        postedby: data.posted_by ? data.posted_by : ""
+      });
+      return;
+    }
+    console.log("Project exists in Database but without parameter");
+    res.redirect("/projects");
+  });
 });
-
-// router.get("/profile", redirectHome, (req, res) => {
-//   res.render("profile");
-// });
 
 router.get("/profile", (req, res) => {
   if (req.session.userid) {
@@ -96,16 +108,15 @@ router.put("/updateuser", (req, res) => {
 // router.get("/project/:projectdata", (req, res, next) => {});
 
 //project view post
-router.post("/viewproject", (req, res, next) => {
-  console.log(req.body.id);
-  project.getProject(req.body.id, projectdata => {
-    if (projectdata) {
+router.post("/projectview", (req, res, next) => {
+  console.log("Project_id: " + req.body.id);
+  project.findProject(req.body.id, projid => {
+    if (projid) {
       res.json({
-        redirect_path: "/projectview",
-        projectdata: projectdata
+        redirect_path: "/project" + projid
       });
     } else {
-      res.json({ message: "Cannot find project" });
+      res.json({ errMessage: "Cannot find project" });
     }
   });
 });
@@ -147,7 +158,7 @@ router.post("/login", (req, res, next) => {
         });
       } else {
         // res.json({ message: "Login Failed" });
-        res.status(404).json({ message: "Login Failed" });
+        res.status(404).json({ errMessage: "Login Failed" });
         console.log("Login Post Err: user not found");
       }
     });
@@ -179,6 +190,13 @@ router.post("/submitregister", (req, res, next) => {
   });
 });
 
+router.get("/login-check", (req, res) => {
+  if (req.session.userId) {
+    res.redirect("/profile");
+  } else {
+    res.redirect("/login");
+  }
+});
 // Get logout page
 router.get("/logout", (req, res, next) => {
   // Check if the session is exist

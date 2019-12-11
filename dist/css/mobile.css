@@ -59,6 +59,21 @@
   .signup-form {
     width: 70%;
   }
+
+  /* View Project Styles */
+  #viewproject {
+    flex-direction: column;
+  }
+  #project-image {
+    display: flex;
+    width: 90%;
+    text-align: center;
+    justify-content: center;
+    margin: 1%;
+  }
+  #project {
+    width: 90%;
+  }
 }
 
 /* For mobile phones: */

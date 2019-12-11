@@ -2,17 +2,11 @@ import * as functions from "./functions.js";
 
 function UserSession() {}
 
-/* Form validation*/
+/*Fetch Methods*/
 UserSession.prototype = {
   p_path: "",
-  // get profileUrl() {
-  //   return this.p_path;
-  // },
-  // set profileUrl(url) {
-  //   this.p_path = url;
-  // },
 
-  loginUser: function(form, callback) {
+  loginUser: (form, callback) => {
     let url = form.loginForm.getAttribute("action")
       ? "/login"
       : "/cannotgetposturl";
@@ -44,20 +38,17 @@ UserSession.prototype = {
           return response.json();
         })
         .then(data => {
-          if (data.message) {
-            console.log("Error: " + data);
+          if (data.errMessage) {
+            console.log("Error: " + data.errMessage);
             functions.displayAlert(
-              data.message + ": Username or Password not correct!",
+              data.errMessage + ": Username or Password not correct!",
               "error"
             );
           } else {
-            // console.log(data.redirect_path);
+            console.log(data.redirect_path);
             // console.log(data.userdata);
             clearFormFields(form.formName);
-            this.p_path = data.redirect_path;
-            console.log(this.p_path);
             callback(data.redirect_path);
-            return;
           }
           callback(null);
         })
@@ -65,7 +56,7 @@ UserSession.prototype = {
     }
   },
   /* Register */
-  signupUser: function(form) {
+  signupUser: form => {
     if (form) {
       if (
         !validateSignupForm(form.formName) ||
@@ -133,7 +124,7 @@ UserSession.prototype = {
     }
   },
 
-  addProject: function(form) {
+  addProject: form => {
     // validation
     if (!validateSignupForm(form.formName)) {
       functions.displayAlert("Fill all required fields", "error");
@@ -178,13 +169,43 @@ UserSession.prototype = {
     }
   },
 
-  updateProfile: (form, callback) => {
-    /* if (!validateSignupForm(form.formName)) {
-      // functions.displayAlert("Fill all required fields", "error");
-      // return false;
-    } else {
+  viewProject: (projectId, callback) => {
+    //fetch project data
+    const project = {
+      id: projectId.textContent
+    };
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(project)
+    };
 
-    }*/
+    let url = "/projectview";
+    fetch(url, fetchOptions)
+      .then(rawResponse => rawResponse.json())
+      .then(data => {
+        if (!data.redirect_path) {
+          functions.displayAlert(data.errMessage, "info");
+          callback(null);
+        } else {
+          callback(data.redirect_path);
+          console.log("returned id: " + data.redirect_path);
+        }
+      })
+      .catch(err => {
+        console.log("project fetch error: " + err);
+      });
+  },
+
+  updateProfile: (form, callback) => {
     let url = "/updateuser";
     const profile = {
       username: form.username.value,
@@ -245,28 +266,6 @@ function validateSignupForm(formName) {
     }
   }
   return true;
-}
-
-function retrieveData() {
-  // submit data to server
-  newUserObj = submitData(
-    fname.value,
-    lname.value,
-    user.value,
-    email.value,
-    password.value
-  );
-}
-//
-function submitData(fname = "", lname = "", user = "", email = "", pass = "") {
-  let userObj = {
-    fname: fname,
-    lname: lname,
-    user: user,
-    email: email,
-    pass: pass
-  };
-  return userObj;
 }
 
 export { UserSession };
