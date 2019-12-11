@@ -43,50 +43,57 @@ router.get("/projectview", (req, res, next) => {
 // });
 
 router.get("/profile", (req, res) => {
-  // res.render("profile.ejs");
-  console.log(req.session.userid);
   if (req.session.userid) {
     //get userdata and render profile
     user.getProfile(req.session.userid, userprofile => {
       if (userprofile) {
         res.render("profile.ejs", {
-          username: userprofile.username ? userprofile.username : "",
+          username: userprofile.userId ? userprofile.userId : "",
           firstname: userprofile.first_name ? userprofile.first_name : "",
           lastname: userprofile.last_name ? userprofile.last_name : "",
-          age: userprofile.age ? userprofile.age : "",
           email: userprofile.email_address ? userprofile.email_address : "",
+          age: userprofile.date_of_birth ? userprofile.date_of_birth : "",
           address: userprofile.home_address ? userprofile.home_address : "",
           phone: userprofile.mobile_number ? userprofile.mobile_number : "",
           nationalId: userprofile.nationalId ? userprofile.nationalId : "",
           state: userprofile.state_of_origin ? userprofile.state_of_origin : ""
         });
         return;
-      } else {
-        console.log("profile route Error: Could not find user profile");
       }
+      console.log("profile route Error: Could not find user profile");
     });
   } else {
     res.redirect("/login");
   }
 });
 
-//get project page
-// router.get("/project/:projectdata", (req, res, next) => {});
-
-// router.get("/loginfailed", (req, res, next) => {
-//   res.json({ message: "User not found" });
-// });
-
-//get user profile page
-router.get("/registersuccess", (req, res, next) => {
-  res.json({
-    status: "Registeration Successful",
-    redirect_path: "/"
+router.put("/updateuser", (req, res) => {
+  console.log("received fetch: " + req.body.dob);
+  const profile = {
+    username: req.body.username,
+    fname: req.body.fname /* ? req.body.fname : "" */,
+    lname: req.body.lname /* ? req.body.lname : "" */,
+    email: req.body.email /* ? req.body.email : "" */,
+    dob: req.body.dob /* ? req.body.dob : "" */,
+    address: req.body.address /* ? req.body.address : "" */,
+    phone: req.body.phone /* ? req.body.phone : "" */,
+    state: req.body.state /* ? req.body.state : "" */,
+    nationalId: req.body.nationalId /*? req.body.nationalId : "" */
+  };
+  user.updateProfile(profile.username, profile, response => {
+    if (response) {
+      console.log("passed updateprofile method");
+      res.json({
+        message: response + " row(s) affected. Profile successfully updated"
+      });
+    } else {
+      console.log("Put: Could not update profile");
+      res.json({ errMessage: "Could not update profile from server" });
+    }
   });
 });
-router.get("/registerfailed", (req, res, next) => {
-  res.json({ message: "Sorry! This User already exists" });
-});
+//get project page
+// router.get("/project/:projectdata", (req, res, next) => {});
 
 //project view post
 router.post("/viewproject", (req, res, next) => {
@@ -105,14 +112,14 @@ router.post("/viewproject", (req, res, next) => {
 
 // Add Project
 router.post("/addproject", (req, res, next) => {
-  if (req.session.user) {
+  if (req.session.userid) {
     let proj = {
       title: req.body.title,
       details: req.body.details,
       address: req.body.address,
       city: req.body.city,
       maxworkers: parseInt(req.body.maxworkers, 10),
-      postedby: "test" //req.session.name
+      postedby: req.session.userid
     };
     project.addProject(proj, projectdata => {
       if (projectdata) {
@@ -121,6 +128,8 @@ router.post("/addproject", (req, res, next) => {
         res.json({ message: "Could not add project" });
       }
     });
+  } else {
+    res.redirect("/login");
   }
 });
 
@@ -130,14 +139,11 @@ router.post("/login", (req, res, next) => {
   if (username && password) {
     user.login(username, password, id => {
       if (id) {
-        console.log("user Found");
         //on login, make a session
         // req.session.name = userdata.first_name + " " + userdata.last_name;
         req.session.userid = id;
-        // res.redirect("/profile");
         res.json({
-          redirect_path: "http://localhost:3000/profile"
-          // userdata: userdata
+          redirect_path: "/profile"
         });
       } else {
         // res.json({ message: "Login Failed" });
@@ -158,13 +164,17 @@ router.post("/submitregister", (req, res, next) => {
     lastname: req.body.lastname,
     email: req.body.email
   };
-  user.create(userObj, data => {
-    console.log("post: " + data);
+  user.createProfile(userObj, data => {
+    console.log("register user: " + data);
     if (data) {
-      res.redirect("/registersuccess");
+      console.log(data + " user created");
+      res.json({
+        status: "Registeration Successful",
+        redirect_path: "/login"
+      });
     } else {
       console.log("Error: Unable to create user");
-      res.redirect("/registerfailed");
+      res.json({ message: "Sorry! This User already exists" });
     }
   });
 });
@@ -172,7 +182,7 @@ router.post("/submitregister", (req, res, next) => {
 // Get logout page
 router.get("/logout", (req, res, next) => {
   // Check if the session is exist
-  if (req.session.user) {
+  if (req.session.userid) {
     // destroy the session and redirect the user to the index page.
     req.session.destroy(function() {
       res.redirect("/");

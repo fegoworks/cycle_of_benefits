@@ -4,6 +4,14 @@ function UserSession() {}
 
 /* Form validation*/
 UserSession.prototype = {
+  p_path: "",
+  // get profileUrl() {
+  //   return this.p_path;
+  // },
+  // set profileUrl(url) {
+  //   this.p_path = url;
+  // },
+
   loginUser: function(form, callback) {
     let url = form.loginForm.getAttribute("action")
       ? "/login"
@@ -43,10 +51,11 @@ UserSession.prototype = {
               "error"
             );
           } else {
-            console.log(data.redirect_path);
+            // console.log(data.redirect_path);
             // console.log(data.userdata);
             clearFormFields(form.formName);
-            // this.setSession();
+            this.p_path = data.redirect_path;
+            console.log(this.p_path);
             callback(data.redirect_path);
             return;
           }
@@ -167,7 +176,56 @@ UserSession.prototype = {
           console.log("post project Fetch error: " + error);
         });
     }
-    //set static url
+  },
+
+  updateProfile: (form, callback) => {
+    /* if (!validateSignupForm(form.formName)) {
+      // functions.displayAlert("Fill all required fields", "error");
+      // return false;
+    } else {
+
+    }*/
+    let url = "/updateuser";
+    const profile = {
+      username: form.username.value,
+      fname: form.fname.value,
+      lname: form.lname.value,
+      email: form.email.value,
+      dob: form.dob.value,
+      address: form.address.value,
+      phone: form.phone.value,
+      state: form.state.value,
+      nationalId: form.nationalId.value
+    };
+    const options = {
+      method: "PUT",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(profile)
+    };
+
+    fetch(url, options)
+      .then(response => {
+        return response.json();
+      })
+      .then(data => {
+        if (data.message) {
+          console.log(data.message);
+          callback(data.message);
+        } else {
+          callback(null);
+        }
+      })
+      .catch(err => {
+        console.log("Update Profile: " + err);
+      });
   }
 };
 

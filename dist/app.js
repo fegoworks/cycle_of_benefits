@@ -18,20 +18,14 @@ if (document.getElementById("loginform")) {
       if (profileUrl) {
         functions.displayAlert("Login Successful!", "success");
         // if (confirm("Go to your profile?")) {
-        // usersession.getSession();
         window.location.replace(profileUrl);
-        showprofile();
         // } else {
         // window.location.assign("/");
         // }
-        //store data for profile page
-        // localStorage.setItem("currentUser", JSON.stringify(data.userdata));
-        // showprofile();
       }
     });
   });
 }
-
 //on signup page
 if (document.getElementById("form")) {
   const form = {
@@ -51,6 +45,11 @@ if (document.getElementById("form")) {
   });
 }
 
+// if (location.pathname == location.host + "/profile") {
+//   showprofile();
+// } else {
+//   console.log("can't show profile");
+// }
 function showprofile() {
   //pass session variable here to load user data on profile page
   if (document.querySelector(".signin-link")) {
@@ -193,7 +192,99 @@ if (document.querySelector("#post_project")) {
   });
 }
 
-//Edit profile button
+/* Profile Form */
+if (document.querySelector(".profile")) {
+  let editBtn = document.querySelector("#edit-button");
+  let saveChanges = document.querySelector("#save_changes");
+  let profileForm = document.getElementById("profile-form");
+  let formName = document.forms.namedItem("profile-form");
+
+  let inputFields = Array.from(
+    profileForm.querySelectorAll(
+      "input[type=text], input[type=date], input[type=email]"
+    )
+  ).slice(1);
+  let initialValues = [];
+  let editToggle = false;
+  saveCurrentData(initialValues);
+  //Edit Profile
+  editBtn.onclick = editable;
+
+  function editable() {
+    //put form values in array
+    if (!editToggle) {
+      for (let i = 0; i < inputFields.length; i++) {
+        inputFields[i].classList.add("edit-profile");
+        inputFields[i].removeAttribute("readonly");
+      }
+      saveChanges.removeAttribute("disabled");
+      editToggle = true;
+    } else {
+      for (let i = 0; i < inputFields.length; i++) {
+        inputFields[i].classList.remove("edit-profile");
+        inputFields[i].setAttribute("readonly", true);
+      }
+      saveChanges.setAttribute("disabled", true);
+      editToggle = false;
+    }
+  }
+  /* Reset fields */
+  let resetBtn = document.getElementById("reset_button");
+  /* resetBtn.onclick = () => {
+    if (initialValues.length > 0) {
+      // if (confirm("Are You sure you want to rest changes?")) {
+      for (let i = 0; i < initialValues.length; i++) {
+        formName.elements[i].value = initialValues[i];
+        formName.elements[i].setAttribute = "readonly";
+      }
+      saveChanges.setAttribute("disabled", true);
+      editToggle = false;
+      clearCurrentData();
+    } 
+  };*/
+
+  //Save changes
+  profileForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const form = {
+      username: document.getElementById("edit_username"),
+      fname: document.getElementById("edit_firstname"),
+      lname: document.getElementById("edit_lastname"),
+      email: document.getElementById("edit_email"),
+      dob: document.getElementById("edit_dob"),
+      address: document.getElementById("edit_address"),
+      phone: document.getElementById("edit_phone"),
+      state: document.getElementById("edit_state"),
+      nationalId: document.getElementById("edit_national_id")
+    };
+    usersession.updateProfile(form, response => {
+      if (!response) {
+        functions.displayAlert("Could not update profile", "error");
+      } else {
+        functions.displayAlert(response, "success");
+        clearCurrentData();
+        saveCurrentData(initialValues);
+        editToggle = false;
+        editable();
+      }
+    });
+    for (let i = 0; i < formName.elements.length - 1; i++) {
+      formName.elements[i].setAttribute = "readonly";
+      /* formName.elements[i].textContent =  */
+    }
+  });
+
+  /* Functions */
+  function saveCurrentData(array) {
+    for (let i = 0; i < formName.elements.length - 1; i++) {
+      array.push(formName.elements[i].value); // || "disabled";
+    }
+  }
+
+  function clearCurrentData() {
+    initialValues = [];
+  }
+}
 
 async function fetchData(url, options) {
   const rawResponse = await fetch(url, options);

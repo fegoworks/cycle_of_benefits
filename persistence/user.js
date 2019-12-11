@@ -11,22 +11,18 @@ User.prototype = {
     // if the userid variable is defined
     if (userid) {
       // Sql query
-      console.log(userid);
-      let queryString = "SELECT * FROM cyobDB.dbo.Tbl_Users";
+      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Profiles WHERE userId = '${userid}'`;
       let request = new dbconnect.sql.Request(dbconnect.pool);
       request
         .query(queryString)
         .then(data => {
-          console.log("Find: " + data);
           let userRecord = data.recordset[0];
           if (userRecord.userId == userid) {
-            callback(userRecord); //return the first result
-            console.log("This user exists");
-            // return full record
+            callback(userRecord.userId); //return the first result
+            console.log("Find: This user exists");
           } else {
             callback(null);
           }
-          // dbconnect.pool.close();
         })
         .catch(err => {
           console.log("Find Fetch Error: " + err);
@@ -34,38 +30,65 @@ User.prototype = {
     }
   },
 
-  // This function will insert data into the database. (create a new user)
-  // body is an object
-  create: function(userobj, callback) {
-    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Users WHERE userId = '${userobj.username}'`;
+  createUser: function(userobj, callback) {
+    /* let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Users WHERE userId = '${userobj.username}'`;
     let request = new dbconnect.sql.Request(dbconnect.pool);
     request.query(queryString).then(data => {
       let matchedRow = data.rowsAffected;
-      if (matchedRow >= 1) {
+      if (matchedRow == 1) {
         console.log("Found: " + data.recordset[0].userId);
         callback(null);
-      } else {
-        let hashedPassword = userobj.password;
-        // Hash the password
-        hashedPassword = bcrypt.hashSync(hashedPassword, 10);
+      }  */
+    this.find(userobj.username, "Profiles", id => {
+      if (id) {
+        console.log("Found User: " + id);
+        callback(null);
+        return;
+      }
+      let hashedPassword = userobj.password;
+      // Hash the password
+      hashedPassword = bcrypt.hashSync(hashedPassword, 10);
+      // prepare the sql query, insert in order 5 required fields
+      let queryString = `INSERT INTO cyobDB.dbo.Tbl_Users (userId, pass_code) VALUES ('${userobj.username}', '${hashedPassword}')`;
+      //make request
+      request
+        .query(queryString)
+        .then(rows => {
+          if (rows.rowsAffected == 1) {
+            //make new request
+            callback(rows.rowsAffected);
+          } else {
+            callback(null);
+          }
+          // dbconnect.pool.close();
+        })
+        .catch(err => {
+          console.log("Create Error: " + err);
+        });
+    });
+    /*  }); */
+  },
 
-        // prepare the sql query, insert in order 5 required fields
-        let queryString = `INSERT INTO cyobDB.dbo.Tbl_Users (userId, pass_code, first_name, last_name, email_address) VALUES ('${userobj.username}', '${hashedPassword}', '${userobj.firstname}', '${userobj.lastname}', '${userobj.email}')`;
-        //make new request
+  createProfile: function(userobj, callback) {
+    this.createUser(userobj, response => {
+      console.log(response + " from create Profile");
+      if (response) {
+        let queryString = `INSERT INTO cyobDB.dbo.Tbl_Profiles (userId, first_name, last_name, email_address) VALUES ('${userobj.username}', '${userobj.firstname}', '${userobj.lastname}', '${userobj.email}')`;
+
+        let request = new dbconnect.sql.Request(dbconnect.pool);
         request
           .query(queryString)
           .then(rows => {
             if (rows.rowsAffected == 1) {
               // return the record of current user
-              callback(userobj);
+              callback(rows.rowsAffected);
               return;
             } else {
               callback(null);
             }
-            // dbconnect.pool.close();
           })
           .catch(err => {
-            console.log("Create Error: " + err);
+            console.log("Save Profile Error: " + err);
           });
       }
     });
@@ -96,21 +119,59 @@ User.prototype = {
   },
 
   getProfile: function(userid, callback) {
-    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Profiles WHERE username = '${userid}' `;
-    let request = new dbconnect.sql.Request(dbconnect.pool);
-    request
-      .query(queryString)
-      .then(data => {
-        let userRecord = data.recordset[0];
-        if (userRecord) {
-          callback(userRecord);
+    if (userid) {
+      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Profiles WHERE userId = '${userid}' `;
+      let request = new dbconnect.sql.Request(dbconnect.pool);
+      request
+        .query(queryString)
+        .then(data => {
+          let userRecord = data.recordset[0];
+          if (userRecord) {
+            callback(userRecord);
+          } else {
+            callback(null);
+          }
+        })
+        .catch(err => {
+          console.log("get Profile Error: " + err);
+        });
+    } else {
+      console.log("getProfile: Userid is null");
+      callback(null);
+    }
+  },
+
+  updateProfile: function(userid, profile, callback) {
+    if (userid) {
+      this.find(userid, id => {
+        if (id) {
+          let queryString = `UPDATE cyobDB.dbo.Tbl_Profiles
+           SET first_name = '${profile.fname}', last_name = '${profile.lname}', date_of_birth = '${profile.dob}', email_address = '${profile.email}', home_address = '${profile.address}', mobile_number = '${profile.phone}', state_of_origin = '${profile.state}', nationalId = '${profile.nationalId}'
+           WHERE userId = '${id}' `;
+          let request = new dbconnect.sql.Request(dbconnect.pool);
+          request
+            .query(queryString)
+            .then(data => {
+              console.log(data);
+              if (data.rowsAffected == 1) {
+                console.log("updated");
+                callback(data.rowsAffected);
+              } else {
+                console.log("did not update");
+                callback(null);
+              }
+            })
+            .catch(err => {
+              console.log("get Profile Error: " + err);
+            });
         } else {
           callback(null);
         }
-      })
-      .catch(err => {
-        console.log("get Profile Error: " + err);
       });
+    } else {
+      console.log("updateProfile: Userid is null");
+      callback(null);
+    }
   }
 };
 
