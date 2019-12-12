@@ -152,12 +152,9 @@ User.prototype = {
           request
             .query(queryString)
             .then(data => {
-              console.log(data);
               if (data.rowsAffected == 1) {
-                console.log("updated");
                 callback(data.rowsAffected);
               } else {
-                console.log("did not update");
                 callback(null);
               }
             })

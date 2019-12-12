@@ -4,9 +4,16 @@ function UserSession() {}
 
 /*Fetch Methods*/
 UserSession.prototype = {
-  p_path: "",
-
-  loginUser: (form, callback) => {
+  Path: {
+    path: null,
+    set path_(url) {
+      this.path = url;
+    },
+    get path_() {
+      return this.path;
+    }
+  },
+  loginUser: function(form, callback) {
     let url = form.loginForm.getAttribute("action")
       ? "/login"
       : "/cannotgetposturl";
@@ -49,6 +56,7 @@ UserSession.prototype = {
             // console.log(data.userdata);
             clearFormFields(form.formName);
             callback(data.redirect_path);
+            this.Path.path_ = data.redirect_path;
           }
           callback(null);
         })
@@ -56,7 +64,7 @@ UserSession.prototype = {
     }
   },
   /* Register */
-  signupUser: form => {
+  signupUser: function(form) {
     if (form) {
       if (
         !validateSignupForm(form.formName) ||
@@ -124,7 +132,7 @@ UserSession.prototype = {
     }
   },
 
-  addProject: form => {
+  addProject: function(form) {
     // validation
     if (!validateSignupForm(form.formName)) {
       functions.displayAlert("Fill all required fields", "error");
@@ -169,7 +177,7 @@ UserSession.prototype = {
     }
   },
 
-  viewProject: (projectId, callback) => {
+  viewProject: function(projectId, callback) {
     //fetch project data
     const project = {
       id: projectId.textContent
@@ -205,7 +213,7 @@ UserSession.prototype = {
       });
   },
 
-  updateProfile: (form, callback) => {
+  updateProfile: function(form, callback) {
     let url = "/updateuser";
     const profile = {
       username: form.username.value,
@@ -247,6 +255,11 @@ UserSession.prototype = {
       .catch(err => {
         console.log("Update Profile: " + err);
       });
+  },
+
+  clearPath: function() {
+    //clear path
+    this.Path.path_ = null;
   }
 };
 

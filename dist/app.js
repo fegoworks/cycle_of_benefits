@@ -2,6 +2,10 @@ import * as functions from "./functions.js";
 import * as myform from "./forms.js";
 
 const usersession = new myform.UserSession();
+/* Menu Button Toggler */
+if (document.querySelector(".menu-btn")) {
+  functions.menuToggle();
+}
 
 /* Login and View Profile */
 if (document.getElementById("loginform")) {
@@ -17,16 +21,35 @@ if (document.getElementById("loginform")) {
     usersession.loginUser(form, function(profileUrl) {
       if (profileUrl) {
         functions.displayAlert("Login Successful!", "success");
-        // if (confirm("Go to your profile?")) {
         window.location.replace(profileUrl);
-        // localStorage.setItem("profile_styles", profileUrl);
-        // } else {
-        // window.location.assign("/");
-        // }
       }
     });
   });
 }
+
+if (document.querySelector(".signin-link")) {
+  //fetch user session to display styles
+  fetch("/profilestyle")
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      if (data.session) {
+        let userLink = document.querySelector(".signin-link");
+        userLink.textContent = "";
+        userLink.removeAttribute("href");
+        let userIcon = document.createElement("i");
+        userIcon.classList.add("fas", "fa-user", "fa-2x");
+        userLink.appendChild(userIcon);
+
+        functions.enableSlideMenu(userLink);
+        functions.appendProfileToMobileMenu();
+      } else {
+        // functions.displayAlert(data.errMessage, "info");
+      }
+    });
+}
+
 /* Signup Form */
 if (document.getElementById("form")) {
   const form = {
@@ -46,41 +69,8 @@ if (document.getElementById("form")) {
   });
 }
 
-// if (location.pathname == location.host + "/profile") {
-//   showprofile();
-// } else {
-//   console.log("can't show profile");
-// }
-function showprofile() {
-  //pass session variable here to load user data on profile page
-  if (document.querySelector(".signin-link")) {
-    //fetch user profile
-    // if (usersession.getCurrentUser()) {
-    let userLink = document.querySelector(".signin-link");
-    userLink.textContent = "";
-    userLink.removeAttribute("href");
-    let userIcon = document.createElement("i");
-    userIcon.classList.add("fas", "fa-user", "fa-2x");
-    userLink.appendChild(userIcon);
-
-    functions.enableSlideMenu(userLink);
-    functions.appendProfileToMobileMenu();
-    // }
-  }
-}
-
-/* Menu Button Toggler */
-if (document.querySelector(".menu-btn")) {
-  functions.menuToggle();
-}
-// localStorage.removeItem("currentUser");
-// console.log("Client:\n" + localStorage.getItem("currentUser"));
-
 /*  User profile */
 if (document.querySelector(".boxes")) {
-  // let currentUser = localStorage.getItem("currentUser");
-  // if (currentUser) {
-  // const user = JSON.parse(currentUser);
   // let leftbox = document.querySelector(".leftbox");
   let navLinks = document.querySelectorAll(".leftbox nav a");
   let nav = document.querySelector(".rightbox").children;
@@ -120,14 +110,6 @@ if (document.querySelector(".boxes")) {
       }
     };
   });
-
-  // Load user data into form fields
-  // console.log("From profile: " + user.userId);
-  // document.querySelector("#edit_username").value = user.userId;
-  // document.querySelector("#edit_firstname").value = user.first_name;
-  // document.querySelector("#edit_lastname").value = user.last_name;
-  // document.querySelector("#edit_email").value = user.email_address;
-  // }
 }
 
 /* Load all projects */
@@ -244,7 +226,6 @@ if (document.querySelector(".projects")) {
 
 /* Post project */
 if (document.querySelector("#post_project")) {
-  // console.log("hi");
   const form = {
     projectform: document.getElementById("post_project"),
     projectTitle: document.getElementById("proj_title"),
@@ -337,10 +318,10 @@ if (document.querySelector(".profile")) {
         editable();
       }
     });
-    for (let i = 0; i < formName.elements.length - 1; i++) {
-      formName.elements[i].setAttribute = "readonly";
-      /* formName.elements[i].textContent =  */
-    }
+    // for (let i = 0; i < formName.elements.length - 1; i++) {
+    //   formName.elements[i].setAttribute = "readonly";
+    //   /* formName.elements[i].textContent =  */
+    // }
   });
 
   /* Functions */

@@ -16,6 +16,14 @@ router.get("/projects", (req, res, next) => {
   res.render("projects");
 });
 
+router.get("/profilestyle", (req, res) => {
+  if (req.session.userid) {
+    res.json({ session: req.session.userid });
+    return;
+  }
+  res.json({ errMessage: "Session expired, Login" });
+});
+
 router.get("/about", (req, res, next) => {
   res.render("about");
 });
@@ -25,12 +33,15 @@ router.get("/register", (req, res, next) => {
 });
 
 router.get("/login", (req, res, next) => {
-  res.render("login");
+  if (!req.session.userid) {
+    res.render("login");
+    return;
+  }
+  res.redirect("/profile");
 });
 
 router.get("/project:id", (req, res, next) => {
   const proj_id = req.params.id;
-  console.log("Got you: " + proj_id);
   project.getProject(proj_id, data => {
     if (data) {
       res.render("viewproject", {
@@ -80,7 +91,6 @@ router.get("/profile", (req, res) => {
 });
 
 router.put("/updateuser", (req, res) => {
-  console.log("received fetch: " + req.body.dob);
   const profile = {
     username: req.body.username,
     fname: req.body.fname /* ? req.body.fname : "" */,
@@ -94,9 +104,9 @@ router.put("/updateuser", (req, res) => {
   };
   user.updateProfile(profile.username, profile, response => {
     if (response) {
-      console.log("passed updateprofile method");
+      console.log(response + "row(s) affected.");
       res.json({
-        message: response + " row(s) affected. Profile successfully updated"
+        message: "Profile successfully updated"
       });
     } else {
       console.log("Put: Could not update profile");
@@ -200,7 +210,7 @@ router.post("/submitregister", (req, res, next) => {
 });
 
 router.get("/login-check", (req, res) => {
-  if (req.session.userId) {
+  if (req.session.userid) {
     res.redirect("/profile");
   } else {
     res.redirect("/login");

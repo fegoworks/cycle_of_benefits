@@ -63,7 +63,7 @@ hr {
   display: block;
   height: 1px;
   border: 0;
-  border-top: 1px solid #555;
+  border-top: 1px solid #998;
   margin: 0.8em 0;
   padding: 0;
 }
@@ -228,13 +228,13 @@ main.main-content {
 /*******************************************************/
 /* All Projects Content */
 /*******************************************************/
-.projects {
-  /* max-height: 500px; */
-  /* border: 1px solid #fff; */
-  /* overflow-y: auto; */
-  /* color: #fff; */
-  /* box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15); */
-}
+/* .projects {
+  max-height: 500px; 
+  border: 1px solid #fff;
+  overflow-y: auto;
+  color: #fff;
+  box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+} */
 .project-pills li:not(:first-child) {
   background: rgb(212, 211, 211);
   color: #000;
@@ -571,6 +571,8 @@ $white: #ffffff; */
   left: 0px;
   bottom: 0;
   right: 0;
+  margin: 1% 3%;
+  height: fit-content;
 }
 .active {
   color: #3fb6a8 !important;
@@ -596,7 +598,7 @@ $white: #ffffff; */
   /* top: 0;
   left: 0; */
   /* overflow: auto; */
-  transition: opacity 0.5s ease-in;
+  transition: all 0.5s ease-in;
 }
 .profile .profile-heading {
   display: flex;
@@ -641,12 +643,6 @@ $white: #ffffff; */
   color: #f5f5f5;
   border-bottom: 1px solid #555;
   /* border: 1px solid #fff; */
-}
-#profile-form input[type="text"]:focus,
-#profile-form input[type="email"]:focus,
-#profile-form input[type="date"]:focus,
-#profile-form textarea:focus {
-  /* background: #998; */
 }
 
 /*******************************************************/
