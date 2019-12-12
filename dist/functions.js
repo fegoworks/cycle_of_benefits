@@ -35,7 +35,10 @@ function displayAlert(msg, type) {
   closeButton.classList.add("close-button");
   closeButton.append(document.createTextNode("X"));
   parag.append(closeButton);
-  // alertDiv.appendChild(closeButton);
+
+  let alertBox = document.createElement("div");
+  alertBox.classList.add("alert-box");
+  alertBox.appendChild(parag);
 
   if (type === "error") {
     parag.style.background = "red";
@@ -45,24 +48,26 @@ function displayAlert(msg, type) {
     parag.style.background = "green";
   }
 
-  if (document.getElementById("alert-info")) {
-    let alertDialog = document.getElementById("alert-info");
-    alertDialog.appendChild(parag);
+  if (document.querySelector(".modal")) {
+    let modal = document.querySelector(".modal");
+    modal.appendChild(alertBox);
   } else {
-    let alertDialog = document.createElement("div");
-    alertDialog.classList.add("alert-info");
-    alertDialog.setAttribute("id", "alert-info");
-    alertDialog.appendChild(parag);
-    document.body.appendChild(alertDialog);
+    // background
+    let modal = document.createElement("div");
+    modal.classList.add("modal");
+    modal.appendChild(alertBox);
+    document.body.appendChild(modal);
   }
   closeButton.onclick = function() {
-    // parag.style.display = "none";
-    let alertDialog = document.getElementById("alert-info");
-    alertDialog.removeChild(parag);
-    if (document.getElementsByClassName("p-info").length == 0) {
-      document.body.removeChild(alertDialog);
-      // alertDialog.style.display = "none";
+    let modal = document.querySelector(".modal");
+    alertBox.removeChild(parag);
+    modal.removeChild(alertBox);
+    if (document.querySelectorAll(".p-info").length == 0) {
+      // alertBox.removeChild(parag);
+      document.body.removeChild(modal);
+      // alertBox.style.display = "none";
     }
+    // if(alert)
   };
 }
 
