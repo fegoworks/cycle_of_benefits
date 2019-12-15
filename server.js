@@ -7,10 +7,10 @@ const pageRouter = require("./routes/pages");
 const sql = require("mssql");
 const path = require("path");
 const session = require("express-session");
-const HALF_HOUR = 1000 * 60 * 30; //30 minutes
+const HALF_HOUR = 1000 * 60 * 5; //5 minutes
 
 const {
-  PORT = 3000,
+  PORT = 5000,
   NODE_ENV = "development",
   SESS_SECRET = "cyob//!Icardi?!",
   SESS_LIFETIME = HALF_HOUR
