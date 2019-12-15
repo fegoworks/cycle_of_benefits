@@ -2,25 +2,40 @@ import * as functions from "./functions.js";
 import * as myform from "./forms.js";
 
 const usersession = new myform.UserSession();
-/* Menu Button Toggler */
+
+/* Menu Button Toggle functionality */
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
 
 /* Display profile styles */
-if (document.querySelector(".signin-link")) {
+if (document.querySelector(".signin-div")) {
+  let div = document.querySelector(".signin-div");
   //fetch user session to display styles
-  if (checkUserSession) {
-    let userLink = document.querySelector(".signin-link");
-    userLink.textContent = "";
-    userLink.removeAttribute("href");
-    let userIcon = document.createElement("i");
-    userIcon.classList.add("fas", "fa-user", "fa-2x");
-    userLink.appendChild(userIcon);
+  fetch("/usersession")
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      if (data.session) {
+        let userLink = document.querySelector(".signin-link");
+        let iconLink = document.createElement("a");
+        let userIcon = document.createElement("i");
+        userIcon.classList.add("fas", "fa-user", "fa-2x");
+        userIcon.setAttribute("id", "user-icon");
+        iconLink.append(userIcon);
+        div.appendChild(iconLink);
+        userLink.parentNode.removeChild(userLink);
 
-    functions.enableSlideMenu(userLink);
-    functions.appendProfileToMobileMenu();
-  }
+        functions.enableSlideMenu(userIcon);
+        functions.appendProfileToMobileMenu();
+      } else {
+        // functions.displayAlert(data.errMessage, "info");
+      }
+    })
+    .catch(err => {
+      console.log("error fetching user session: " + err);
+    });
 }
 
 /* Login and View Profile */
@@ -155,7 +170,7 @@ if (document.querySelector(".profile")) {
   }
 }
 
-/*  User profile */
+/*  Profile page stack functionality*/
 if (document.querySelector(".boxes")) {
   // let leftbox = document.querySelector(".leftbox");
   let navLinks = document.querySelectorAll(".leftbox nav a");
@@ -237,7 +252,7 @@ if (document.querySelector(".projects")) {
     proj_worth.appendChild(document.createTextNode(recordset.reward_points));
     proj_current_workers.appendChild(
       document.createTextNode(
-        recordset.current_workers ? recordset.current_workers : 0 + "/"
+        recordset.current_workers ? recordset.current_workers + "/" : 0 + "/"
       )
     );
     proj_total_workers.appendChild(
@@ -296,7 +311,6 @@ if (document.querySelector(".projects")) {
   /* view Project page */
   function viewProject() {
     let projectRow = document.querySelectorAll(".project_");
-    console.log(projectRow.length);
     let projectBtn = document.querySelectorAll(".project-button > input");
     let projectId = document.querySelectorAll(".project-id");
     let postedBy = document.querySelectorAll(".project-posted");
@@ -333,8 +347,7 @@ if (document.querySelector("#post_project")) {
 
 /* Update Project */
 if (document.querySelector("#project")) {
-  let submitInterest = document.getElementById("interest");
-
+  // let submitInterest = document.getElementById("interest");
   const form = {
     projectform: document.getElementById("project-form"),
     id: document.getElementById("view_id"),
@@ -345,30 +358,18 @@ if (document.querySelector("#project")) {
 
   form.projectform.onsubmit = function(e) {
     e.preventDefault();
-    usersession.enlistUser(form, data => {
-      if (data) {
+    usersession.incrementWorkers(form, incremented => {
+      if (incremented) {
+        usersession.enlistWorker(form, result => {
+          if (result) {
+            functions.displayAlert(result, "success");
+          }
+        });
       }
     });
   };
 }
 // let id = document.getElementById("view_id");
 // console.log(id.value);
-async function fetchData(url, options) {
-  const rawResponse = await fetch(url, options);
-  const jsonData = await rawResponse.json();
-  return jsonData;
-}
 
-function checkUserSession() {
-  fetch("/usersession")
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      if (data.session) {
-        return true;
-      }
-      return false;
-      // functions.displayAlert(data.errMessage, "info");
-    });
-}
+function checkUserSession() {}

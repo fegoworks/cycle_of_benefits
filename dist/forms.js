@@ -13,6 +13,7 @@ UserSession.prototype = {
       return this.path;
     }
   },
+
   loginUser: function(form, callback) {
     let url = form.loginForm.getAttribute("action")
       ? "/login"
@@ -40,10 +41,7 @@ UserSession.prototype = {
         body: JSON.stringify(user)
       };
 
-      fetch(url, fetchOptions)
-        .then(response => {
-          return response.json();
-        })
+      fetchData(url, fetchOptions)
         .then(data => {
           if (data.errMessage) {
             console.log("Error: " + data.errMessage);
@@ -63,7 +61,7 @@ UserSession.prototype = {
         .catch(error => console.error("HTTP- Error: ", "\n" + error));
     }
   },
-  /* Register */
+
   signupUser: function(form) {
     if (form) {
       if (
@@ -100,8 +98,7 @@ UserSession.prototype = {
           },
           body: JSON.stringify(userobj)
         };
-        fetch(url, fetchOptions)
-          .then(rawResponse => rawResponse.json())
+        fetchData(url, fetchOptions)
           .then(data => {
             // console.log(data);
             if (!data.redirect_path) {
@@ -161,8 +158,7 @@ UserSession.prototype = {
         body: JSON.stringify(newProject)
       };
 
-      fetch(url, options)
-        .then(rawResponse => rawResponse.json())
+      fetchData(url, options)
         .then(jsonData => {
           if (jsonData.success) {
             functions.displayAlert(jsonData.success, "success");
@@ -198,8 +194,7 @@ UserSession.prototype = {
     };
 
     let url = "/projectview";
-    fetch(url, fetchOptions)
-      .then(rawResponse => rawResponse.json())
+    fetchData(url, fetchOptions)
       .then(data => {
         if (!data.redirect_path) {
           functions.displayAlert(data.errMessage, "info");
@@ -241,10 +236,7 @@ UserSession.prototype = {
       body: JSON.stringify(profile)
     };
 
-    fetch(url, options)
-      .then(response => {
-        return response.json();
-      })
+    fetchData(url, options)
       .then(data => {
         if (data.message) {
           console.log(data.message);
@@ -263,10 +255,10 @@ UserSession.prototype = {
     this.Path.path_ = null;
   },
 
-  enlistUser: function(form, callback) {
+  enlistWorker: function(form, callback) {
     //fetch project data
     const project = {
-      projid: form.id.value,
+      projid: form.id.textContent,
       status: form.status.value,
       current: form.current.value,
       max: form.max.value
@@ -286,20 +278,53 @@ UserSession.prototype = {
     };
 
     let url = "/enlist";
-    fetch(url, fetchOptions)
-      .then(rawResponse => rawResponse.json())
+    fetchData(url, fetchOptions)
       .then(data => {
         if (!data.message) {
           functions.displayAlert(data.errMessage, "error");
           callback(null);
-        } else if (true) {
-          /*  */
-          callback(data.redirect_path);
-          console.log("returned id: " + data.redirect_path);
+        } else {
+          callback(data.message);
         }
       })
       .catch(err => {
-        console.log("project fetch error: " + err);
+        console.log("enlist fetch error: " + err);
+      });
+  },
+
+  incrementWorkers: function(form, callback) {
+    const project = {
+      projid: form.id.textContent,
+      status: form.status.value,
+      current: form.current.value,
+      max: form.max.value
+    };
+    const fetchOptions = {
+      method: "PUT",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(project)
+    };
+
+    let url = "/currentworkers";
+    fetchData(url, fetchOptions)
+      .then(data => {
+        if (data.errMessage) {
+          functions.displayAlert(data.errMessage, "error");
+          callback(null);
+        } else {
+          callback(data.message);
+        }
+      })
+      .catch(err => {
+        console.log("increment fetch error: " + err);
       });
   }
 };
@@ -320,6 +345,12 @@ function validateSignupForm(formName) {
     }
   }
   return true;
+}
+
+async function fetchData(url, options) {
+  const rawResponse = await fetch(url, options);
+  const jsonData = await rawResponse.json();
+  return jsonData;
 }
 
 export { UserSession };

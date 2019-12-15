@@ -9,14 +9,11 @@ const project = new Project();
 
 //get index page
 router.get("/", (req, res, next) => {
+  console.log(req.session.userid + ": " + req.session.cookie.maxAge);
   res.render("index");
 });
 
-router.get("/projects", (req, res, next) => {
-  res.render("projects");
-});
-
-router.get("/profilestyle", (req, res) => {
+router.get("/usersession", (req, res) => {
   if (req.session.userid) {
     res.json({ session: req.session.userid });
     return;
@@ -24,11 +21,15 @@ router.get("/profilestyle", (req, res) => {
   res.json({ errMessage: "Session expired, Login" });
 });
 
-router.get("/about", (req, res, next) => {
+router.get("/projects", (req, res) => {
+  res.render("projects");
+});
+
+router.get("/about", (req, res) => {
   res.render("about");
 });
 
-router.get("/register", (req, res, next) => {
+router.get("/register", (req, res) => {
   res.render("register");
 });
 
@@ -53,9 +54,10 @@ router.get("/project:id", (req, res, next) => {
             ? data.proj_address + ", " + data.proj_city
             : "",
         status: data.proj_status ? data.proj_status : "",
-        tools: data.tools ? data.tools : "",
-        current: data.current_workers ? data.current_workers : "",
-        maxworkers: data.max_no_workers ? data.max_no_workers : "",
+        worth: data.reward_points ? data.reward_points : 0,
+        tools: data.proj_tools ? data.proj_tools : "",
+        current: data.current_workers ? data.current_workers : 0,
+        maxworkers: data.max_no_workers ? data.max_no_workers : 1,
         postedby: data.posted_by ? data.posted_by : ""
       });
       return;
@@ -126,10 +128,73 @@ router.get("/allprojects", (req, res) => {
   });
 });
 
+/* Add user and project to worklist */
+router.post("/enlist", (req, res) => {
+  if (req.session.userid) {
+    const proj = {
+      userid: req.session.userid,
+      projid: req.body.projid,
+      current: req.body.current,
+      max: req.body.max,
+      status: req.body.status
+    };
+
+    project.enlistWorker(proj.userid, proj.projid, rows => {
+      if (rows) {
+        //if user is successfully added to list of workers
+        res.json({ message: "You have been enlisted successfully" });
+        return;
+      }
+      res.json({ errMessage: "Sorry, could not insert into worklist" });
+    });
+  }
+});
+
+router.put("/currentworkers", (req, res) => {
+  if (req.session.userid) {
+    const userProj = {
+      userid: req.session.userid,
+      projid: req.body.projid /* ? req.body.projid : "" */
+    };
+    //getProject
+    project.getProject(userProj.projid, projrecord => {
+      if (projrecord) {
+        //check worklist table
+        project.checkWorklist(
+          projrecord.projId,
+          userProj.userid,
+          noduplicate => {
+            if (noduplicate) {
+              project.updateCurrentWorker(projrecord, result => {
+                if (result) {
+                  res.json({ message: "All clear for enlisting" });
+                } else {
+                  res.json({
+                    errMessage: "Sorry, This Project has already been assigned!"
+                  });
+                }
+              });
+            } else {
+              res.json({
+                errMessage:
+                  "You have already been listed as a worker for this project!"
+              });
+            }
+          }
+        );
+      } else {
+        res.json({ errMessage: "Project record not found" });
+      }
+    });
+  } else {
+    res.json({ errMessage: "you must be logged in to enlist" });
+  }
+});
+
 //project view post
 router.post("/projectview", (req, res, next) => {
   console.log("Project_id: " + req.body.id);
-  project.findProject(req.body.id, projid => {
+  project.findProject(req.body.id, req.body.postedby, projid => {
     if (projid) {
       res.json({
         redirect_path: "/project" + projid
@@ -176,7 +241,6 @@ router.post("/login", (req, res, next) => {
           redirect_path: "/profile"
         });
       } else {
-        // res.json({ message: "Login Failed" });
         res.status(404).json({ errMessage: "Login Failed" });
         console.log("Login Post Err: user not found");
       }
