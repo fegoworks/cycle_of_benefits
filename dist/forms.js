@@ -177,10 +177,11 @@ UserSession.prototype = {
     }
   },
 
-  viewProject: function(projectId, callback) {
+  viewProject: function(projectId, postedBy, callback) {
     //fetch project data
     const project = {
-      id: projectId.textContent
+      id: projectId.textContent,
+      postedby: postedBy.textContent
     };
     const fetchOptions = {
       method: "POST",
@@ -260,6 +261,46 @@ UserSession.prototype = {
   clearPath: function() {
     //clear path
     this.Path.path_ = null;
+  },
+
+  enlistUser: function(form, callback) {
+    //fetch project data
+    const project = {
+      projid: form.id.value,
+      status: form.status.value,
+      current: form.current.value,
+      max: form.max.value
+    };
+    const fetchOptions = {
+      method: "POST",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(project)
+    };
+
+    let url = "/enlist";
+    fetch(url, fetchOptions)
+      .then(rawResponse => rawResponse.json())
+      .then(data => {
+        if (!data.message) {
+          functions.displayAlert(data.errMessage, "error");
+          callback(null);
+        } else if (true) {
+          /*  */
+          callback(data.redirect_path);
+          console.log("returned id: " + data.redirect_path);
+        }
+      })
+      .catch(err => {
+        console.log("project fetch error: " + err);
+      });
   }
 };
 
