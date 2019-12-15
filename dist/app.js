@@ -7,6 +7,22 @@ if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
 }
 
+/* Display profile styles */
+if (document.querySelector(".signin-link")) {
+  //fetch user session to display styles
+  if (checkUserSession) {
+    let userLink = document.querySelector(".signin-link");
+    userLink.textContent = "";
+    userLink.removeAttribute("href");
+    let userIcon = document.createElement("i");
+    userIcon.classList.add("fas", "fa-user", "fa-2x");
+    userLink.appendChild(userIcon);
+
+    functions.enableSlideMenu(userLink);
+    functions.appendProfileToMobileMenu();
+  }
+}
+
 /* Login and View Profile */
 if (document.getElementById("loginform")) {
   const form = {
@@ -27,30 +43,7 @@ if (document.getElementById("loginform")) {
   });
 }
 
-if (document.querySelector(".signin-link")) {
-  //fetch user session to display styles
-  fetch("/profilestyle")
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      if (data.session) {
-        let userLink = document.querySelector(".signin-link");
-        userLink.textContent = "";
-        userLink.removeAttribute("href");
-        let userIcon = document.createElement("i");
-        userIcon.classList.add("fas", "fa-user", "fa-2x");
-        userLink.appendChild(userIcon);
-
-        functions.enableSlideMenu(userLink);
-        functions.appendProfileToMobileMenu();
-      } else {
-        // functions.displayAlert(data.errMessage, "info");
-      }
-    });
-}
-
-/* Signup Form */
+/* Signup */
 if (document.getElementById("form")) {
   const form = {
     signupForm: document.getElementById("form"),
@@ -67,6 +60,99 @@ if (document.getElementById("form")) {
     e.preventDefault();
     usersession.signupUser(form);
   });
+}
+
+/* Edit Profile */
+if (document.querySelector(".profile")) {
+  let editBtn = document.querySelector("#edit-button");
+  let saveChanges = document.querySelector("#save_changes");
+  let profileForm = document.getElementById("profile-form");
+  let formName = document.forms.namedItem("profile-form");
+
+  let inputFields = Array.from(
+    profileForm.querySelectorAll(
+      "input[type=text], input[type=date], input[type=email]"
+    )
+  ).slice(1);
+  let initialValues = [];
+  let editToggle = false;
+  saveCurrentData(initialValues);
+  //Edit Profile
+  editBtn.onclick = editable;
+
+  function editable() {
+    //put form values in array
+    if (!editToggle) {
+      for (let i = 0; i < inputFields.length; i++) {
+        inputFields[i].classList.add("edit-profile");
+        inputFields[i].removeAttribute("readonly");
+      }
+      saveChanges.removeAttribute("disabled");
+      editToggle = true;
+    } else {
+      for (let i = 0; i < inputFields.length; i++) {
+        inputFields[i].classList.remove("edit-profile");
+        inputFields[i].setAttribute("readonly", true);
+      }
+      saveChanges.setAttribute("disabled", true);
+      editToggle = false;
+    }
+  }
+  /* Reset fields */
+  let resetBtn = document.getElementById("reset_button");
+  resetBtn.onclick = () => {
+    if (initialValues.length > 0) {
+      // if (confirm("Are You sure you want to rest changes?")) {
+      for (let i = 0; i < initialValues.length; i++) {
+        formName.elements[i].value = initialValues[i];
+      }
+      saveChanges.setAttribute("disabled", true);
+      editToggle = false;
+      clearCurrentData();
+    }
+  };
+
+  //Save changes
+  profileForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const form = {
+      username: document.getElementById("edit_username"),
+      fname: document.getElementById("edit_firstname"),
+      lname: document.getElementById("edit_lastname"),
+      email: document.getElementById("edit_email"),
+      dob: document.getElementById("edit_dob"),
+      address: document.getElementById("edit_address"),
+      phone: document.getElementById("edit_phone"),
+      state: document.getElementById("edit_state"),
+      nationalId: document.getElementById("edit_national_id")
+    };
+    usersession.updateProfile(form, response => {
+      if (!response) {
+        functions.displayAlert("Could not update profile", "error");
+      } else {
+        functions.displayAlert(response, "success");
+        clearCurrentData();
+        saveCurrentData(initialValues);
+        editToggle = false;
+        editable();
+      }
+    });
+    // for (let i = 0; i < formName.elements.length - 1; i++) {
+    //   formName.elements[i].setAttribute = "readonly";
+    //   /* formName.elements[i].textContent =  */
+    // }
+  });
+
+  /* Functions */
+  function saveCurrentData(array) {
+    for (let i = 0; i < formName.elements.length - 1; i++) {
+      array.push(formName.elements[i].value); // || "disabled";
+    }
+  }
+
+  function clearCurrentData() {
+    initialValues = [];
+  }
 }
 
 /*  User profile */
@@ -125,8 +211,10 @@ if (document.querySelector(".projects")) {
     proj_id.classList.add("project-id");
     let proj_title = document.createElement("div");
     proj_title.classList.add("project-title");
-    let proj_details = document.createElement("div");
-    proj_details.classList.add("project-details");
+    let proj_worth = document.createElement("div");
+    proj_worth.classList.add("project-worth");
+    let proj_posted = document.createElement("div");
+    proj_posted.classList.add("project-posted");
     let proj_status = document.createElement("div");
     proj_status.classList.add("project-status");
     let proj_workers = document.createElement("div");
@@ -145,31 +233,31 @@ if (document.querySelector(".projects")) {
     /* Add text contents */
     proj_id.appendChild(document.createTextNode(recordset.projId));
     proj_title.appendChild(document.createTextNode(recordset.proj_title));
-    proj_details.appendChild(document.createTextNode(recordset.proj_details));
     proj_status.appendChild(document.createTextNode(recordset.proj_status));
+    proj_worth.appendChild(document.createTextNode(recordset.reward_points));
     proj_current_workers.appendChild(
       document.createTextNode(
-        recordset.proj_current_workers
-          ? recordset.proj_current_workers
-          : 0 + "/"
+        recordset.current_workers ? recordset.current_workers : 0 + "/"
       )
     );
     proj_total_workers.appendChild(
       document.createTextNode(
-        recordset.proj_max_no_workers ? recordset.proj_max_no_workers : 0
+        recordset.max_no_workers ? recordset.max_no_workers : 0
       )
     );
 
     proj_workers.append(proj_current_workers);
     proj_workers.append(proj_total_workers);
+    proj_posted.appendChild(document.createTextNode(recordset.posted_by));
     proj_button.appendChild(input);
 
     /* Append to project group */
     project_.appendChild(proj_id);
     project_.appendChild(proj_title);
-    project_.appendChild(proj_details);
     project_.appendChild(proj_status);
+    project_.appendChild(proj_worth);
     project_.appendChild(proj_workers);
+    project_.appendChild(proj_posted);
     project_.appendChild(proj_button);
 
     pill.appendChild(project_);
@@ -196,7 +284,7 @@ if (document.querySelector(".projects")) {
         for (let i = 0; i < data.length; i++) {
           appendProjects(data[i]);
         }
-        viewProfile();
+        viewProject();
       } else {
         functions.displayAlert(data.errMessage, "error");
       }
@@ -205,16 +293,17 @@ if (document.querySelector(".projects")) {
       console.log("Fetch Error: All projects: " + err);
     });
 
-  function viewProfile() {
-    /* view Project page */
+  /* view Project page */
+  function viewProject() {
     let projectRow = document.querySelectorAll(".project_");
     console.log(projectRow.length);
     let projectBtn = document.querySelectorAll(".project-button > input");
     let projectId = document.querySelectorAll(".project-id");
+    let postedBy = document.querySelectorAll(".project-posted");
     //set static url
     for (let i = 0; i < projectRow.length; i++) {
       projectBtn[i].onclick = function() {
-        usersession.viewProject(projectId[i], data => {
+        usersession.viewProject(projectId[i], postedBy[i], data => {
           if (data) {
             window.location.assign(data);
           }
@@ -242,102 +331,44 @@ if (document.querySelector("#post_project")) {
   });
 }
 
-/* Edit Profile */
-if (document.querySelector(".profile")) {
-  let editBtn = document.querySelector("#edit-button");
-  let saveChanges = document.querySelector("#save_changes");
-  let profileForm = document.getElementById("profile-form");
-  let formName = document.forms.namedItem("profile-form");
+/* Update Project */
+if (document.querySelector("#project")) {
+  let submitInterest = document.getElementById("interest");
 
-  let inputFields = Array.from(
-    profileForm.querySelectorAll(
-      "input[type=text], input[type=date], input[type=email]"
-    )
-  ).slice(1);
-  let initialValues = [];
-  let editToggle = false;
-  saveCurrentData(initialValues);
-  //Edit Profile
-  editBtn.onclick = editable;
+  const form = {
+    projectform: document.getElementById("project-form"),
+    id: document.getElementById("view_id"),
+    status: document.getElementById("view_status"),
+    current: document.getElementById("view_current_workers"),
+    max: document.getElementById("view_no_of_workers")
+  };
 
-  function editable() {
-    //put form values in array
-    if (!editToggle) {
-      for (let i = 0; i < inputFields.length; i++) {
-        inputFields[i].classList.add("edit-profile");
-        inputFields[i].removeAttribute("readonly");
-      }
-      saveChanges.removeAttribute("disabled");
-      editToggle = true;
-    } else {
-      for (let i = 0; i < inputFields.length; i++) {
-        inputFields[i].classList.remove("edit-profile");
-        inputFields[i].setAttribute("readonly", true);
-      }
-      saveChanges.setAttribute("disabled", true);
-      editToggle = false;
-    }
-  }
-  /* Reset fields */
-  let resetBtn = document.getElementById("reset_button");
-  /* resetBtn.onclick = () => {
-    if (initialValues.length > 0) {
-      // if (confirm("Are You sure you want to rest changes?")) {
-      for (let i = 0; i < initialValues.length; i++) {
-        formName.elements[i].value = initialValues[i];
-        formName.elements[i].setAttribute = "readonly";
-      }
-      saveChanges.setAttribute("disabled", true);
-      editToggle = false;
-      clearCurrentData();
-    } 
-  };*/
-
-  //Save changes
-  profileForm.addEventListener("submit", e => {
+  form.projectform.onsubmit = function(e) {
     e.preventDefault();
-    const form = {
-      username: document.getElementById("edit_username"),
-      fname: document.getElementById("edit_firstname"),
-      lname: document.getElementById("edit_lastname"),
-      email: document.getElementById("edit_email"),
-      dob: document.getElementById("edit_dob"),
-      address: document.getElementById("edit_address"),
-      phone: document.getElementById("edit_phone"),
-      state: document.getElementById("edit_state"),
-      nationalId: document.getElementById("edit_national_id")
-    };
-    usersession.updateProfile(form, response => {
-      if (!response) {
-        functions.displayAlert("Could not update profile", "error");
-      } else {
-        functions.displayAlert(response, "success");
-        clearCurrentData();
-        saveCurrentData(initialValues);
-        editToggle = false;
-        editable();
+    usersession.enlistUser(form, data => {
+      if (data) {
       }
     });
-    // for (let i = 0; i < formName.elements.length - 1; i++) {
-    //   formName.elements[i].setAttribute = "readonly";
-    //   /* formName.elements[i].textContent =  */
-    // }
-  });
-
-  /* Functions */
-  function saveCurrentData(array) {
-    for (let i = 0; i < formName.elements.length - 1; i++) {
-      array.push(formName.elements[i].value); // || "disabled";
-    }
-  }
-
-  function clearCurrentData() {
-    initialValues = [];
-  }
+  };
 }
-
+// let id = document.getElementById("view_id");
+// console.log(id.value);
 async function fetchData(url, options) {
   const rawResponse = await fetch(url, options);
   const jsonData = await rawResponse.json();
   return jsonData;
+}
+
+function checkUserSession() {
+  fetch("/usersession")
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      if (data.session) {
+        return true;
+      }
+      return false;
+      // functions.displayAlert(data.errMessage, "info");
+    });
 }
