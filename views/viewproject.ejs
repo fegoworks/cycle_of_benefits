@@ -68,19 +68,15 @@
           <div id="viewproject">
             <div id="project-image">
               <img src="" alt="Project Photo" />
+              <div class="view-block">
+                <label>Project ID: cyob<span form="project-form" id="view_id" type="text" name="id"
+                  ><%= id%></span></label>
+              </div>
             </div>
             <div id="project">
-              <form method="post" action="/workonproject" id="project-form">
+              <form method="post" action="/enlist" id="project-form">
                 <div class="view-block">
-                  <label for="type">Project Id:</label>
-                  <div>
-                    <input id="view_type" type="text" name="type" 
-                    value="<%= id%>" 
-                    disabled />
-                  </div>
-                </div>
-                <div class="view-block">
-                  <label for="title">Title / Type:</label>
+                  <label for="title">Title/Type:</label>
                   <div>
                     <input
                       id="view_title"
@@ -106,7 +102,7 @@
                   <label for="location">Location:</label>
                   <div>
                     <input
-                      id="view_lastname"
+                      id="view_location"
                       type="text"
                       name="location"
                       value="<%= location%>"
@@ -139,7 +135,7 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="current_workers">Current Number of Workers:</label>
+                  <label for="current_workers">Current No. of Workers:</label>
                   <div>
                     <input
                       id="view_current_workers"
@@ -151,13 +147,25 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="no_of_workers">Maximum Number of Workers:</label>
+                  <label for="no_of_workers">Maximum Workers:</label>
                   <div>
                     <input
                       id="view_no_of_workers"
                       type="text"
                       name="no_of_workers"
                       value="<%= maxworkers%>"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="view-block">
+                  <label for="worth">Total Reward Points:</label>
+                  <div>
+                    <input
+                      id="view_worth"
+                      type="text"
+                      name="worth"
+                      value="<%= worth%>"
                       disabled
                     />
                   </div>
@@ -176,9 +184,10 @@
                 </div>
                 <div class="form-button">
                   <input
+                  id="interest"
                     class="my-btn left-btn"
                     type="submit"
-                    value="Indicate Interest"
+                    value="ENLIST"
                   />
                   <a class="right-btn" href="./projects">Back</a>
                 </div>
