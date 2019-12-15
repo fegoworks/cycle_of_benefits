@@ -201,7 +201,6 @@ UserSession.prototype = {
           callback(null);
         } else {
           callback(data.redirect_path);
-          console.log("returned id: " + data.redirect_path);
         }
       })
       .catch(err => {
@@ -258,10 +257,7 @@ UserSession.prototype = {
   enlistWorker: function(form, callback) {
     //fetch project data
     const project = {
-      projid: form.id.textContent,
-      status: form.status.value,
-      current: form.current.value,
-      max: form.max.value
+      projid: form.id.textContent
     };
     const fetchOptions = {
       method: "POST",
@@ -294,10 +290,7 @@ UserSession.prototype = {
 
   incrementWorkers: function(form, callback) {
     const project = {
-      projid: form.id.textContent,
-      status: form.status.value,
-      current: form.current.value,
-      max: form.max.value
+      projid: form.id.textContent
     };
     const fetchOptions = {
       method: "PUT",

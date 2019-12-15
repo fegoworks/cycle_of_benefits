@@ -141,13 +141,16 @@ hr {
 }
 
 .signin-div {
-  /* border: 1px solid #fff; */
+  border: 1px solid #fff;
   min-width: 15%;
   float: right;
   padding-right: 5px;
   cursor: pointer;
   display: flex;
   justify-content: center;
+}
+.signin-div:hover {
+  cursor: pointer;
 }
 
 /*******************************************************/

@@ -118,6 +118,20 @@ Project.prototype = {
                 .catch(err => {
                   console.log("allprojects- subquery error: " + err);
                 });
+            } else {
+              let subqueryString = `UPDATE cyobDB.dbo.Tbl_Projects
+               SET proj_status = 'Open'
+               WHERE projId = ${projectRecord[i].projId}`;
+              request
+                .query(subqueryString)
+                .then(data => {
+                  if (data.rowsAffected > 1) {
+                    console.log(data.rowsAffected + " rows affected");
+                  }
+                })
+                .catch(err => {
+                  console.log("allprojects- subquery error: " + err);
+                });
             }
           }
           callback(data);
@@ -130,31 +144,31 @@ Project.prototype = {
       });
   },
 
-  enlistWorker: function(userid, projid, callback) {
-    let queryString = `INSERT INTO cyobDB.dbo.Tbl_Worklist (projId, proj_status, reward_points, userId)
-    SELECT t2.projId, t2.proj_status, t2.reward_points, t1.userId 
-    FROM Tbl_Profiles as t1
-    CROSS JOIN Tbl_Projects as t2
-    WHERE t1.userId = '${userid}' AND t2.projId = ${projid}`;
-    let request = new dbconnect.sql.Request(dbconnect.pool);
-    request
-      .query(queryString)
-      .then(data => {
-        console.log(data);
-        if (data.rowsAffected == 1) {
-          callback(data.rowsAffected);
-          return;
-        }
-        console.log("could not insert into worklist");
-        callback(null);
-      })
-      .catch(err => {
-        console.log("enlistWorker- Error running query: " + err);
-      });
+  enlistWorker: function(project, userid, callback) {
+    if (project.current_workers < project.max_no_workers) {
+      let queryString = `INSERT INTO cyobDB.dbo.Tbl_Worklist (projId, proj_status, reward_points, userId)
+      SELECT t2.projId, t2.proj_status, t2.reward_points, t1.userId 
+      FROM Tbl_Profiles as t1
+      CROSS JOIN Tbl_Projects as t2
+      WHERE t1.userId = '${userid}' AND t2.projId = ${project.projId}`;
+      let request = new dbconnect.sql.Request(dbconnect.pool);
+      request
+        .query(queryString)
+        .then(data => {
+          if (data.rowsAffected == 1) {
+            callback(data.rowsAffected);
+            return;
+          }
+          console.log("could not insert into worklist");
+          callback(null);
+        })
+        .catch(err => {
+          console.log("enlistWorker- Error running query: " + err);
+        });
+    }
   },
 
   updateCurrentWorker: function(project, callback) {
-    console.log("Previous workers: " + project.current_workers);
     let request = new dbconnect.sql.Request(dbconnect.pool);
     if (project.current_workers < project.max_no_workers) {
       let queryString = `UPDATE cyobDB.dbo.Tbl_Projects
@@ -186,7 +200,6 @@ Project.prototype = {
     request
       .query(queryString)
       .then(data => {
-        console.log(data.rowsAffected);
         // if no duplicate is found
         if (data.rowsAffected == 0) {
           callback(true);

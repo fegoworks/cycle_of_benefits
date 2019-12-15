@@ -350,18 +350,18 @@ if (document.querySelector("#project")) {
   // let submitInterest = document.getElementById("interest");
   const form = {
     projectform: document.getElementById("project-form"),
-    id: document.getElementById("view_id"),
-    status: document.getElementById("view_status"),
-    current: document.getElementById("view_current_workers"),
-    max: document.getElementById("view_no_of_workers")
+    id: document.getElementById("view_id")
+    // status: document.getElementById("view_status"),
+    // current: document.getElementById("view_current_workers"),
+    // max: document.getElementById("view_no_of_workers")
   };
 
   form.projectform.onsubmit = function(e) {
     e.preventDefault();
-    usersession.incrementWorkers(form, incremented => {
-      if (incremented) {
-        usersession.enlistWorker(form, result => {
-          if (result) {
+    usersession.enlistWorker(form, result => {
+      if (result) {
+        usersession.incrementWorkers(form, incremented => {
+          if (incremented) {
             functions.displayAlert(result, "success");
           }
         });
@@ -369,7 +369,3 @@ if (document.querySelector("#project")) {
     });
   };
 }
-// let id = document.getElementById("view_id");
-// console.log(id.value);
-
-function checkUserSession() {}

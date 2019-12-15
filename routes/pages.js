@@ -133,55 +133,31 @@ router.post("/enlist", (req, res) => {
   if (req.session.userid) {
     const proj = {
       userid: req.session.userid,
-      projid: req.body.projid,
-      current: req.body.current,
-      max: req.body.max,
-      status: req.body.status
-    };
-
-    project.enlistWorker(proj.userid, proj.projid, rows => {
-      if (rows) {
-        //if user is successfully added to list of workers
-        res.json({ message: "You have been enlisted successfully" });
-        return;
-      }
-      res.json({ errMessage: "Sorry, could not insert into worklist" });
-    });
-  }
-});
-
-router.put("/currentworkers", (req, res) => {
-  if (req.session.userid) {
-    const userProj = {
-      userid: req.session.userid,
-      projid: req.body.projid /* ? req.body.projid : "" */
+      projid: req.body.projid
     };
     //getProject
-    project.getProject(userProj.projid, projrecord => {
+    project.getProject(proj.projid, projrecord => {
       if (projrecord) {
-        //check worklist table
-        project.checkWorklist(
-          projrecord.projId,
-          userProj.userid,
-          noduplicate => {
-            if (noduplicate) {
-              project.updateCurrentWorker(projrecord, result => {
-                if (result) {
-                  res.json({ message: "All clear for enlisting" });
-                } else {
-                  res.json({
-                    errMessage: "Sorry, This Project has already been assigned!"
-                  });
-                }
-              });
-            } else {
+        //check worklist
+        project.checkWorklist(projrecord.projId, proj.userid, noduplicate => {
+          if (noduplicate) {
+            project.enlistWorker(projrecord, proj.userid, rows => {
+              if (rows) {
+                //if user is successfully added to list of workers
+                res.json({ message: "You have been enlisted successfully" });
+                return;
+              }
               res.json({
-                errMessage:
-                  "You have already been listed as a worker for this project!"
+                errMessage: "Sorry, could not insert into worklist"
               });
-            }
+            });
+          } else {
+            res.json({
+              errMessage:
+                "You have already been listed as a worker for this project!"
+            });
           }
-        );
+        });
       } else {
         res.json({ errMessage: "Project record not found" });
       }
@@ -191,9 +167,30 @@ router.put("/currentworkers", (req, res) => {
   }
 });
 
+router.put("/currentworkers", (req, res) => {
+  if (req.session.userid) {
+    const proj = {
+      userid: req.session.userid,
+      projid: req.body.projid /* ? req.body.projid : "" */
+    };
+    project.getProject(proj.projid, projrecord => {
+      if (projrecord) {
+        project.updateCurrentWorker(projrecord, result => {
+          if (result) {
+            res.json({ message: "All clear for enlisting" });
+          } else {
+            res.json({
+              errMessage: "Sorry, This Project has already been assigned!"
+            });
+          }
+        });
+      }
+    });
+  }
+});
+
 //project view post
 router.post("/projectview", (req, res, next) => {
-  console.log("Project_id: " + req.body.id);
   project.findProject(req.body.id, req.body.postedby, projid => {
     if (projid) {
       res.json({
