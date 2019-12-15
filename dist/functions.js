@@ -36,10 +36,6 @@ function displayAlert(msg, type) {
   closeButton.append(document.createTextNode("X"));
   parag.append(closeButton);
 
-  let alertBox = document.createElement("div");
-  alertBox.classList.add("alert-box");
-  alertBox.appendChild(parag);
-
   if (type === "error") {
     parag.style.background = "red";
   } else if (type === "info") {
@@ -48,20 +44,29 @@ function displayAlert(msg, type) {
     parag.style.background = "green";
   }
 
-  if (document.querySelector(".modal")) {
+  if (
+    document.querySelector(".modal") &&
+    document.querySelector(".alert-box")
+  ) {
     let modal = document.querySelector(".modal");
+    let alertBox = document.querySelector(".alert-box");
+    alertBox.appendChild(parag);
     modal.appendChild(alertBox);
   } else {
     // background
     let modal = document.createElement("div");
     modal.classList.add("modal");
+    let alertBox = document.createElement("div");
+    alertBox.classList.add("alert-box");
+    alertBox.appendChild(parag);
     modal.appendChild(alertBox);
     document.body.appendChild(modal);
   }
   closeButton.onclick = function() {
     let modal = document.querySelector(".modal");
+    let alertBox = document.querySelector(".alert-box");
     alertBox.removeChild(parag);
-    modal.removeChild(alertBox);
+    // modal.removeChild(alertBox);
     if (document.querySelectorAll(".p-info").length == 0) {
       // alertBox.removeChild(parag);
       document.body.removeChild(modal);
@@ -90,7 +95,7 @@ function appendProfileToMobileMenu() {
   menuList.appendChild(signoutMenu);
 }
 
-function enableSlideMenu(userIconLink) {
+function enableSlideMenu(userIcon) {
   //called by showUserIcon();
   //create a new div
   let profileDiv = document.createElement("div");
@@ -116,15 +121,15 @@ function enableSlideMenu(userIconLink) {
 
   let dropdown = false;
 
-  userIconLink.onclick = function() {
+  userIcon.onclick = function() {
     if (!dropdown) {
-      userIconLink.classList.add("enable-slide");
+      userIcon.classList.add("enable-slide");
       profileDiv.classList.add("slide-down");
 
       //reset Menu State
       dropdown = true;
     } else {
-      userIconLink.classList.remove("enable-slide");
+      userIcon.classList.remove("enable-slide");
       profileDiv.classList.remove("slide-down");
 
       //reset Menu State
@@ -133,24 +138,4 @@ function enableSlideMenu(userIconLink) {
   };
 }
 
-// function showUserIcon() {
-// show icon when user is logged in successfully
-
-// }
-// }
-
-//function that connects to the data base and retrieve project information appends as a div to the list of project
-
-//function that loads all project data on request through the projects.html url
-
-//a project button functionality that when clicked loads projectpage.html of the corrresponding project
-
-//a userprofile page with navigation links at the left
-//--post project
-//--my messages
-//--my Profile userprofile
-
 export { menuToggle, displayAlert, appendProfileToMobileMenu, enableSlideMenu };
-// create an i element, attache a class of "fas fa-user-tie"
-//create a dropdown div for wider screens(>600px), include a ul with two list items: profile and signout
-// };
