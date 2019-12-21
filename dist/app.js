@@ -179,6 +179,7 @@ if (document.querySelector(".boxes")) {
   let profile = document.querySelector(".profile");
   let messages = document.querySelector(".messages");
   let rewards = document.querySelector(".rewards");
+  let info = document.querySelector(".information");
 
   //stacked divs display function
   navLinks.forEach(link => {
@@ -208,6 +209,11 @@ if (document.querySelector(".boxes")) {
           nav[i].classList.add("noshow");
         }
         rewards.classList.remove("noshow");
+      } else if (link.id === "information") {
+        for (let i = 0; i < nav.length; i++) {
+          nav[i].classList.add("noshow");
+        }
+        info.classList.remove("noshow");
       }
     };
   });
@@ -368,4 +374,53 @@ if (document.querySelector("#project")) {
       }
     });
   };
+}
+
+/* Rewards Page */
+if (document.querySelector(".rewards")) {
+  /* Reload Points */
+  // Triggers the assignReward method
+  if (document.querySelector(".reward-load")) {
+    let reload = document.getElementById("reload");
+    reload.onclick = function() {
+      usersession.loadPoints(res => {
+        if (res.message) {
+          functions.displayAlert(res.message, "success");
+        } else if (res.errMessage) {
+          functions.displayAlert(res.errMessage, "error");
+        }
+      });
+    };
+  }
+  /* Redeem Reward */
+  if (document.querySelector("#rewardform")) {
+    const form = {
+      rewardForm: document.getElementById("rewardform"),
+      total: document.getElementById("totalpoints"),
+      used: document.getElementById("usedpoints"),
+      benefit: document.getElementById("benefittype")
+    };
+
+    form.rewardForm.addEventListener("submit", e => {
+      e.preventDefault();
+      // ensure used value is always less or equal to total value
+      if (
+        form.total.textContent < form.used.value ||
+        form.total.textContent === 0
+      ) {
+        functions.displayAlert(
+          "You have insufficient points, earn more points",
+          "error"
+        );
+      } else if (form.used.value === "" || form.used.value == 0) {
+        functions.displayAlert("Select number of points to redeem", "error");
+      } else {
+        usersession.redeemReward(form, message => {
+          if (message) {
+            functions.displayAlert(message, "success");
+          }
+        });
+      }
+    });
+  }
 }
