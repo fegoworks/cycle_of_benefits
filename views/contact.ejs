@@ -10,11 +10,15 @@
       rel="stylesheet"
       href="https://use.fontawesome.com/releases/v5.0.11/css/all.css"
     />
-    <link rel="stylesheet" href="css/styles.css" />
-    <link rel="stylesheet" href="css/dynamic.css" />
-    <link rel="stylesheet" href="css/mobile.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link rel="stylesheet" href="/css/dynamic.css" />
+    <link rel="stylesheet" href="/css/mobile.css" />
     <link
       href="https://fonts.googleapis.com/css?family=Karla&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i"
       rel="stylesheet"
     />
   </head>
@@ -42,7 +46,7 @@
           </div>
         </div>
         <div class="signin-div">
-          <a class="signin-link" href="./login">Sign In</a>
+          <a class="signin-link" href="./login"><p>Sign In</p></a>
         </div>
       </header>
       <div class="menu-header">
@@ -63,36 +67,33 @@
       </div>
       <div class="clear-float"></div>
       <main class="main-content">
-        <div class="content-heading">
-          <h1>All Projects</h1>
-          <p>
-            The current list of all uploaded projects Lorem ipsum, dolor sit
-            amet consectetur adipisicing elit. Culpa hic aspernatur sunt quasi
-            accusantium dolor?
-          </p>
-        </div>
-        <div class="content-body">
-          <div class="projects">
-            <ul class="project-pills">
-              <li class="project-heading">
-                <div class="heading-id"><i class="fas fa-list-ol"></i></div>
-                <div class="heading-title">Title</div>
-                <div class="heading-status">
-                  <i class="fas fa-hourglass-half"></i>
-                </div>
-                <div class="heading-worth">
-                  <i class="fa fa-hand-holding-usd"></i>
-                </div>
-                <div class="heading-workers">
-                  <i class="fa fa-clipboard-list"></i>
-                </div>
-                <div class="heading-posted"><i class="fa fa-user"></i></div>
-                <div class="heading-button">
-                  <i class="fas fa-caret-square-right"></i>
-                </div>
-              </li>
-            </ul>
-          </div>
+        <h3>Contact Form</h3>
+        <div class="contact">
+          <form id="contactform" name="contactform" action="/contactform">
+            <label for="fname">First Name</label>
+            <input
+              type="text"
+              id="fname"
+              name="firstname"
+              placeholder="First Name"
+            />
+
+            <label for="email">E-mail Address</label>
+            <input
+              type="text"
+              id="email"
+              name="email"
+              placeholder="Email address"
+            />
+            <label for="subject">Subject</label>
+            <textarea
+              id="subject"
+              name="subject"
+              placeholder="Write something.."
+            ></textarea>
+
+            <input type="submit" value="Submit" />
+          </form>
         </div>
       </main>
       <footer class="main-footer">

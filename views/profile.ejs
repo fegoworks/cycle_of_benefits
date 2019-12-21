@@ -26,7 +26,7 @@
     <div class="main-container">
       <header class="main-header">
         <div class="logo-div">
-          <a href="./"><i class="fas fa-dolly-flatbed fa-2x"></i></a>
+          <a href="./"><i class="fas fa-monument fa-2x"></i></a>
           <p><a href="./">Cycle of Benefits</a></p>
           <div class="menu-btn">
             <i class="fas fa-bars fa-2x"></i>
@@ -78,17 +78,20 @@
                 ><i class="fa fa-user"></i
                 ><span class="nav-menu">My Profile</span></a
               >
-              <a id="messages"
-                ><i class="fa fa-credit-card"></i
-                ><span class="nav-menu">My Messages</span></a
-              >
               <a id="postproject"
                 ><i class="fa fa-tv"></i
                 ><span class="nav-menu">Post Project</span></a
               >
               <a id="rewards"
-                ><i class="fa fa-tasks"></i
+                ><i class="fa fa-hand-holding-usd"></i
                 ><span class="nav-menu">My Rewards</span></a
+              >
+              <a id="information"
+                    ><i class="fa fa-caret-square-up"></i><span class="nav-menu">Information</span></a
+              >
+              <a id="messages"
+                ><i class="fa fa-comment-dots"></i
+                ><span class="nav-menu">My Messages</span></a
               >
             </nav>
           </div>
@@ -226,7 +229,6 @@
                 <hr />
               </form>
             </div>
-
             <div class="postproject noshow">
               <h1>Post a new Project</h1>
               <form method="post" action="/addproject" id="post_project">
@@ -292,17 +294,90 @@
                 <hr />
               </form>
             </div>
-
             <div class="rewards noshow">
               <h1>My Rewards</h1>
-              <p>Rewards Coming Soon</p>
+              <section class="myrewards">
+                <div class="reward-load form-button">
+                    <label for="reload">Click to Load/Reload Points: </label>
+                    <input
+                      id="reload"
+                      type="submit"
+                      class="left-btn my-btn"
+                      value="Reload"
+                    />
+                </div>
+                <div class="reward-points">
+                  <form action="/redeemreward" id="rewardform">
+                    <i class="fas fa-trophy fa-2x"></i>
+                    <div>
+                      <p form="rewardform"for="total">Total Points: <span id="totalpoints"><%= points%></span></p>
+                    <div>
+                      <label for="usedpoints">Use: </label>
+                    <input id="usedpoints" type="number" min="0" max="<%=points%>">
+                    </div>
+                    <div>
+                      <label for="benefit">Choose Benefit: </label>
+                    <select id="benefittype" name="benefit">
+                    <option value="medical">Medical Benefits ></option>
+                    <option value="clothing">Clothing Benefits</option>
+                    <option value="educational">Educational Benefits</option>
+                    <option value="cash">Cash Benefits</option>
+                    <option value="food">Food Benefits</option>
+                    <option value="transport">Transportation Benefits</option>
+                    </select>
+                    </div>
+                    <div class="form-button">
+                      <input
+                        id="redeem"
+                        type="submit"
+                        class="left-btn my-btn"
+                        value="Redeem Reward"
+                      />
+                    </div>
+                  </form>
+                </div>
+            </section>
             </div>
-
+            <div class="information noshow">
+              <h1><strong>How To</strong></h1>
+                <div>
+                  <p>Earn points each time you complete various project tasks</p>
+                <p>Redeem your points for reward benefits</p>
+                </div>
+                <div>
+                  <h4>Reward Benefits</h4>
+                <ul>
+                  <li>Medical Benefits</li>
+                  <li>Clothing Benefits</li>
+                  <li>Educational Benefits</li>
+                  <li>Cash Benefits</li>
+                  <li>Food Benefits</li>
+                  <li>Transportation Benefits</li>
+                </ul>
+                </div>
+                <div>
+                  <h4>Reward Points</h4>
+                <ul>
+                  <li>200RP: <span class="level1">#10,000</span</li>
+                  <li>600RP:<span class="level1">#45,000</span</li>
+                  <li>1000RP:<span class="level1">#90,000</span</li>
+                </ul>
+                </div>
+                <div>
+                  <h3>How do i earn reward points?</h3>
+                  <p>Complete a project task, upon confirmation of the project being complete, the reward points assigned to the project will be distributed accordingly amongst enlisted workers/participants.</p>
+                </div>
+                <div>
+                  <h3>How do use my reward points?</h3>
+                  <p>The amount of points you have can be used to unlock the corresponding point-amount and can then be used to redeem one of any of the benefit types listed above.</p>
+                </div>
+              
+            </div>
             <div class="messages noshow">
               <h1>My Messages</h1>
               <p>Messages Coming Soon</p>
             </div>
-          </div>
+        </div>
         </div>
       </main>
 
