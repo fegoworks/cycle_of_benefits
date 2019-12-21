@@ -110,7 +110,6 @@ UserSession.prototype = {
               form.password.value = "";
               form.password_match.value = "";
             } else {
-              console.log(data);
               functions.displayAlert(data.status, "success");
               clearFormFields(form.formName);
               //get data and send to
@@ -318,6 +317,66 @@ UserSession.prototype = {
       })
       .catch(err => {
         console.log("increment fetch error: " + err);
+      });
+  },
+
+  redeemReward: function(form, callback) {
+    const reward = {
+      used: form.used.value,
+      total: form.total.textContent,
+      benefit: form.benefit.value
+    };
+    const fetchOptions = {
+      method: "PUT",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(reward)
+    };
+
+    let url = "/redeemreward";
+    fetchData(url, fetchOptions)
+      .then(data => {
+        if (data.errMessage) {
+          functions.displayAlert(data.errMessage, "error");
+          callback(null);
+        } else {
+          callback(data.message);
+        }
+      })
+      .catch(err => {
+        console.log("redeem reward error: " + err);
+      });
+  },
+
+  loadPoints: function(callback) {
+    let url = "/loadpoints";
+    fetchData(url, {
+      method: "PUT",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      }
+    })
+      .then(data => {
+        if (data) {
+          console.log(data);
+          callback(data);
+        }
+      })
+      .catch(err => {
+        console.log("Load Points Fetch err: ", err);
       });
   }
 };
