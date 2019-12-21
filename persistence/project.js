@@ -73,6 +73,10 @@ Project.prototype = {
     //   });
   },
 
+  updateProject: function(projectId, callback) {
+    //Add other fields to the project, rewards point, estimated period
+  },
+
   getProject: function(projectId, callback) {
     let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects WHERE projId = ${projectId}`;
     let request = new dbconnect.sql.Request(dbconnect.pool);
@@ -100,7 +104,7 @@ Project.prototype = {
         if (data.recordset.length > 0) {
           /* Check and update status columns */
           let projectRecord = data.recordset;
-          for (let i = 0; i < data.recordset.length; i++) {
+          for (let i = 0; i < projectRecord.length; i++) {
             if (
               projectRecord[i].current_workers ==
               projectRecord[i].max_no_workers
@@ -210,7 +214,64 @@ Project.prototype = {
       .catch(err => {
         console.log("checkDuplicate- Error running query: " + err);
       });
-  }
+  },
+
+  distributePoints: function(callback) {
+    //when project status = "assigned"
+    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Projects WHERE proj_status = 'Assigned'`;
+    let request = new dbconnect.sql.Request(dbconnect.pool);
+    request
+      .query(queryString)
+      .then(data => {
+        if (data.recordset.length > 0) {
+          console.log(data.recordset.length + " assigned project(s) found");
+          let projectRecord = data.recordset;
+          for (let i = 0; i < projectRecord.length; i++) {
+            let id = projectRecord[i].projId;
+            //get all users in worklist table for the completed project
+            let subqueryString = `SELECT * FROM cyobDB.dbo.Tbl_Worklist WHERE projId = ${id}`;
+            request
+              .query(subqueryString)
+              .then(data => {
+                if (data.recordset.length > 0) {
+                  let worklistRecord = data.recordset;
+                  let rewards = worklistRecord[0].reward_points;
+                  let numWorkers = worklistRecord.length;
+                  let point = Math.floor(rewards / numWorkers);
+                  let count = 0;
+                  for (let i = 0; i < numWorkers; i++) {
+                    let user = worklistRecord[i].userId;
+                    let innerQuery = `UPDATE cyobDB.dbo.Tbl_Profiles SET user_reward_points = user_reward_points + ${point} WHERE userId = '${user}'`;
+                    request
+                      .query(innerQuery)
+                      .then(data => {
+                        count++;
+                        if (count == numWorkers) {
+                          console.log(
+                            "points distributed to " + count + " workers"
+                          );
+                          callback(id);
+                        }
+                      })
+                      .catch(err => console.log(err));
+                  }
+                }
+              })
+              .catch(err => console.log(err));
+          }
+        } else {
+          callback(null);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    //assign(update) the rewards point of each to equal shares of the total reward the project carries
+    //add the reward points to each of the user's total rewards in the reward table
+    //delete all record with the project id
+  },
+
+  archiveProject: function() {}
 };
 
 module.exports = Project;

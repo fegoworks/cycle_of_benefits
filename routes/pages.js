@@ -9,7 +9,7 @@ const project = new Project();
 
 //get index page
 router.get("/", (req, res, next) => {
-  console.log(req.session.userid + ": " + req.session.cookie.maxAge);
+  // console.log(req.session.userid + ": " + req.session.cookie.maxAge);
   res.render("index");
 });
 
@@ -69,27 +69,40 @@ router.get("/project:id", (req, res, next) => {
 
 router.get("/profile", (req, res) => {
   if (req.session.userid) {
-    //get userdata and render profile
-    user.getProfile(req.session.userid, userprofile => {
-      if (userprofile) {
-        res.render("profile.ejs", {
-          username: userprofile.userId ? userprofile.userId : "",
-          firstname: userprofile.first_name ? userprofile.first_name : "",
-          lastname: userprofile.last_name ? userprofile.last_name : "",
-          email: userprofile.email_address ? userprofile.email_address : "",
-          age: userprofile.date_of_birth ? userprofile.date_of_birth : "",
-          address: userprofile.home_address ? userprofile.home_address : "",
-          phone: userprofile.mobile_number ? userprofile.mobile_number : "",
-          nationalId: userprofile.nationalId ? userprofile.nationalId : "",
-          state: userprofile.state_of_origin ? userprofile.state_of_origin : ""
-        });
-        return;
-      }
-      console.log("profile route Error: Could not find user profile");
-    });
+    if (req.session.userid === "admin") {
+      res.render("control");
+    } else {
+      //get userdata and render profile
+      user.getProfile(req.session.userid, userprofile => {
+        if (userprofile) {
+          res.render("profile.ejs", {
+            username: userprofile.userId ? userprofile.userId : "",
+            firstname: userprofile.first_name ? userprofile.first_name : "",
+            lastname: userprofile.last_name ? userprofile.last_name : "",
+            email: userprofile.email_address ? userprofile.email_address : "",
+            age: userprofile.date_of_birth ? userprofile.date_of_birth : "",
+            address: userprofile.home_address ? userprofile.home_address : "",
+            phone: userprofile.mobile_number ? userprofile.mobile_number : "",
+            nationalId: userprofile.nationalId ? userprofile.nationalId : "",
+            state: userprofile.state_of_origin
+              ? userprofile.state_of_origin
+              : "",
+            points: userprofile.user_reward_points
+              ? userprofile.user_reward_points
+              : "0"
+          });
+          return;
+        }
+        console.log("profile route Error: Could not find user profile");
+      });
+    }
   } else {
     res.redirect("/login");
   }
+});
+
+router.get("/contact", (req, res) => {
+  res.render("contact");
 });
 
 router.put("/updateuser", (req, res) => {
@@ -167,6 +180,7 @@ router.post("/enlist", (req, res) => {
   }
 });
 
+/* increment current workers */
 router.put("/currentworkers", (req, res) => {
   if (req.session.userid) {
     const proj = {
@@ -190,7 +204,7 @@ router.put("/currentworkers", (req, res) => {
 });
 
 //project view post
-router.post("/projectview", (req, res, next) => {
+router.post("/projectview", (req, res) => {
   project.findProject(req.body.id, req.body.postedby, projid => {
     if (projid) {
       res.json({
@@ -203,7 +217,7 @@ router.post("/projectview", (req, res, next) => {
 });
 
 // Add Project
-router.post("/addproject", (req, res, next) => {
+router.post("/addproject", (req, res) => {
   if (req.session.userid) {
     let proj = {
       title: req.body.title,
@@ -226,7 +240,7 @@ router.post("/addproject", (req, res, next) => {
 });
 
 //login Post
-router.post("/login", (req, res, next) => {
+router.post("/login", (req, res) => {
   const { username, password } = req.body;
   if (username && password) {
     user.login(username, password, id => {
@@ -246,7 +260,7 @@ router.post("/login", (req, res, next) => {
 });
 
 //register post
-router.post("/submitregister", (req, res, next) => {
+router.post("/submitregister", (req, res) => {
   // console.log(req.body);
   let userObj = {
     username: req.body.username,
@@ -277,8 +291,43 @@ router.get("/login-check", (req, res) => {
     res.redirect("/login");
   }
 });
+
+router.put("/redeemreward", (req, res) => {
+  if (req.session.userid) {
+    let reward = {
+      used: parseInt(req.body.used, 10),
+      total: parseInt(req.body.total, 10),
+      benefit: parseInt(req.body.benefit, 10)
+    };
+    user.useReward(req.session.userid, reward, redeemed => {
+      if (redeemed) {
+        res.json({
+          message:
+            "You have successfully redeemed your reward, Check your email on instructions on how to collect"
+        });
+        return;
+      }
+      res.json({
+        errMessage: "Something went wrong with getting your reward, Try again"
+      });
+    });
+  }
+});
+
+router.put("/loadpoints", (req, res) => {
+  project.distributePoints(response => {
+    if (response) {
+      res.json({ message: "Your Reward Points have been added" });
+      return;
+    }
+    res.json({ errMessage: "Projects are yet to be completed" });
+  });
+});
+
+router.delete("/projectdone", (req, res) => {});
+
 // Get logout page
-router.get("/logout", (req, res, next) => {
+router.get("/logout", (req, res) => {
   // Check if the session is exist
   if (req.session.userid) {
     // destroy the session and redirect the user to the index page.
