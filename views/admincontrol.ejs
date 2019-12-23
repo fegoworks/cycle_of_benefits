@@ -19,6 +19,7 @@
     /> -->
     <!-- Custom Styles -->
     <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/admin.css" />
     <link rel="stylesheet" href="css/dynamic.css" />
     <link rel="stylesheet" href="css/mobile.css" />
     <!-- Google Fonts Api -->
@@ -76,15 +77,75 @@
       </div>
 
       <main class="main-content">
-        <div class="content-body">
-          <h1>ADMIN</h1>
-          <h3>Control Panel</h3>
-          <p><a href="">Show All Users</a></p>
-          <p><a href="">Show Proposed Projects</a></p>
-          <p><a href="">Add Projects to Inventory</a></p>
-          <p><a href="">Remove Projects</a></p>
-          <p><a href="">Redeemed Rewards</a></p>
-          <p><a href="">Activate</a></p>
+        <div id="admin">
+          <header>
+            <h2>Control Panel</h2>
+            <p>Put the necessary input and get results</p>
+          </header>
+          <div id="inputs">
+            <div>
+              <label for="project_id">Project Id: </label>
+              <input type="text" id="project_id" />
+            </div>
+            <div>
+              <label for="user_id">User Id: </label>
+              <input type="text" id="user_id" />
+            </div>
+          </div>
+          <div id="control">
+            <div>
+              <input
+                class="my-btn"
+                type="button"
+                id="showAllusers"
+                value="All Users"
+              />
+            </div>
+            <div>
+              <input
+                class="my-btn"
+                type="button"
+                id="showAllProjects"
+                value="All Projects"
+              />
+            </div>
+            <div>
+              <input
+                class="my-btn"
+                type="button"
+                id="archiveProject"
+                value="Archive Projects"
+              />
+            </div>
+            <div>
+              <input
+                class="my-btn"
+                type="button"
+                id="showAllRedeemedRewards"
+                value="Requests"
+              />
+            </div>
+            <div>
+              <input
+                class="my-btn"
+                type="button"
+                id="RemoveUser"
+                value="Remove User"
+              />
+            </div>
+            <div>
+              <input
+                class="my-btn"
+                type="button"
+                id="RemoveProject"
+                value="Remove Project"
+              />
+            </div>
+          </div>
+          <div class="display">
+            <h2 id="display-heading"></h2>
+            <div id="display-body"></div>
+          </div>
         </div>
       </main>
       <footer class="main-footer">
@@ -98,6 +159,7 @@
         </div>
       </footer>
     </div>
-    <script type="module" src="app.js"></script>
+    <script type="module" src="/app.js"></script>
+    <script type="module" src="/admin.js"></script>
   </body>
 </html>
