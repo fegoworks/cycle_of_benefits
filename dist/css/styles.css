@@ -163,7 +163,7 @@ hr {
   width: 100%;
   margin-bottom: 2em;
 }
-.content-heading .title {
+.title {
   width: 40%;
   font-size: 1.6em;
   display: flex;
@@ -354,8 +354,7 @@ hr {
   padding: 2% 2%;
   letter-spacing: 4px;
 }
-
-.input-block {
+.title .input-block {
   margin: 2% 0;
   width: 95%;
 }
@@ -610,6 +609,7 @@ $white: #ffffff; */
   /* top: 0;
   left: 0; */
   /* overflow: auto; */
+  height: fit-content;
   transition: all 0.5s ease-in;
 }
 .profile .profile-heading {

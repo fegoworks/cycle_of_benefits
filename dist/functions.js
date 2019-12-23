@@ -138,4 +138,48 @@ function enableSlideMenu(userIcon) {
   };
 }
 
-export { menuToggle, displayAlert, appendProfileToMobileMenu, enableSlideMenu };
+function saveCurrentData(array, formName) {
+  for (let i = 0; i < formName.elements.length - 1; i++) {
+    array.push(formName.elements[i].value); // || "disabled";
+  }
+}
+
+function clearCurrentData() {
+  initialValues = [];
+}
+
+function clearFormFields(formName) {
+  let element = formName.elements;
+  for (let i = 0; i < element.length - 1; i++) {
+    element[i].value = "";
+  }
+}
+
+function validateSignupForm(formName) {
+  let element = formName.elements;
+  //check for empty fields
+  for (let i = 0; i < element.length - 1; i++) {
+    if (element[i].value == "") {
+      return false;
+    }
+  }
+  return true;
+}
+
+async function fetchData(url, options) {
+  const rawResponse = await fetch(url, options);
+  const jsonData = await rawResponse.json();
+  return jsonData;
+}
+
+export {
+  menuToggle,
+  displayAlert,
+  appendProfileToMobileMenu,
+  enableSlideMenu,
+  saveCurrentData,
+  clearCurrentData,
+  clearFormFields,
+  validateSignupForm,
+  fetchData
+};
