@@ -11,7 +11,7 @@ User.prototype = {
     // if the userid variable is defined
     if (userid) {
       // Sql query
-      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Profiles WHERE userId = '${userid}'`;
+      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Users WHERE userId = '${userid}'`;
       let request = new dbconnect.sql.Request(dbconnect.pool);
       request
         .query(queryString)
@@ -62,8 +62,8 @@ User.prototype = {
   },
 
   createProfile: function(userobj, callback) {
+    // 1. save user and password in users table
     this.createUser(userobj, response => {
-      console.log(response + " from create Profile");
       if (response) {
         let queryString = `INSERT INTO cyobDB.dbo.Tbl_Profiles (userId, first_name, last_name, email_address) VALUES ('${userobj.username}', '${userobj.firstname}', '${userobj.lastname}', '${userobj.email}')`;
 
@@ -170,7 +170,7 @@ User.prototype = {
 
   useReward: function(userid, reward, callback) {
     if (reward) {
-      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Rewards WHERE userId = '${userid}'`;
+      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Worklist WHERE userId = '${userid}'`;
       let request = new dbconnect.sql.Request(dbconnect.pool);
       request
         .query(queryString)
@@ -178,13 +178,13 @@ User.prototype = {
           if (data) {
             let id = data.recordset[0].userId;
             //Update/Use points
-            let subqueryString = `UPDATE cyobDB.dbo.Tbl_Rewards
-          SET total_point = ${reward.total - reward.used}
+            let subqueryString = `UPDATE cyobDB.dbo.Tbl_Profiles
+          SET user_reward_points = user_reward_points - ${reward.used}
           WHERE userId = '${id}' `;
 
             request.query(subqueryString).then(data => {
-              if (data.rowsAffected === 1) {
-                callback(data.rowsAffected);
+              if (data.rowsAffected.length === 1) {
+                callback(reward.used);
                 return;
               }
               callback(null);

@@ -1,7 +1,7 @@
 import * as functions from "./functions.js";
-import * as myform from "./forms.js";
+import * as myfetch from "./fetch.js";
 
-const usersession = new myform.UserSession();
+const usersession = new myfetch.UserSession();
 
 /* Menu Button Toggle functionality */
 if (document.querySelector(".menu-btn")) {
@@ -12,12 +12,11 @@ if (document.querySelector(".menu-btn")) {
 if (document.querySelector(".signin-div")) {
   let div = document.querySelector(".signin-div");
   //fetch user session to display styles
-  fetch("/usersession")
-    .then(response => {
-      return response.json();
-    })
+  functions
+    .fetchData("/usersession")
     .then(data => {
       if (data.session) {
+        //display styles
         let userLink = document.querySelector(".signin-link");
         let iconLink = document.createElement("a");
         let userIcon = document.createElement("i");
@@ -29,6 +28,91 @@ if (document.querySelector(".signin-div")) {
 
         functions.enableSlideMenu(userIcon);
         functions.appendProfileToMobileMenu();
+
+        if (data.session == "admin") {
+          /* Admin views */
+          if (document.querySelector("#viewproject")) {
+            const form = {
+              formName: document.forms.namedItem("project-form"),
+              id: document.getElementById("view_id"),
+              type: document.getElementById("view_type"),
+              title: document.getElementById("view_title"),
+              details: document.getElementById("view_details"),
+              tools: document.getElementById("view_tools"),
+              address: document.getElementById("view_address"),
+              city: document.getElementById("view_city"),
+              status: document.getElementById("view_status"),
+              maxworkers: document.getElementById("view_no_of_workers"),
+              duration: document.getElementById("view_duration"),
+              point: document.getElementById("view_worth")
+            };
+
+            let projectForm = document.getElementById("project-form");
+            let editProject = document.getElementById("editProject");
+            let interest = document.getElementById("interest");
+
+            //   Create edit button
+            let editBtn = document.createElement("button");
+            editBtn.classList.add("my-btn", "left-btn");
+            let text = document.createTextNode("EDIT");
+            editBtn.appendChild(text);
+            editBtn.style.margin = "0 auto";
+
+            //create update button
+            let updateProject = document.createElement("input");
+            updateProject.setAttribute("value", "UPDATE PROJECT");
+            updateProject.setAttribute("id", "updateProject");
+            updateProject.classList.add("my-btn", "left-btn");
+            console.log("Welcome Admin");
+            //   Append edit button
+            editProject.appendChild(editBtn);
+
+            //switch enlist button to edit project
+            interest.replaceWith(updateProject);
+
+            let inputFields = Array.from(
+              projectForm.querySelectorAll("input[type=text]")
+            );
+            let initialValues = [];
+            functions.saveCurrentData(initialValues, form.formName);
+
+            updateProject.setAttribute("disabled", true);
+            let editToggle = false;
+            //edit click listener function
+            editBtn.onclick = function() {
+              if (!editToggle) {
+                for (let i = 0; i < inputFields.length; i++) {
+                  inputFields[i].classList.add("edit-profile");
+                  inputFields[i].removeAttribute("disabled");
+                }
+                updateProject.removeAttribute("disabled");
+                editToggle = true;
+              } else {
+                for (let i = 0; i < inputFields.length; i++) {
+                  inputFields[i].classList.remove("edit-profile");
+                  inputFields[i].setAttribute("disabled", true);
+                }
+                updateProject.setAttribute("disabled", true);
+                editToggle = false;
+              }
+            };
+
+            // let updateProject = document.getElementById("updateProject");
+            updateProject.onclick = function(e) {
+              e.preventDefault();
+              usersession.updateProject(form, response => {
+                if (response) {
+                  functions.displayAlert(response, "success");
+                  functions.clearCurrentData();
+                  functions.saveCurrentData(initialValues, form.formName);
+                  editToggle = false;
+                }
+              });
+            };
+          }
+        } else {
+          console.log("not admin");
+        }
       } else {
         // functions.displayAlert(data.errMessage, "info");
       }
@@ -77,7 +161,7 @@ if (document.getElementById("form")) {
   });
 }
 
-/* Edit Profile */
+/* Update Profile */
 if (document.querySelector(".profile")) {
   let editBtn = document.querySelector("#edit-button");
   let saveChanges = document.querySelector("#save_changes");
@@ -91,7 +175,7 @@ if (document.querySelector(".profile")) {
   ).slice(1);
   let initialValues = [];
   let editToggle = false;
-  saveCurrentData(initialValues);
+  functions.saveCurrentData(initialValues, formName);
   //Edit Profile
   editBtn.onclick = editable;
 
@@ -146,28 +230,13 @@ if (document.querySelector(".profile")) {
         functions.displayAlert("Could not update profile", "error");
       } else {
         functions.displayAlert(response, "success");
-        clearCurrentData();
-        saveCurrentData(initialValues);
+        functions.clearCurrentData();
+        functions.saveCurrentData(initialValues, formName);
         editToggle = false;
-        editable();
+        // editable();
       }
     });
-    // for (let i = 0; i < formName.elements.length - 1; i++) {
-    //   formName.elements[i].setAttribute = "readonly";
-    //   /* formName.elements[i].textContent =  */
-    // }
   });
-
-  /* Functions */
-  function saveCurrentData(array) {
-    for (let i = 0; i < formName.elements.length - 1; i++) {
-      array.push(formName.elements[i].value); // || "disabled";
-    }
-  }
-
-  function clearCurrentData() {
-    initialValues = [];
-  }
 }
 
 /*  Profile page stack functionality*/
@@ -285,20 +354,18 @@ if (document.querySelector(".projects")) {
     // document.body.appendChild("pill");
   }
   // fetch data
-  fetch("/allprojects", {
-    method: "Get",
-    headers: {
-      Accept: [
-        "application/x-www-form-urlencoded",
-        "application/json",
-        "text/plain",
-        "*/*"
-      ],
-      "Content-Type": "application/json"
-    }
-  })
-    .then(response => {
-      return response.json();
+  functions
+    .fetchData("/allprojects", {
+      method: "Get",
+      headers: {
+        Accept: [
+          "application/x-www-form-urlencoded",
+          "application/json",
+          "text/plain",
+          "*/*"
+        ],
+        "Content-Type": "application/json"
+      }
     })
     .then(data => {
       if (data) {
@@ -319,11 +386,11 @@ if (document.querySelector(".projects")) {
     let projectRow = document.querySelectorAll(".project_");
     let projectBtn = document.querySelectorAll(".project-button > input");
     let projectId = document.querySelectorAll(".project-id");
-    let postedBy = document.querySelectorAll(".project-posted");
+    // let postedBy = document.querySelectorAll(".project-posted");
     //set static url
     for (let i = 0; i < projectRow.length; i++) {
       projectBtn[i].onclick = function() {
-        usersession.viewProject(projectId[i], postedBy[i], data => {
+        usersession.viewProject(projectId[i], data => {
           if (data) {
             window.location.assign(data);
           }
@@ -333,14 +400,17 @@ if (document.querySelector(".projects")) {
   }
 }
 
-/* Post project */
+/* Add project */
 if (document.querySelector("#post_project")) {
   const form = {
     projectform: document.getElementById("post_project"),
+    projectType: document.getElementById("proj_type"),
     projectTitle: document.getElementById("proj_title"),
+    projectTools: document.getElementById("proj_tools"),
     projectDetails: document.getElementById("proj_details"),
     projectAddress: document.getElementById("proj_address"),
     projectCity: document.getElementById("proj_city"),
+    projectDuration: document.getElementById("proj_duration"),
     projectWorkers: document.getElementById("proj_max_workers"),
     formName: document.forms.namedItem("post_project")
   };
@@ -351,7 +421,7 @@ if (document.querySelector("#post_project")) {
   });
 }
 
-/* Update Project */
+/* Update Project current workers */
 if (document.querySelector("#project")) {
   // let submitInterest = document.getElementById("interest");
   const form = {
@@ -423,4 +493,7 @@ if (document.querySelector(".rewards")) {
       }
     });
   }
+}
+
+if (document.getElementById("updateProject")) {
 }

@@ -67,16 +67,27 @@
         <div class="content-body">
           <div id="viewproject">
             <div id="project-image">
-              <img src="" alt="Project Photo" />
+              <img src="/<%=image%>" alt="Project Photo" form="project-form" />
               <div class="view-block">
-                <label>Project ID: cyob<span form="project-form" id="view_id" type="text" name="id"
+                <label>Project ID: cyob<span form="project-form" id="view_id" name="id"
                   ><%= id%></span></label>
               </div>
             </div>
             <div id="project">
-              <form method="post" action="/enlist" id="project-form">
+              <form method="post" action="/enlist" name="project-form" id="project-form">
                 <div class="view-block">
-                  <label for="title">Title/Type:</label>
+                  <label for="type">Type: </label>
+                  <div>
+                    <input
+                      id="view_type"
+                      type="text"
+                      name="type"
+                      value="<%= type%>"
+                      disabled
+                    />
+                  </div>
+                <div class="view-block">
+                  <label for="title">Title: </label>
                   <div>
                     <input
                       id="view_title"
@@ -87,7 +98,7 @@
                     />
                   </div>
                 <div class="view-block">
-                  <label for="details">Details:</label>
+                  <label for="details">Details: </label>
                   <div>
                     <input
                       id="view_details"
@@ -97,21 +108,44 @@
                       disabled
                     />
                   </div>
+                  <div class="view-block">
+                    <label for="duration">Estimated Duration: </label>
+                    <div>
+                      <input
+                        id="view_duration"
+                        type="text"
+                        name="duration"
+                        value="<%= duration%>"
+                        disabled
+                      />
+                    </div>
                 </div>
                 <div class="view-block">
-                  <label for="location">Location:</label>
+                  <label for="address">Address: </label>
                   <div>
                     <input
-                      id="view_location"
+                      id="view_address"
                       type="text"
-                      name="location"
-                      value="<%= location%>"
+                      name="address"
+                      value="<%= address%>"
                       disabled
                     />
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="status">Status:</label>
+                  <label for="city">City: </label>
+                  <div>
+                    <input
+                      id="view_city"
+                      type="text"
+                      name="city"
+                      value="<%= city%>"
+                      disabled
+                    />
+                  </div>
+                </div>
+                <div class="view-block">
+                  <label for="status">Status: </label>
                   <div>
                     <input
                     type="text"
@@ -123,7 +157,7 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="tools">Tools Required:</label>
+                  <label for="tools">Tools Required: </label>
                   <div>
                     <input
                       id="view_tools"
@@ -135,7 +169,7 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="current_workers">Current No. of Workers:</label>
+                  <label for="current_workers">Current No. of Workers: </label>
                   <div>
                     <input
                       id="view_current_workers"
@@ -147,7 +181,7 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="no_of_workers">Maximum Workers:</label>
+                  <label for="no_of_workers">Maximum Workers: </label>
                   <div>
                     <input
                       id="view_no_of_workers"
@@ -159,7 +193,7 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="worth">Total Reward Points:</label>
+                  <label for="worth">Total Reward Points: </label>
                   <div>
                     <input
                       id="view_worth"
@@ -171,7 +205,7 @@
                   </div>
                 </div>
                 <div class="view-block">
-                  <label for="posted_by">Posted By:</label>
+                  <label for="posted_by">Posted By: </label>
                   <div>
                     <input
                       id="view_posted_by"
@@ -191,6 +225,7 @@
                   />
                   <a class="right-btn" href="./projects">Back</a>
                 </div>
+                <div id="editProject"></div>
                 <hr />
               </form>
             </div>

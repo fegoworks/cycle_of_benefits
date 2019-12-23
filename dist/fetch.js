@@ -4,7 +4,7 @@ function UserSession() {}
 
 /*Fetch Methods*/
 UserSession.prototype = {
-  Path: {
+  /* Path: {
     path: null,
     set path_(url) {
       this.path = url;
@@ -12,7 +12,7 @@ UserSession.prototype = {
     get path_() {
       return this.path;
     }
-  },
+  }, */
 
   loginUser: function(form, callback) {
     let url = form.loginForm.getAttribute("action")
@@ -41,7 +41,8 @@ UserSession.prototype = {
         body: JSON.stringify(user)
       };
 
-      fetchData(url, fetchOptions)
+      functions
+        .fetchData(url, fetchOptions)
         .then(data => {
           if (data.errMessage) {
             console.log("Error: " + data.errMessage);
@@ -50,11 +51,8 @@ UserSession.prototype = {
               "error"
             );
           } else {
-            console.log(data.redirect_path);
-            // console.log(data.userdata);
-            clearFormFields(form.formName);
+            functions.clearFormFields(form.formName);
             callback(data.redirect_path);
-            this.Path.path_ = data.redirect_path;
           }
           callback(null);
         })
@@ -65,7 +63,7 @@ UserSession.prototype = {
   signupUser: function(form) {
     if (form) {
       if (
-        !validateSignupForm(form.formName) ||
+        !functions.validateSignupForm(form.formName) ||
         form.password.value !== form.password_match.value
       ) {
         functions.displayAlert(
@@ -98,7 +96,8 @@ UserSession.prototype = {
           },
           body: JSON.stringify(userobj)
         };
-        fetchData(url, fetchOptions)
+        functions
+          .fetchData(url, fetchOptions)
           .then(data => {
             // console.log(data);
             if (!data.redirect_path) {
@@ -111,7 +110,7 @@ UserSession.prototype = {
               form.password_match.value = "";
             } else {
               functions.displayAlert(data.status, "success");
-              clearFormFields(form.formName);
+              functions.clearFormFields(form.formName);
               //get data and send to
               if (confirm("Sign in?")) {
                 window.location.assign(data.redirect_path);
@@ -130,16 +129,19 @@ UserSession.prototype = {
 
   addProject: function(form) {
     // validation
-    if (!validateSignupForm(form.formName)) {
+    if (!functions.validateSignupForm(form.formName)) {
       functions.displayAlert("Fill all required fields", "error");
       return false;
     } else {
       let url = "/addproject";
       const newProject = {
+        type: form.projectType.value,
         title: form.projectTitle.value,
+        tools: form.projectTools.value,
         details: form.projectDetails.value,
         address: form.projectAddress.value,
         city: form.projectCity.value,
+        duration: form.projectDuration.value,
         maxworkers: form.projectWorkers.value
       };
       // console.log(newProject);
@@ -157,14 +159,64 @@ UserSession.prototype = {
         body: JSON.stringify(newProject)
       };
 
-      fetchData(url, options)
+      functions
+        .fetchData(url, options)
         .then(jsonData => {
           if (jsonData.success) {
             functions.displayAlert(jsonData.success, "success");
-            clearFormFields(form.formName);
+            functions.clearFormFields(form.formName);
           } else {
             functions.displayAlert(jsonData.message, "error");
           }
+        })
+        .catch(error => {
+          console.log("add project Fetch error: " + error);
+        });
+    }
+  },
+
+  updateProject: function(form, callback) {
+    // validation
+    if (!functions.validateSignupForm(form.formName)) {
+      functions.displayAlert("Fill all required fields", "error");
+      return false;
+    } else {
+      let url = "/updateproject";
+      const project = {
+        id: form.id.textContent,
+        type: form.type.value,
+        title: form.title.value,
+        details: form.details.value,
+        tools: form.tools.value,
+        address: form.address.value,
+        city: form.city.value,
+        status: form.status.value,
+        maxworkers: form.maxworkers.value,
+        duration: form.duration.value,
+        point: form.point.value
+      };
+      const options = {
+        method: "PUT",
+        headers: {
+          Accept: [
+            "application/x-www-form-urlencoded",
+            "application/json",
+            "text/plain",
+            "*/*"
+          ],
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(project)
+      };
+
+      functions
+        .fetchData(url, options)
+        .then(data => {
+          if (data.message) {
+            callback(data.message);
+            return;
+          }
+          functions.displayAlert(data.errMessage, "error");
         })
         .catch(error => {
           console.log("post project Fetch error: " + error);
@@ -172,11 +224,11 @@ UserSession.prototype = {
     }
   },
 
-  viewProject: function(projectId, postedBy, callback) {
+  viewProject: function(projectId, callback) {
     //fetch project data
     const project = {
-      id: projectId.textContent,
-      postedby: postedBy.textContent
+      id: projectId.textContent /* ,
+      postedby: postedBy.textContent */
     };
     const fetchOptions = {
       method: "POST",
@@ -193,7 +245,8 @@ UserSession.prototype = {
     };
 
     let url = "/projectview";
-    fetchData(url, fetchOptions)
+    functions
+      .fetchData(url, fetchOptions)
       .then(data => {
         if (!data.redirect_path) {
           functions.displayAlert(data.errMessage, "info");
@@ -234,7 +287,8 @@ UserSession.prototype = {
       body: JSON.stringify(profile)
     };
 
-    fetchData(url, options)
+    functions
+      .fetchData(url, options)
       .then(data => {
         if (data.message) {
           console.log(data.message);
@@ -273,7 +327,8 @@ UserSession.prototype = {
     };
 
     let url = "/enlist";
-    fetchData(url, fetchOptions)
+    functions
+      .fetchData(url, fetchOptions)
       .then(data => {
         if (!data.message) {
           functions.displayAlert(data.errMessage, "error");
@@ -306,7 +361,8 @@ UserSession.prototype = {
     };
 
     let url = "/currentworkers";
-    fetchData(url, fetchOptions)
+    functions
+      .fetchData(url, fetchOptions)
       .then(data => {
         if (data.errMessage) {
           functions.displayAlert(data.errMessage, "error");
@@ -341,13 +397,16 @@ UserSession.prototype = {
     };
 
     let url = "/redeemreward";
-    fetchData(url, fetchOptions)
+    functions
+      .fetchData(url, fetchOptions)
       .then(data => {
         if (data.errMessage) {
           functions.displayAlert(data.errMessage, "error");
           callback(null);
         } else {
           callback(data.message);
+          // reset used value to empty
+          reward.used = "";
         }
       })
       .catch(err => {
@@ -357,18 +416,19 @@ UserSession.prototype = {
 
   loadPoints: function(callback) {
     let url = "/loadpoints";
-    fetchData(url, {
-      method: "PUT",
-      headers: {
-        Accept: [
-          "application/x-www-form-urlencoded",
-          "application/json",
-          "text/plain",
-          "*/*"
-        ],
-        "Content-Type": "application/json"
-      }
-    })
+    functions
+      .fetchData(url, {
+        method: "PUT",
+        headers: {
+          Accept: [
+            "application/x-www-form-urlencoded",
+            "application/json",
+            "text/plain",
+            "*/*"
+          ],
+          "Content-Type": "application/json"
+        }
+      })
       .then(data => {
         if (data) {
           console.log(data);
@@ -380,29 +440,5 @@ UserSession.prototype = {
       });
   }
 };
-
-function clearFormFields(formName) {
-  let element = formName.elements;
-  for (let i = 0; i < element.length - 1; i++) {
-    element[i].value = "";
-  }
-}
-
-function validateSignupForm(formName) {
-  let element = formName.elements;
-  //check for empty fields
-  for (let i = 0; i < element.length - 1; i++) {
-    if (element[i].value == "") {
-      return false;
-    }
-  }
-  return true;
-}
-
-async function fetchData(url, options) {
-  const rawResponse = await fetch(url, options);
-  const jsonData = await rawResponse.json();
-  return jsonData;
-}
 
 export { UserSession };

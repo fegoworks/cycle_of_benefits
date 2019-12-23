@@ -3,14 +3,14 @@ const express = require("express");
 const app = express();
 
 const bodyParser = require("body-parser");
-const pageRouter = require("./routes/pages");
-const sql = require("mssql");
+const mainRouter = require("./routes/main_routes");
+const adminRouter = require("./routes/admin_routes");
 const path = require("path");
 const session = require("express-session");
 const HALF_HOUR = 1000 * 60 * 30; //30 minutes
 
 const {
-  PORT = 5000,
+  PORT = 3000,
   NODE_ENV = "development",
   SESS_SECRET = "cyob//!Icardi?!",
   SESS_LIFETIME = HALF_HOUR
@@ -42,7 +42,7 @@ app.use(
 );
 
 //user routes
-app.use("/", pageRouter);
+app.use("/", mainRouter);
 
 // Errors : Page not found
 app.use((req, res, next) => {

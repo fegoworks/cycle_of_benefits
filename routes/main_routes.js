@@ -2,10 +2,15 @@ const express = require("express");
 const path = require("path");
 const User = require("../persistence/user");
 const Project = require("../persistence/project");
+const Control = require("../persistence/control");
+const multer = require("multer");
+const upload = multer({ dest: "/dist/assets/projects" });
+
 const router = express.Router();
 
 const user = new User();
 const project = new Project();
+const control = new Control();
 
 //get index page
 router.get("/", (req, res, next) => {
@@ -47,18 +52,19 @@ router.get("/project:id", (req, res, next) => {
     if (data) {
       res.render("viewproject", {
         id: data.projId ? data.projId : "",
+        type: data.proj_type ? data.proj_type : "other",
         title: data.proj_title ? data.proj_title : "",
         details: data.proj_details ? data.proj_details : "",
-        location:
-          data.proj_address + ", " + data.proj_city
-            ? data.proj_address + ", " + data.proj_city
-            : "",
+        address: data.proj_address ? data.proj_address : "",
+        city: data.proj_city ? data.proj_city : "",
         status: data.proj_status ? data.proj_status : "",
         worth: data.reward_points ? data.reward_points : 0,
         tools: data.proj_tools ? data.proj_tools : "",
         current: data.current_workers ? data.current_workers : 0,
         maxworkers: data.max_no_workers ? data.max_no_workers : 1,
-        postedby: data.posted_by ? data.posted_by : ""
+        postedby: data.posted_by ? data.posted_by : "",
+        duration: data.estimated_duration ? data.estimated_duration : "unknown",
+        image: data.proj_photo ? data.proj_photo : ""
       });
       return;
     }
@@ -70,7 +76,7 @@ router.get("/project:id", (req, res, next) => {
 router.get("/profile", (req, res) => {
   if (req.session.userid) {
     if (req.session.userid === "admin") {
-      res.render("control");
+      res.render("admincontrol");
     } else {
       //get userdata and render profile
       user.getProfile(req.session.userid, userprofile => {
@@ -152,25 +158,29 @@ router.post("/enlist", (req, res) => {
     project.getProject(proj.projid, projrecord => {
       if (projrecord) {
         //check worklist
-        project.checkWorklist(projrecord.projId, proj.userid, noduplicate => {
-          if (noduplicate) {
-            project.enlistWorker(projrecord, proj.userid, rows => {
-              if (rows) {
-                //if user is successfully added to list of workers
-                res.json({ message: "You have been enlisted successfully" });
-                return;
-              }
-              res.json({
-                errMessage: "Sorry, could not insert into worklist"
+        project.checkWorklistForDuplicates(
+          projrecord.projId,
+          proj.userid,
+          noduplicate => {
+            if (noduplicate) {
+              project.enlistWorker(projrecord, proj.userid, rows => {
+                if (rows) {
+                  //if user is successfully added to list of workers
+                  res.json({ message: "You have been enlisted successfully" });
+                  return;
+                }
+                res.json({
+                  errMessage: "Sorry, could not insert into worklist"
+                });
               });
-            });
-          } else {
-            res.json({
-              errMessage:
-                "You have already been listed as a worker for this project!"
-            });
+            } else {
+              res.json({
+                errMessage:
+                  "You have already been listed as a worker for this project!"
+              });
+            }
           }
-        });
+        );
       } else {
         res.json({ errMessage: "Project record not found" });
       }
@@ -205,7 +215,7 @@ router.put("/currentworkers", (req, res) => {
 
 //project view post
 router.post("/projectview", (req, res) => {
-  project.findProject(req.body.id, req.body.postedby, projid => {
+  project.findProject(req.body.id, projid => {
     if (projid) {
       res.json({
         redirect_path: "/project" + projid
@@ -217,14 +227,21 @@ router.post("/projectview", (req, res) => {
 });
 
 // Add Project
-router.post("/addproject", (req, res) => {
+router.post("/addproject", upload.single("image"), (req, res, next) => {
+  let imageurl = path.join(req.file.path, req.file.originalname).toLowerCase();
+  // console.log(imageurl);
+  let period = req.body.duration;
   if (req.session.userid) {
     let proj = {
+      type: req.body.type,
       title: req.body.title,
+      tools: req.body.tools,
       details: req.body.details,
       address: req.body.address,
       city: req.body.city,
+      duration: period.toString(),
       maxworkers: parseInt(req.body.maxworkers, 10),
+      image: imageurl,
       postedby: req.session.userid
     };
     project.addProject(proj, projectdata => {
@@ -297,15 +314,24 @@ router.put("/redeemreward", (req, res) => {
     let reward = {
       used: parseInt(req.body.used, 10),
       total: parseInt(req.body.total, 10),
-      benefit: parseInt(req.body.benefit, 10)
+      benefit: req.body.benefit
     };
-    user.useReward(req.session.userid, reward, redeemed => {
-      if (redeemed) {
-        res.json({
-          message:
-            "You have successfully redeemed your reward, Check your email on instructions on how to collect"
+    user.useReward(req.session.userid, reward, rewardUsed => {
+      if (rewardUsed) {
+        //1.on successful, upload the request to database for admin to handle
+        control.uploadRequest(reward, uploaded => {
+          if (uploaded) {
+            res.json({
+              message:
+                "You have successfully redeemed " +
+                redeemed +
+                " points in " +
+                reward.benefit +
+                ".\n Check your email on instructions on how to collect"
+            });
+            return;
+          }
         });
-        return;
       }
       res.json({
         errMessage: "Something went wrong with getting your reward, Try again"
@@ -324,7 +350,9 @@ router.put("/loadpoints", (req, res) => {
   });
 });
 
-router.delete("/projectdone", (req, res) => {});
+router.delete("/projectdone", (req, res) => {
+  control.archiveProject(projid);
+});
 
 // Get logout page
 router.get("/logout", (req, res) => {
@@ -336,5 +364,121 @@ router.get("/logout", (req, res) => {
     });
   }
 });
+/**************************************************/
+/* Admin Routes */
+/**************************************************/
+
+/* showAllusers */
+router.get("/showusers", (req, res) => {});
+
+/* updateProject */
+router.put("/updateproject", (req, res) => {
+  const proj = {
+    id: parseInt(req.body.id, 10),
+    type: req.body.type,
+    title: req.body.title,
+    details: req.body.details,
+    tools: req.body.tools,
+    address: req.body.address,
+    city: req.body.city,
+    duration: req.body.duration,
+    point: parseInt(req.body.point, 10),
+    maxworkers: parseInt(req.body.maxworkers, 10)
+  };
+  project.updateProject(proj, updated => {
+    if (updated) {
+      res.json({ message: proj.id + " has been successfully updated" });
+      return;
+    }
+    res.json({ errMessage: "Could not update project" });
+  });
+});
+
+/* archiveProject */
+router.delete("/archiveproject", (req, res) => {
+  if (req.session.userid) {
+    control.archiveProject(req.body.projid, archived => {
+      if (archived) {
+        res.json({ message: "Project archived" });
+        return;
+      }
+      res.json({
+        errMessage: "Project was not archived"
+      });
+    });
+  }
+});
+
+/* showAllRedeemedRewards */
+router.get("/showrewards", (req, res) => {
+  control.getAllRewardRequests(data => {
+    if (data) {
+      res.json(data.recordset);
+      return;
+    }
+    res.json({
+      errMessage: "could not display rewards table"
+    });
+  });
+});
+
+/* RemoveUser */
+router.delete("/removeuser", (req, res) => {
+  user.find(req.body.userid, id => {
+    if (id) {
+      control.removeUser(req.body.userid, deleted => {
+        if (deleted) {
+          res.json({ message: "User Deleted" });
+          return;
+        }
+        res.json({
+          errMessage: "User was not deleted"
+        });
+      });
+    } else {
+      res.json({
+        errMessage: "This user does not exist"
+      });
+    }
+  });
+});
+
+/* RemoveProject */
+router.delete("/removeproject", (req, res) => {
+  project.findProject(req.body.projid, id => {
+    if (id) {
+      control.removeProject(req.body.projid, removed => {
+        if (removed) {
+          res.json({ message: "Project removed" });
+          return;
+        }
+        res.json({
+          errMessage: "Error with removing project"
+        });
+      });
+    } else {
+      res.json({
+        errMessage: "This project does not exist"
+      });
+    }
+  });
+});
+
+/* Add project point */
+/* router.put("/addpoint", (req, res) => {
+  const project = {
+    point: req.body.point,
+    duration: req.body.duration
+  };
+  control.addProjectPoint(project, added => {
+    if (added) {
+      res.json({ message: "Points and duration have been added to project" });
+      return;
+    }
+    res.json({
+      errMessage: "Points/Project Duration were not added to project"
+    });
+  });
+}); */
 
 module.exports = router;

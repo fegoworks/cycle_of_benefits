@@ -67,9 +67,6 @@
       </div>
       <main class="main-content">
         <div class="content-heading">
-          <div class="title">
-            <h3>Hi <span id="fullname"><%= firstname%></span></h3>
-          </div>
         </div>
         <div class="boxes">
           <div class="leftbox">
@@ -103,7 +100,7 @@
                   <i class="fas fa-edit fa-2x"></i>
                 </button>
               </div>
-              <form method="put" action="/updateuser" id="profile-form">
+              <form method="put" enctype="multipart/form-data" action="/updateuser" id="profile-form">
                 <div class="input-block">
                   <label for="username">Username: </label>
                   <div>
@@ -231,16 +228,16 @@
             </div>
             <div class="postproject noshow">
               <h1>Post a new Project</h1>
-              <form method="post" action="/addproject" id="post_project">
+              <form method="post" enctype="multipart/form-data" action="/addproject" id="post_project">
                 <div class="input-block">
                   <label for="type">Project Type: </label>
-                  <input list="project-types" name="type" />
-                  <datalist id="project-types">
-                    <option value="Refuse Dump Site"></option>
-                    <option value="Clogged Gutter"></option>
-                    <option value="Market Cleaning"></option>
-                    <option value="Other"></option>
-                  </datalist>
+                  <select id="proj_type" name="type">
+                    <option value="Refuse Dump Site">Refuse Dump Site</option>
+                    <option value="Clogged Gutter">Clogged Gutter</option>
+                    <option value="Market Cleaning">Market Cleaning</option>
+                    <option value="Grass Cutting">Grass Cutting</option>
+                    <option value="Other">Other</option>
+                  </select>
                 </div>
                 <div class="input-block">
                   <label for="title">Title:</label>
@@ -259,6 +256,12 @@
                   </div>
                 </div>
                 <div class="input-block">
+                  <label for="tools">Required Tools:</label>
+                  <div>
+                    <input id="proj_tools" type="text" name="tools" />
+                  </div>
+                </div>
+                <div class="input-block">
                   <label for="image">Upload Picture file:</label>
                   <div>
                     <input type="file" id="proj_image" name="image" />
@@ -274,6 +277,16 @@
                   <label for="city">City:</label>
                   <div>
                     <input id="proj_city" type="text" name="city" />
+                  </div>
+                </div>
+                <div class="input-block">
+                  <label for="duration">Estimated Duration of Project: </label>
+                  <div>
+                    <input
+                      id="proj_duration"
+                      type="text"
+                      name="duration"
+                    />
                   </div>
                 </div>
                 <div class="input-block">
