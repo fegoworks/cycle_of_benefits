@@ -1,28 +1,9 @@
 const dbconnect = require("./connection");
-const bcrypt = require("bcryptjs");
 
 //Create a User Interface
 function Control() {}
 
 Control.prototype = {
-  /* user action */
-  uploadRequest: function(rewardObj, callback) {
-    let request = new dbconnect.sql.Request(dbconnect.pool);
-    let queryString = `INSERT INTO cyobDB.dbo.Tbl_RewardsRequest
-                      VALUES ('${rewardObj.userid}', ${rewardObj.projid},
-                      ${rewardObj.used}, '${rewardObj.benefit}')`;
-    request
-      .query(queryString)
-      .then(data => {
-        if (data.rowsAffected.length == 1) {
-          callback(true);
-          return;
-        }
-        callback(null);
-      })
-      .catch(err => console.log(err));
-  },
-
   archiveProject: function(projid, callback) {
     if (projid) {
       let request = new dbconnect.sql.Request(dbconnect.pool);

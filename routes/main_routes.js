@@ -4,10 +4,32 @@ const User = require("../persistence/user");
 const Project = require("../persistence/project");
 const Control = require("../persistence/control");
 const multer = require("multer");
-const upload = multer({ dest: "/dist/assets/projects" });
+// const upload = multer({ dest: "/assets/projects/images" });
+
+//using the diskStorage option instead of dest to have full control uploaded images
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "dist/assets/projects");
+  },
+  filename: function(req, file, cb) {
+    // the null as first argument means no error
+    cb(null, Date.now() + "-" + file.originalname);
+  }
+});
+
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 3000000 //3mb max
+  },
+  fileFilter: function(req, file, cb) {
+    checkFileType(file, cb);
+  }
+});
 
 const router = express.Router();
 
+/*Database queries Constructors/Objects */
 const user = new User();
 const project = new Project();
 const control = new Control();
@@ -38,7 +60,7 @@ router.get("/register", (req, res) => {
   res.render("register");
 });
 
-router.get("/login", (req, res, next) => {
+router.get("/login", (req, res) => {
   if (!req.session.userid) {
     res.render("login");
     return;
@@ -48,8 +70,16 @@ router.get("/login", (req, res, next) => {
 
 router.get("/project:id", (req, res, next) => {
   const proj_id = req.params.id;
+
   project.getProject(proj_id, data => {
     if (data) {
+      // format photo string
+      // if(data.proj_photo){
+      //   let photoUrl = data.proj_photo
+      //   .split("\\")
+      //   .splice(1) /*remove the 'dist' from path*/
+      //   .join("/");
+      // }
       res.render("viewproject", {
         id: data.projId ? data.projId : "",
         type: data.proj_type ? data.proj_type : "other",
@@ -64,7 +94,12 @@ router.get("/project:id", (req, res, next) => {
         maxworkers: data.max_no_workers ? data.max_no_workers : 1,
         postedby: data.posted_by ? data.posted_by : "",
         duration: data.estimated_duration ? data.estimated_duration : "unknown",
-        image: data.proj_photo ? data.proj_photo : ""
+        image: data.proj_photo
+          ? data.proj_photo
+              .split("\\")
+              .splice(1) /*remove the 'dist' from path*/
+              .join("/")
+          : ""
       });
       return;
     }
@@ -150,6 +185,7 @@ router.get("/allprojects", (req, res) => {
 /* Add user and project to worklist */
 router.post("/enlist", (req, res) => {
   if (req.session.userid) {
+    console.log("fetch received");
     const proj = {
       userid: req.session.userid,
       projid: req.body.projid
@@ -157,30 +193,19 @@ router.post("/enlist", (req, res) => {
     //getProject
     project.getProject(proj.projid, projrecord => {
       if (projrecord) {
-        //check worklist
-        project.checkWorklistForDuplicates(
-          projrecord.projId,
-          proj.userid,
-          noduplicate => {
-            if (noduplicate) {
-              project.enlistWorker(projrecord, proj.userid, rows => {
-                if (rows) {
-                  //if user is successfully added to list of workers
-                  res.json({ message: "You have been enlisted successfully" });
-                  return;
-                }
-                res.json({
-                  errMessage: "Sorry, could not insert into worklist"
-                });
-              });
-            } else {
-              res.json({
-                errMessage:
-                  "You have already been listed as a worker for this project!"
-              });
-            }
+        console.log("project found");
+        project.enlistWorker(projrecord, proj.userid, rows => {
+          if (rows) {
+            console.log("enlist done");
+            //if user is successfully added to list of workers
+            res.json({ message: "You have been enlisted successfully" });
+          } else {
+            res.json({
+              errMessage:
+                "You have already been listed as a worker for this project!"
+            });
           }
-        );
+        });
       } else {
         res.json({ errMessage: "Project record not found" });
       }
@@ -228,10 +253,18 @@ router.post("/projectview", (req, res) => {
 
 // Add Project
 router.post("/addproject", upload.single("image"), (req, res, next) => {
-  let imageurl = path.join(req.file.path, req.file.originalname).toLowerCase();
-  // console.log(imageurl);
-  let period = req.body.duration;
+  console.log("maxworkers: " + req.body.max);
+  if (!req.file) {
+    console.log("No file uploaded");
+    return;
+  }
+  const file = req.file;
+  let imageurl = file.path.toLowerCase();
+  console.log(file);
   if (req.session.userid) {
+    // Everything went fine.
+    // let imageurl = file.path;
+    console.log(file.filename);
     let proj = {
       type: req.body.type,
       title: req.body.title,
@@ -239,16 +272,17 @@ router.post("/addproject", upload.single("image"), (req, res, next) => {
       details: req.body.details,
       address: req.body.address,
       city: req.body.city,
-      duration: period.toString(),
-      maxworkers: parseInt(req.body.maxworkers, 10),
+      duration: req.body.duration,
+      maxworkers: parseInt(req.body.max, 10),
       image: imageurl,
       postedby: req.session.userid
     };
+    //add to database
     project.addProject(proj, projectdata => {
       if (projectdata) {
-        res.json({ success: "Project has been Submitted!" });
+        res.json({ message: "Project has been Submitted!" });
       } else {
-        res.json({ message: "Could not add project" });
+        res.json({ errMessage: "Could not add project" });
       }
     });
   } else {
@@ -313,29 +347,24 @@ router.put("/redeemreward", (req, res) => {
   if (req.session.userid) {
     let reward = {
       used: parseInt(req.body.used, 10),
-      total: parseInt(req.body.total, 10),
+      // total: parseInt(req.body.total, 10),
       benefit: req.body.benefit
     };
-    user.useReward(req.session.userid, reward, rewardUsed => {
-      if (rewardUsed) {
-        //1.on successful, upload the request to database for admin to handle
-        control.uploadRequest(reward, uploaded => {
-          if (uploaded) {
-            res.json({
-              message:
-                "You have successfully redeemed " +
-                redeemed +
-                " points in " +
-                reward.benefit +
-                ".\n Check your email on instructions on how to collect"
-            });
-            return;
-          }
+    user.useReward(req.session.userid, reward, rewardused => {
+      if (rewardused) {
+        res.json({
+          message:
+            "You have successfully redeemed " +
+            reward.used +
+            " points in " +
+            reward.benefit +
+            " benefits .\n Check your email on instructions on how to collect"
+        });
+      } else {
+        res.json({
+          errMessage: "Something went wrong with getting your reward, Try again"
         });
       }
-      res.json({
-        errMessage: "Something went wrong with getting your reward, Try again"
-      });
     });
   }
 });
@@ -348,10 +377,6 @@ router.put("/loadpoints", (req, res) => {
     }
     res.json({ errMessage: "Projects are yet to be completed" });
   });
-});
-
-router.delete("/projectdone", (req, res) => {
-  control.archiveProject(projid);
 });
 
 // Get logout page
@@ -464,6 +489,23 @@ router.delete("/removeproject", (req, res) => {
   });
 });
 
+function checkFileType(file, cb) {
+  // Define the allowed extension
+  let fileExts = ["png", "jpg", "jpeg", "gif"];
+
+  // Check allowed extensions
+  let isAllowedExt = fileExts.includes(
+    file.originalname.split(".")[1].toLowerCase()
+  );
+  // Mime type must be an image
+  let isAllowedMimeType = file.mimetype.startsWith("image/");
+
+  if (isAllowedExt && isAllowedMimeType) {
+    return cb(null, true); // no errors
+  } else {
+    cb("Error: File type not allowed!");
+  }
+}
 /* Add project point */
 /* router.put("/addpoint", (req, res) => {
   const project = {

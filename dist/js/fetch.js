@@ -144,29 +144,22 @@ UserSession.prototype = {
         duration: form.projectDuration.value,
         maxworkers: form.projectWorkers.value
       };
-      // console.log(newProject);
+      const formdata = new FormData(form.projectform);
+      formdata.append("image", FileList[0]);
+      formdata.append("max", newProject.maxworkers);
       const options = {
         method: "POST",
-        headers: {
-          Accept: [
-            "application/x-www-form-urlencoded",
-            "application/json",
-            "text/plain",
-            "*/*"
-          ],
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(newProject)
+        body: formdata
       };
 
       functions
         .fetchData(url, options)
-        .then(jsonData => {
-          if (jsonData.success) {
-            functions.displayAlert(jsonData.success, "success");
+        .then(data => {
+          if (data.message) {
+            functions.displayAlert(data.message, "success");
             functions.clearFormFields(form.formName);
           } else {
-            functions.displayAlert(jsonData.message, "error");
+            functions.displayAlert(data.errMessage, "error");
           }
         })
         .catch(error => {
@@ -395,7 +388,6 @@ UserSession.prototype = {
       },
       body: JSON.stringify(reward)
     };
-
     let url = "/redeemreward";
     functions
       .fetchData(url, fetchOptions)
@@ -406,7 +398,6 @@ UserSession.prototype = {
         } else {
           callback(data.message);
           // reset used value to empty
-          reward.used = "";
         }
       })
       .catch(err => {
@@ -431,7 +422,6 @@ UserSession.prototype = {
       })
       .then(data => {
         if (data) {
-          console.log(data);
           callback(data);
         }
       })

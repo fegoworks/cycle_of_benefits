@@ -1,8 +1,12 @@
-import * as functions from "./functions.js";
-import * as myfetch from "./fetch.js";
+import * as functions from "./js/functions.js";
+import * as myfetch from "./js/fetch.js";
 
 const usersession = new myfetch.UserSession();
 
+if (document.querySelector("#project-image img")) {
+  let img = document.querySelector("#project-image img").getAttribute("src");
+  console.log(img);
+}
 /* Menu Button Toggle functionality */
 if (document.querySelector(".menu-btn")) {
   functions.menuToggle();
@@ -207,7 +211,7 @@ if (document.querySelector(".profile")) {
       }
       saveChanges.setAttribute("disabled", true);
       editToggle = false;
-      clearCurrentData();
+      functions.clearCurrentData();
     }
   };
 
@@ -350,6 +354,10 @@ if (document.querySelector(".projects")) {
     project_.appendChild(proj_posted);
     project_.appendChild(proj_button);
 
+    /* Visual design for completed projects */
+    if (recordset.proj_status == "Completed") {
+      project_.style.backgroundColor = "#888";
+    }
     pill.appendChild(project_);
     // document.body.appendChild("pill");
   }
@@ -427,15 +435,13 @@ if (document.querySelector("#project")) {
   const form = {
     projectform: document.getElementById("project-form"),
     id: document.getElementById("view_id")
-    // status: document.getElementById("view_status"),
-    // current: document.getElementById("view_current_workers"),
-    // max: document.getElementById("view_no_of_workers")
   };
 
   form.projectform.onsubmit = function(e) {
     e.preventDefault();
     usersession.enlistWorker(form, result => {
       if (result) {
+        console.log("enlist fetch success");
         usersession.incrementWorkers(form, incremented => {
           if (incremented) {
             functions.displayAlert(result, "success");
@@ -474,9 +480,10 @@ if (document.querySelector(".rewards")) {
     form.rewardForm.addEventListener("submit", e => {
       e.preventDefault();
       // ensure used value is always less or equal to total value
+      console.log(form.total.textContent + ": used-" + form.used.value);
       if (
-        form.total.textContent < form.used.value ||
-        form.total.textContent === 0
+        form.used.value > parseInt(form.total.textContent, 10) ||
+        form.total.textContent == 0
       ) {
         functions.displayAlert(
           "You have insufficient points, earn more points",
@@ -488,12 +495,10 @@ if (document.querySelector(".rewards")) {
         usersession.redeemReward(form, message => {
           if (message) {
             functions.displayAlert(message, "success");
+            form.used.value = "";
           }
         });
       }
     });
   }
-}
-
-if (document.getElementById("updateProject")) {
 }

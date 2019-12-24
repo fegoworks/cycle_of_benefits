@@ -4,8 +4,8 @@ const app = express();
 
 const bodyParser = require("body-parser");
 const mainRouter = require("./routes/main_routes");
-const adminRouter = require("./routes/admin_routes");
 const path = require("path");
+// const serveStatic = require('serve-static')
 const session = require("express-session");
 const HALF_HOUR = 1000 * 60 * 30; //30 minutes
 
@@ -18,6 +18,8 @@ const {
 const IN_PROD = NODE_ENV === "production";
 
 app.use(express.static("dist"));
+// Virtual Path Prefix '/static'
+// app.use('/images', express.static('public'))
 app.use(express.json({ limit: "1mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.json());

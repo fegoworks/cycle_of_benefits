@@ -169,35 +169,60 @@ User.prototype = {
   },
 
   useReward: function(userid, reward, callback) {
-    if (reward) {
-      let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Worklist WHERE userId = '${userid}'`;
-      let request = new dbconnect.sql.Request(dbconnect.pool);
-      request
-        .query(queryString)
-        .then(data => {
-          if (data) {
-            let id = data.recordset[0].userId;
-            //Update/Use points
-            let subqueryString = `UPDATE cyobDB.dbo.Tbl_Profiles
+    this.uploadRequest(userid, reward, id => {
+      if (id) {
+        //Update/Use points
+        let request = new dbconnect.sql.Request(dbconnect.pool);
+        let subqueryString = `UPDATE cyobDB.dbo.Tbl_Profiles
           SET user_reward_points = user_reward_points - ${reward.used}
-          WHERE userId = '${id}' `;
+          WHERE userId = '${userid}' `;
 
-            request.query(subqueryString).then(data => {
-              if (data.rowsAffected.length === 1) {
-                callback(reward.used);
+        request
+          .query(subqueryString)
+          .then(data => {
+            if (data.rowsAffected == 1) {
+              callback(true);
+              return;
+            }
+          })
+          .catch(err => {
+            "Reward User error: ", err;
+          });
+      } else {
+        callback(null);
+      }
+    });
+  },
+
+  uploadRequest: function(userid, rewardObj, callback) {
+    //1.check if user has reward attached to user
+    let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Worklist WHERE userId = '${userid}'`;
+    let request = new dbconnect.sql.Request(dbconnect.pool);
+    request
+      .query(queryString)
+      .then(data => {
+        if (data.recordset) {
+          let id = data.recordset[0].userId;
+          //2.on successful, upload the request to database for admin to handle
+          let queryString = `INSERT INTO cyobDB.dbo.Tbl_RewardsRequest
+                      VALUES ('${id}', ${data.recordset[0].projId},
+                      ${rewardObj.used}, '${rewardObj.benefit}')`;
+          request
+            .query(queryString)
+            .then(data => {
+              if (data.rowsAffected == 1) {
+                callback(id);
                 return;
               }
               callback(null);
-            });
-          } else {
-            console.log("This user has no rewards here");
-            callback(null);
-          }
-        })
-        .catch(err => {
-          "Reward User error: ", err;
-        });
-    }
+            })
+            .catch(err => console.log("upload: " + err));
+        } else {
+          console.log("This user has no rewards here");
+          callback(null);
+        }
+      })
+      .catch(err => console.log(err));
   }
 };
 
