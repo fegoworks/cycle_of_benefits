@@ -2,10 +2,10 @@ const util = require("util");
 const sql = require("mssql");
 
 const dbConfig = {
-  server: "COLE-PC\\SQLEXPRESS",
+  server: "cyobdbinstance.c4hjqdm5joot.eu-west-1.rds.amazonaws.com",
   database: "cyobDB",
-  user: "guestuser",
-  password: "1234",
+  user: "cyobmaster",
+  password: "cyob1234",
   connectionLimit: 10
 };
 
