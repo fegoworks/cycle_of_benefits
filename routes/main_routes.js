@@ -97,7 +97,7 @@ router.get("/project:id", (req, res, next) => {
             ? data.proj_photo
                 .split("\\")
                 .splice(1) /*remove the 'dist' from path*/
-                .join("/") || data.proj_photo
+                .join("/").toLowerCase() || data.proj_photo
             : ""
       });
       return;
