@@ -140,7 +140,7 @@ if (document.getElementById("loginform")) {
     usersession.loginUser(form, function(profileUrl) {
       if (profileUrl) {
         functions.displayAlert("Login Successful!", "success");
-        window.location.replace(profileUrl);
+        window.location.assign(profileUrl);
       }
     });
   });

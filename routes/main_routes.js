@@ -89,7 +89,7 @@ router.get("/project:id", (req, res, next) => {
         image: data.proj_photo
           ? data.proj_photo
               .split("\\")
-              .splice(1) /*remove the 'dist' from path*/
+              // .splice(1) /*remove the 'dist' from path*/
               .join("/")
           : ""
       });
