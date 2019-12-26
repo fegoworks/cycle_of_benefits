@@ -72,6 +72,12 @@ router.get("/project:id", (req, res, next) => {
   const proj_id = req.params.id;
   project.getProject(proj_id, data => {
     if (data) {
+      // console.log(
+      //   data.proj_photo
+      //     .split("\\")
+      //     .splice(1) /*remove the 'dist' from path*/
+      //     .join("/")
+      // );
       res.render("viewproject", {
         id: data.projId ? data.projId : "",
         type: data.proj_type ? data.proj_type : "other",
@@ -86,12 +92,13 @@ router.get("/project:id", (req, res, next) => {
         maxworkers: data.max_no_workers ? data.max_no_workers : 1,
         postedby: data.posted_by ? data.posted_by : "",
         duration: data.estimated_duration ? data.estimated_duration : "unknown",
-        image: data.proj_photo
-          ? data.proj_photo
-              .split("\\")
-              .splice(1) /*remove the 'dist' from path*/
-              .join("/")
-          : ""
+        image:
+          data.proj_photo !== null
+            ? data.proj_photo
+                .split("\\")
+                .splice(1) /*remove the 'dist' from path*/
+                .join("/") || data.proj_photo
+            : ""
       });
       return;
     }

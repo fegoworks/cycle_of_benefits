@@ -140,7 +140,7 @@ if (document.getElementById("loginform")) {
     usersession.loginUser(form, function(profileUrl) {
       if (profileUrl) {
         functions.displayAlert("Login Successful!", "success");
-        window.location.assign(profileUrl);
+        location.replace(location.origin + profileUrl);
       }
     });
   });
@@ -398,9 +398,9 @@ if (document.querySelector(".projects")) {
     //set static url
     for (let i = 0; i < projectRow.length; i++) {
       projectBtn[i].onclick = function() {
-        usersession.viewProject(projectId[i], data => {
-          if (data) {
-            window.location.assign(data);
+        usersession.viewProject(projectId[i], projectidUrl => {
+          if (projectidUrl) {
+            location.assign(location.origin + projectidUrl);
           }
         });
       };
