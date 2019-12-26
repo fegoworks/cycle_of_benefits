@@ -19,6 +19,7 @@ const {
 const IN_PROD = NODE_ENV === "production";
 
 app.use(express.static("dist"));
+app.use(express.static("assets"));
 // Virtual Path Prefix '/static'
 // app.use('/images', express.static('public'))
 app.use(express.json({ limit: "1mb" }));
