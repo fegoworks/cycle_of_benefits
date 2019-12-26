@@ -10,11 +10,12 @@ const session = require("express-session");
 const HALF_HOUR = 1000 * 60 * 30; //30 minutes
 
 const {
-  PORT = 3000,
+  PORT = process.env.PORT ? process.env.PORT : 1433,
   NODE_ENV = "development",
   SESS_SECRET = "cyob//!Icardi?!",
   SESS_LIFETIME = HALF_HOUR
 } = process.env;
+
 const IN_PROD = NODE_ENV === "production";
 
 app.use(express.static("dist"));

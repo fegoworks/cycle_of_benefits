@@ -160,7 +160,6 @@ Project.prototype = {
     //check worklist
     this.checkWorklistForDuplicates(project.projId, userid, noduplicate => {
       if (noduplicate) {
-        console.log("no duplicates in here");
         if (project.current_workers < project.max_no_workers) {
           let queryString = `INSERT INTO cyobDB.dbo.Tbl_Worklist (projId, proj_status, reward_points, userId)
           SELECT t2.projId, t2.proj_status, t2.reward_points, t1.userId 
@@ -172,7 +171,6 @@ Project.prototype = {
             .query(queryString)
             .then(data => {
               if (data.rowsAffected == 1) {
-                console.log("enlisted in db");
                 callback(true);
                 return;
               }
@@ -217,17 +215,14 @@ Project.prototype = {
   checkWorklistForDuplicates: function(projid, userid, callback) {
     this.findProject(projid, id => {
       if (id) {
-        console.log("project id found in db");
         let request = new dbconnect.sql.Request(dbconnect.pool);
         let queryString = `SELECT * FROM cyobDB.dbo.Tbl_Worklist
                         WHERE projId = ${id} AND userId = '${userid}'`;
         request
           .query(queryString)
           .then(data => {
-            console.log(data);
             // if no duplicate is found
             if (data.rowsAffected == 0) {
-              console.log("no duplicates");
               callback(true);
               return;
             }
@@ -329,7 +324,11 @@ Project.prototype = {
           .catch(err => console.log(err));
       }
     });
-  }
+  },
+
+  getUserProject: function(projid, callback) {},
+
+  dropWorker: function(projid, callback) {}
 };
 
 module.exports = Project;

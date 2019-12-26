@@ -70,16 +70,8 @@ router.get("/login", (req, res) => {
 
 router.get("/project:id", (req, res, next) => {
   const proj_id = req.params.id;
-
   project.getProject(proj_id, data => {
     if (data) {
-      // format photo string
-      // if(data.proj_photo){
-      //   let photoUrl = data.proj_photo
-      //   .split("\\")
-      //   .splice(1) /*remove the 'dist' from path*/
-      //   .join("/");
-      // }
       res.render("viewproject", {
         id: data.projId ? data.projId : "",
         type: data.proj_type ? data.proj_type : "other",
@@ -185,7 +177,6 @@ router.get("/allprojects", (req, res) => {
 /* Add user and project to worklist */
 router.post("/enlist", (req, res) => {
   if (req.session.userid) {
-    console.log("fetch received");
     const proj = {
       userid: req.session.userid,
       projid: req.body.projid
@@ -193,10 +184,8 @@ router.post("/enlist", (req, res) => {
     //getProject
     project.getProject(proj.projid, projrecord => {
       if (projrecord) {
-        console.log("project found");
         project.enlistWorker(projrecord, proj.userid, rows => {
           if (rows) {
-            console.log("enlist done");
             //if user is successfully added to list of workers
             res.json({ message: "You have been enlisted successfully" });
           } else {
@@ -212,6 +201,22 @@ router.post("/enlist", (req, res) => {
     });
   } else {
     res.json({ errMessage: "you must be logged in to enlist" });
+  }
+});
+
+/* Get All user projects */
+router.get("/getuserproject", (req, res) => {
+  if (req.session.userid) {
+  } else {
+    res.json({ errMessage: "you must be logged in" });
+  }
+});
+
+/*Remove user from worklist */
+router.delete("/dropworker", (req, res) => {
+  if (req.session.userid) {
+  } else {
+    res.json({ errMessage: "you must be logged in" });
   }
 });
 
@@ -253,18 +258,18 @@ router.post("/projectview", (req, res) => {
 
 // Add Project
 router.post("/addproject", upload.single("image"), (req, res, next) => {
-  console.log("maxworkers: " + req.body.max);
+  // console.log("maxworkers: " + req.body.max);
   if (!req.file) {
     console.log("No file uploaded");
     return;
   }
   const file = req.file;
   let imageurl = file.path.toLowerCase();
-  console.log(file);
+  // console.log(file);
   if (req.session.userid) {
     // Everything went fine.
     // let imageurl = file.path;
-    console.log(file.filename);
+    // console.log(file.filename);
     let proj = {
       type: req.body.type,
       title: req.body.title,
@@ -321,7 +326,6 @@ router.post("/submitregister", (req, res) => {
     email: req.body.email
   };
   user.createProfile(userObj, data => {
-    console.log("register user: " + data);
     if (data) {
       console.log(data + " user created");
       res.json({

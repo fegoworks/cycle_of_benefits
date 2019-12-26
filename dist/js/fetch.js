@@ -145,7 +145,7 @@ UserSession.prototype = {
         maxworkers: form.projectWorkers.value
       };
       const formdata = new FormData(form.projectform);
-      formdata.append("image", FileList[0]);
+      // formdata.append("img", FileList[0]);
       formdata.append("max", newProject.maxworkers);
       const options = {
         method: "POST",
